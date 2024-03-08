@@ -5,6 +5,7 @@ import seaborn as sns
 import numpy as np
 import matplotlib.pyplot as plt
 
+from imblearn.over_sampling import SMOTE, ADASYN
 from typing import List, Dict, Union
 from ml_framework.tools.helper_functions import get_fileparts
 
@@ -19,7 +20,7 @@ class DataSampler:
         idxs = np.arange(len(data))
         np.random.shuffle(idxs)
 
-        return data.copy().iloc[idxs, :].reset_index()
+        return data.iloc[idxs, :].reset_index(drop=True)
 
     def sample(
         self, data: pd.DataFrame = None, sampling_perc: float = None
@@ -31,7 +32,7 @@ class DataSampler:
 
         idxs = idxs[0:nr_samples]
 
-        return data.copy().iloc[idxs, :].reset_index()
+        return data.iloc[idxs, :].reset_index(drop=True)
 
     def stratified_data_partition(
         self,
@@ -61,8 +62,8 @@ class DataSampler:
                 ]
             )
 
-        train_df.reset_index()
-        test_df.reset_index()
+        train_df.reset_index(drop=True)
+        test_df.reset_index(drop=True)
 
         return train_df, test_df
 
@@ -111,7 +112,75 @@ class DataSampler:
 
             pass
 
-        return ovsmpl_data.reset_index()
+        return ovsmpl_data.reset_index(drop=True)
+
+    def synthetic_sampling_SMOTE(
+        self,
+        data: pd.DataFrame = None,
+        target_col_name: str = None,
+    ) -> pd.DataFrame:
+
+        X = data.loc[:, data.columns != target_col_name]
+        y = data.loc[:, data.columns == target_col_name]
+        oversample = SMOTE()
+        X_synthetic, y_synthetic = oversample.fit_resample(X, y)
+        # X_synthetic, y_synthetic = SMOTE(random_state=42).fit_resample(X, y)
+        synth_data = np.hstack((X_synthetic, y_synthetic))
+        synth_cols = X_synthetic.columns.to_list() + y_synthetic.columns.to_list()
+        synth_data_df = pd.DataFrame(columns=synth_cols, data=synth_data)
+        print(
+            "Class distribution pre-SMOTE:\n",
+            [
+                (class_label, sum(y.to_numpy() == class_label)[0])
+                for class_label in np.unique(y)
+            ],
+        )
+        print(
+            "Class distribution post-SMOTE:\n",
+            [
+                (
+                    class_label,
+                    sum(synth_data_df[target_col_name].to_numpy() == class_label),
+                )
+                for class_label in np.unique(synth_data_df[target_col_name])
+            ],
+        )
+
+        return synth_data_df
+
+    def synthetic_sampling_ADASYN(
+        self,
+        data: pd.DataFrame = None,
+        target_col_name: str = None,
+    ) -> pd.DataFrame:
+
+        X = data.loc[:, data.columns != target_col_name]
+        y = data.loc[:, data.columns == target_col_name]
+        oversample = ADASYN()
+        X_synthetic, y_synthetic = oversample.fit_resample(X, y)
+        # X_synthetic, y_synthetic = SMOTE(random_state=42).fit_resample(X, y)
+        synth_data = np.hstack((X_synthetic, y_synthetic))
+        synth_cols = X_synthetic.columns.to_list() + y_synthetic.columns.to_list()
+        synth_data_df = pd.DataFrame(columns=synth_cols, data=synth_data)
+        print(
+            "Class distribution pre-SMOTE:\n",
+            [
+                (class_label, sum(y.to_numpy() == class_label)[0])
+                for class_label in np.unique(y)
+            ],
+        )
+        print(
+            "Class distribution post-SMOTE:\n",
+            [
+                (
+                    class_label,
+                    sum(synth_data_df[target_col_name].to_numpy() == class_label),
+                )
+                for class_label in np.unique(synth_data_df[target_col_name])
+            ],
+        )
+
+        return synth_data_df
 
 
 if __name__ == "__main__":

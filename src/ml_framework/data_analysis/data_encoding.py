@@ -66,24 +66,27 @@ class DataEncoder:
         data = pd.get_dummies(data)
         return data
 
-    def encode_target_column(self, data: pd.DataFrame = None, col_name: str = None):
+    def encode_target_column(
+        self, data: pd.DataFrame = None, target_col_name: str = None
+    ):
         """
         Encode target labels with value between 0 and n_classes-1.
         """
-        class_labels = data[col_name].unique()
+        class_labels = data[target_col_name].unique()
         label_coding = defaultdict(int)
         for idx, class_label in enumerate(class_labels):
             label_coding[class_label] = idx
 
-        data[col_name] = data[col_name].apply(lambda x: label_coding[x])
+        data[target_col_name] = data[target_col_name].apply(lambda x: label_coding[x])
 
         return data
 
-    def normalize_data(self, data: pd.DataFrame = None):
-        pass
-        # scaler = StandardScaler()
-        # scaler.fit(np.concatenate((X_train,X_valid),axis=0))
-        # X_train = scaler.transform(X_train)
+    def z_score_data(self, data: pd.DataFrame = None, target_col_name: str = None):
+        scaler = StandardScaler()
+        data.loc[:, data.columns != target_col_name] = scaler.fit_transform(
+            data.loc[:, data.columns != target_col_name]
+        )
+        return data
 
 
 if __name__ == "__main__":

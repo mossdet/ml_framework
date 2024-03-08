@@ -19,42 +19,44 @@ class Analyzer:
             get_workspace_path() + "Images/Data_Analysis_Images/"
         )
         os.makedirs(self.images_destination_path, exist_ok=True)
+        self.data = None
+        self.train_data = None
+        self.test_data = None
 
-    def analyze_data(self) -> pd.DataFrame:
-
-        ################################################################
+    def read_data(self) -> None:
         # 1. Ingest Data
         data_ingestor = data_ingestion.DataIngestor(
             self.data_filepath, self.images_destination_path
         )
-        df = data_ingestor.read_data()
-        data_ingestor.describe_data(df)
+        self.data = data_ingestor.read_data()
+        data_ingestor.describe_data(self.data)
 
-        ################################################################
+    def clean_data(self) -> None:
         # 2. Clean Data
         data_cleaner = data_cleaning.DataCleaner()
-        # df = data_cleaner.replace_missing_data(data=df, nan_replace_metrics={0: 'interpolate'})
-        # df = data_cleaner.drop_rows(df)
-        df = data_cleaner.drop_columns(df, drop_idxs=0)
+        # self.data = data_cleaner.replace_missing_data(data=self.data, nan_replace_metrics={0: 'interpolate'})
+        self.data = data_cleaner.drop_columns(
+            self.data, drop_idxs=0
+        )  # drop unnamed column
+        self.data = data_cleaner.drop_rows(self.data)
 
-        ################################################################
-        # 3. Encode Categorical Data
+    def encode_data(self) -> None:
         data_encoder = data_encoding.DataEncoder(self.images_destination_path)
-        categ_data_description = data_encoder.describe_categorical_data(df)
+        categ_data_description = data_encoder.describe_categorical_data(self.data)
 
         # 3.1 Encode Ordinal Data
         # Worst to best: Fair, Good, Very Good, Premium, Ideal
         col_name = "cut"
         cut_encoding = {"Fair": 1, "Good": 2, "Very Good": 3, "Premium": 4, "Ideal": 5}
-        df = data_encoder.encode_ordinal_data(
-            data=df, col_name=col_name, categorical_order=cut_encoding
+        self.data = data_encoder.encode_ordinal_data(
+            data=self.data, col_name=col_name, categorical_order=cut_encoding
         )
 
         # J (worst) to D (best)
         col_name = "color"
         color_encoding = {"J": 1, "I": 2, "H": 3, "G": 4, "F": 5, "E": 6, "D": 7}
-        df = data_encoder.encode_ordinal_data(
-            data=df, col_name=col_name, categorical_order=color_encoding
+        self.data = data_encoder.encode_ordinal_data(
+            data=self.data, col_name=col_name, categorical_order=color_encoding
         )
 
         # Worst to best: I1, SI2, SI1, VS2, VS1, VVS2, VVS1, IF
@@ -69,59 +71,77 @@ class Analyzer:
             "VVS1": 7,
             "IF": 8,
         }
-        df = data_encoder.encode_ordinal_data(
-            data=df, col_name=col_name, categorical_order=clarity_encoding
+        self.data = data_encoder.encode_ordinal_data(
+            data=self.data, col_name=col_name, categorical_order=clarity_encoding
         )
 
         # 3.2 Encode Nominal Data
-        df_enc = data_encoder.encode_nominal_data(data=df.copy())
+        # self.data = data_encoder.encode_nominal_data(data=self.data)
 
         # 3.3 Encode Target Column Data
-        col_name = "clarity"
-        df_enc = data_encoder.encode_target_column(data=df.copy(), col_name=col_name)
+        target_col_name = "clarity"
+        self.data = data_encoder.encode_target_column(
+            data=self.data, target_col_name=col_name
+        )
 
-        ################################################################
+        # 3.4 Normalize (Z-Score) Data
+        target_col_name = "clarity"
+        self.data = data_encoder.z_score_data(data=self.data, target_col_name=col_name)
+
+        pass
+
+    def visualize_data(self) -> None:
         # 4. Visualize Data
         data_visualizer = data_visualization.DataVisualizer(
             self.images_destination_path
         )
-        data_visualizer.plot_correlation_matrix(data=df)
-        data_visualizer.plot_histograms_numerical(data=df)
-        data_visualizer.plot_histograms_categorical(data=df)
-        # data_visualizer.plot_pairplot(data=df, hue='clarity')
-        data_visualizer.plot_boxplot(data=df, x="cut", y="price")
-        data_visualizer.plot_classes_distribution(data=df, target_col_name="clarity")
+        data_visualizer.plot_correlation_matrix(data=self.data)
+        data_visualizer.plot_histograms_numerical(data=self.data)
+        data_visualizer.plot_histograms_categorical(data=self.data)
+        # data_visualizer.plot_pairplot(data=self.data, hue='clarity')
+        data_visualizer.plot_boxplot(data=self.data, x="cut", y="price")
+        data_visualizer.plot_classes_distribution(
+            data=self.data, target_col_name="clarity"
+        )
 
-        ################################################################
+    def sample_data(self) -> None:
+
         # 5. Data Sampling
         data_sampler = data_sampling.DataSampler()
-        df_shuffled = data_sampler.shuffle(df)
-        df_reduced = data_sampler.sample(df, sampling_perc=0.5)
-        df_train, df_test = data_sampler.stratified_data_partition(
-            df, target_col_name="clarity", train_perc=0.8
+
+        # df_reduced = data_sampler.sample(self.data, sampling_perc=0.5)
+        self.train_data, self.test_data = data_sampler.stratified_data_partition(
+            self.data, target_col_name="clarity", train_perc=0.8
+        )
+        # self.train_data = data_sampler.oversample_data(
+        #    data=self.train_data, target_col_name="clarity", oversample_factor=-1
+        # )
+        # self.train_data = data_sampler.synthetic_sampling_SMOTE(
+        #    data=self.train_data, target_col_name="clarity"
+        # )
+        # self.train_data = data_sampler.synthetic_sampling_ADASYN(
+        #    data=self.train_data, target_col_name="clarity"
+        # )
+
+        self.train_data = data_sampler.shuffle(self.train_data)
+
+        data_visualizer = data_visualization.DataVisualizer(
+            self.images_destination_path
+        )
+        data_visualizer.plot_classes_distribution(
+            data=self.train_data, target_col_name="clarity", suffix="train_set"
+        )
+        data_visualizer.plot_classes_distribution(
+            data=self.test_data, target_col_name="clarity", suffix="test_set"
         )
 
-        df_train = data_sampler.oversample_data(
-            data=df_train, target_col_name="clarity", oversample_factor=-1
-        )
+        pass
 
-        data_visualizer.plot_classes_distribution(
-            data=df_shuffled, target_col_name="clarity", suffix="shuffled"
-        )
-        data_visualizer.plot_classes_distribution(
-            data=df_reduced, target_col_name="clarity", suffix="reduced"
-        )
-        data_visualizer.plot_classes_distribution(
-            data=df_train, target_col_name="clarity", suffix="train"
-        )
-        data_visualizer.plot_classes_distribution(
-            data=df_test, target_col_name="clarity", suffix="test"
-        )
-        data_visualizer.plot_classes_distribution(
-            data=df_train, target_col_name="clarity", suffix="train_oversampled"
-        )
+    def get_data(self) -> pd.DataFrame:
+        return self.data
 
-        return df
+    def get_partitioned_data(self) -> pd.DataFrame:
+        return self.train_data, self.test_data
 
 
 if __name__ == "__main__":
@@ -130,5 +150,5 @@ if __name__ == "__main__":
     data_filepath = data_folder_path + "diamonds.csv"
 
     analyzer = Analyzer(data_filepath)
-    df = analyzer.analyze_data()
+    df_train, df_test = analyzer.analyze_data()
     pass
