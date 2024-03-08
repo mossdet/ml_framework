@@ -1,9 +1,14 @@
-import os
+import socket
 import run_analyzer
 
 
 # Set Data path
-data_folder_path = "C:/Users/HFO/Documents/MachineLearning/Capstone_Projects/Data/"
+data_folder_path = ""
+if socket.gethostname() == 'LAPTOP-TFQFNF6U':
+    data_folder_path = "F:/Weiterbildung/UOC_ML_Bootcamp/Capstone_Projects/Data/"
+elif socket.gethostname() == 'HFO':
+    data_folder_path = "C:/Users/HFO/Documents/MachineLearning/Capstone_Projects/Data/"
+    
 data_filepath = data_folder_path + "diamonds.csv"
 
 
