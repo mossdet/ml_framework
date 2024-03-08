@@ -1,10 +1,13 @@
-import tensorflow as tf
-import keras
 
-def main():
-    print(tf.__version__)
-    print(keras.__version__)
+import os
+import analyzer
 
 
-if __name__ == '__main__':
-    main()
+# Set Data amd Images paths
+data_folder_path = "C:/Users/HFO/Documents/MachineLearning/Capstone_Projects/Data/"
+data_filepath = data_folder_path + "diamonds.csv"
+
+analyzer = analyzer.Analyzer(data_filepath)
+df = analyzer.analyze_data()
+
+pass
