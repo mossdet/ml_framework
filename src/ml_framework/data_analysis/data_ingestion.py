@@ -14,7 +14,7 @@ class DataIngestor:
         self.images_destination_path = images_destination_path
 
     # Read and describe data
-    def read_data(self) -> pd.DataFrame:
+    def ingest_data(self) -> pd.DataFrame:
         df = None
         if os.path.isfile(self.datafile_path):
             (path, filename, ext) = get_fileparts(self.datafile_path)
