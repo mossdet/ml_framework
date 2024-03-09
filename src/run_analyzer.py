@@ -28,7 +28,7 @@ class Analyzer:
         data_ingestor = data_ingestion.DataIngestor(
             self.data_filepath, self.images_destination_path
         )
-        self.data = data_ingestor.read_data()
+        self.data = data_ingestor.ingest_data()
         data_ingestor.describe_data(self.data)
 
     def clean_data(self) -> None:
