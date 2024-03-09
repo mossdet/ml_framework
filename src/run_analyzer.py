@@ -11,7 +11,7 @@ from ml_framework.data_analysis import (
 )
 
 
-class Analyzer:
+class RunAnalysis:
     def __init__(self, data_filepath: str = None):
 
         self.data_filepath = data_filepath

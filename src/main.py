@@ -1,9 +1,6 @@
 import socket
 import run_analyzer
-from ml_framework.data_classification.logistic_regression import (
-    LogisticRegressionClassifier,
-)
-from ml_framework.data_classification.knn import KNN_Classifier
+import run_classifier
 
 # Set Data path
 data_folder_path = ""
@@ -17,7 +14,7 @@ data_filepath = data_folder_path + "diamonds.csv"
 
 # Analyzer
 target_col_name = "cut"
-analyzer = run_analyzer.Analyzer(data_filepath)
+analyzer = run_analyzer.RunAnalysis(data_filepath)
 analyzer.read_data()
 analyzer.clean_data()
 analyzer.encode_data(target_col_name=target_col_name)
@@ -28,18 +25,20 @@ train_data, valid_data, test_data = analyzer.sample_data(
 
 # Classifier
 
-classifier = LogisticRegressionClassifier(target_col_name, train_data, valid_data)
-classifier.fit(nr_iterations=50)
-classifier.predict(test_data, target_col_name=target_col_name)
-classifier.score()
-classifier.plot_confusion_matrixx()
+classifiers_ls = ["LogisticRegressionClassifier", "KNN_Classifier"]
+params = {
+    "classifier_name": "",
+    "target_col_name": target_col_name,
+    "train_data": train_data,
+    "valid_data": valid_data,
+}
+for classifier_name in classifiers_ls:
+    params["classifier_name"] = classifier_name
+    classifier = run_classifier.RunClassification(**params)
+    classifier.fit(nr_iterations=50)
+    classifier.predict(test_data)
+    classifier.score()
+    classifier.plot_confusion_matrix()
 
-
-classifier = KNN_Classifier(target_col_name, train_data, valid_data)
-classifier.fit(nr_iterations=50)
-print("Best K= ", classifier.get_best_k())
-classifier.predict(test_data, target_col_name=target_col_name)
-classifier.score()
-classifier.plot_confusion_matrixx()
 
 pass

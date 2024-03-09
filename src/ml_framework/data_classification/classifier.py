@@ -31,7 +31,6 @@ class Classifier:
         target_col_name: str = None,
         train_data: pd.DataFrame = None,
         valid_data: pd.DataFrame = None,
-        test_data: pd.DataFrame = None,
     ):
         self.X_train = train_data.loc[
             :, train_data.columns != target_col_name
@@ -47,6 +46,7 @@ class Classifier:
             valid_data.loc[:, valid_data.columns == target_col_name].to_numpy().ravel()
         )
 
+        self.target_col_name = target_col_name
         self.y_test = None
         self.model = None
         self.y_predicted = None
@@ -54,21 +54,27 @@ class Classifier:
 
         self.images_destination_path = get_workspace_path() + "Images/Modelling_Images/"
         os.makedirs(self.images_destination_path, exist_ok=True)
-        print("Running ", type(self).__name__)
+        print("\n\n****************************************************************")
+        print("\nRunning ", type(self).__name__)
 
         pass
 
     def fit(self):
         pass
 
-    def predict(self, test_data: pd.DataFrame = None, target_col_name: str = None):
+    def predict(self, test_data: pd.DataFrame = None):
 
-        X_test = test_data.loc[:, test_data.columns != target_col_name].to_numpy()
+        X_test = test_data.loc[:, test_data.columns != self.target_col_name].to_numpy()
         self.y_test = (
-            test_data.loc[:, test_data.columns == target_col_name].to_numpy().ravel()
+            test_data.loc[:, test_data.columns == self.target_col_name]
+            .to_numpy()
+            .ravel()
         )
         self.y_predicted = self.model.predict(X_test)
         self.confusion_matrix = confusion_matrix(self.y_predicted, self.y_test)
+
+    def get_predicted_values(self):
+        return self.y_predicted
 
     def score(self):
         f1_val = f1_score(self.y_predicted, self.y_test, average=None)
@@ -97,7 +103,7 @@ class Classifier:
 
         return score_dict
 
-    def plot_confusion_matrixx(self) -> None:
+    def plot_confusion_matrix(self) -> None:
         sns.heatmap(self.confusion_matrix, annot=True, fmt=".0f", cmap="crest")
         plt.ylabel("True label")
         plt.ylabel("Predicted label")
