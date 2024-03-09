@@ -21,6 +21,7 @@ class Analyzer:
         os.makedirs(self.images_destination_path, exist_ok=True)
         self.data = None
         self.train_data = None
+        self.valid_data = None
         self.test_data = None
 
     def read_data(self) -> None:
@@ -40,7 +41,7 @@ class Analyzer:
         )  # drop unnamed column
         self.data = data_cleaner.drop_rows(self.data)
 
-    def encode_data(self) -> None:
+    def encode_data(self, target_col_name: str = None) -> None:
         data_encoder = data_encoding.DataEncoder(self.images_destination_path)
         categ_data_description = data_encoder.describe_categorical_data(self.data)
 
@@ -79,18 +80,18 @@ class Analyzer:
         # self.data = data_encoder.encode_nominal_data(data=self.data)
 
         # 3.3 Encode Target Column Data
-        target_col_name = "clarity"
         self.data = data_encoder.encode_target_column(
-            data=self.data, target_col_name=col_name
+            data=self.data, target_col_name=target_col_name
         )
 
         # 3.4 Normalize (Z-Score) Data
-        target_col_name = "clarity"
-        self.data = data_encoder.z_score_data(data=self.data, target_col_name=col_name)
+        self.data = data_encoder.z_score_data(
+            data=self.data, target_col_name=target_col_name
+        )
 
         pass
 
-    def visualize_data(self) -> None:
+    def visualize_data(self, target_col_name: str = None) -> None:
         # 4. Visualize Data
         data_visualizer = data_visualization.DataVisualizer(
             self.images_destination_path
@@ -98,29 +99,49 @@ class Analyzer:
         data_visualizer.plot_correlation_matrix(data=self.data)
         data_visualizer.plot_histograms_numerical(data=self.data)
         data_visualizer.plot_histograms_categorical(data=self.data)
-        # data_visualizer.plot_pairplot(data=self.data, hue='clarity')
-        data_visualizer.plot_boxplot(data=self.data, x="cut", y="price")
+        # data_visualizer.plot_pairplot(data=self.data, hue=target_col_name)
         data_visualizer.plot_classes_distribution(
-            data=self.data, target_col_name="clarity"
+            data=self.data, target_col_name=target_col_name
         )
 
-    def sample_data(self) -> None:
+        for class_name in self.data.columns:
+            print(class_name)
+            data_visualizer.plot_boxplot(
+                data=self.data,
+                x=target_col_name,
+                y=class_name,
+                suffix=class_name,
+                hue=target_col_name,
+            )
+
+    def sample_data(
+        self,
+        target_col_name: str = None,
+        train_perc: float = 0.8,
+        valid_perc: float = 0.2,
+    ) -> None:
 
         # 5. Data Sampling
         data_sampler = data_sampling.DataSampler()
 
         # df_reduced = data_sampler.sample(self.data, sampling_perc=0.5)
         self.train_data, self.test_data = data_sampler.stratified_data_partition(
-            self.data, target_col_name="clarity", train_perc=0.8
+            self.data, target_col_name=target_col_name, train_perc=train_perc
         )
+        self.train_data, self.valid_data = data_sampler.stratified_data_partition(
+            self.train_data,
+            target_col_name=target_col_name,
+            train_perc=(1 - valid_perc),
+        )
+
         # self.train_data = data_sampler.oversample_data(
-        #    data=self.train_data, target_col_name="clarity", oversample_factor=-1
+        #    data=self.train_data, target_col_name=target_col_name, oversample_factor=-1
         # )
         # self.train_data = data_sampler.synthetic_sampling_SMOTE(
-        #    data=self.train_data, target_col_name="clarity"
+        #    data=self.train_data, target_col_name=target_col_name
         # )
         # self.train_data = data_sampler.synthetic_sampling_ADASYN(
-        #    data=self.train_data, target_col_name="clarity"
+        #    data=self.train_data, target_col_name=target_col_name
         # )
 
         self.train_data = data_sampler.shuffle(self.train_data)
@@ -129,13 +150,16 @@ class Analyzer:
             self.images_destination_path
         )
         data_visualizer.plot_classes_distribution(
-            data=self.train_data, target_col_name="clarity", suffix="train_set"
+            data=self.train_data, target_col_name=target_col_name, suffix="train_set"
         )
         data_visualizer.plot_classes_distribution(
-            data=self.test_data, target_col_name="clarity", suffix="test_set"
+            data=self.valid_data, target_col_name=target_col_name, suffix="valid_set"
+        )
+        data_visualizer.plot_classes_distribution(
+            data=self.test_data, target_col_name=target_col_name, suffix="test_set"
         )
 
-        pass
+        return self.train_data, self.valid_data, self.test_data
 
     def get_data(self) -> pd.DataFrame:
         return self.data

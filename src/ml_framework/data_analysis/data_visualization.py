@@ -84,9 +84,17 @@ class DataVisualizer:
         x: str = None,
         y: str = None,
         hue: str = None,
+        suffix: str = None,
     ) -> None:
+
+        if suffix is None:
+            suffix = ""
+        else:
+            suffix = "_" + suffix
+
         sns.boxplot(data=data, x=x, y=y, hue=hue)
-        plt.savefig(self.images_destination_path + "boxplot.jpeg")
+        plt.title(f"Boxplot\n{suffix}")
+        plt.savefig(self.images_destination_path + f"boxplot{suffix}.jpeg")
         # plt.show()
         plt.close()
 
