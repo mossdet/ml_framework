@@ -12,8 +12,24 @@ from ml_framework.data_analysis import (
 
 
 class RunAnalysis:
-    def __init__(self, data_filepath: str = None):
+    """
+    A class to perform data analysis tasks on a dataset.
 
+    Attributes:
+        data_filepath (str): The file path of the dataset.
+        images_destination_path (str): The destination path for saving visualization images.
+        data (pd.DataFrame): The loaded dataset.
+        train_data (pd.DataFrame): The training dataset after sampling.
+        valid_data (pd.DataFrame): The validation dataset after sampling.
+        test_data (pd.DataFrame): The testing dataset after sampling.
+    """
+    def __init__(self, data_filepath: str = None):
+        """
+        Initializes the RunAnalysis object.
+
+        Args:
+            data_filepath (str): The file path of the dataset.
+        """
         self.data_filepath = data_filepath
         self.images_destination_path = (
             get_workspace_path() + "Images/Data_Analysis_Images/"
@@ -25,6 +41,9 @@ class RunAnalysis:
         self.test_data = None
 
     def read_data(self) -> None:
+        """
+        Reads and ingests the dataset.
+        """
         # 1. Ingest Data
         data_ingestor = data_ingestion.DataIngestor(
             self.data_filepath, self.images_destination_path
@@ -33,6 +52,9 @@ class RunAnalysis:
         data_ingestor.describe_data(self.data)
 
     def clean_data(self) -> None:
+        """
+        Cleans the dataset.
+        """
         # 2. Clean Data
         data_cleaner = data_cleaning.DataCleaner()
         # self.data = data_cleaner.replace_missing_data(data=self.data, nan_replace_metrics={0: 'interpolate'})
@@ -42,6 +64,12 @@ class RunAnalysis:
         self.data = data_cleaner.drop_rows(self.data)
 
     def encode_data(self, target_col_name: str = None) -> None:
+        """
+        Encodes categorical data and normalizes the dataset.
+
+        Args:
+            target_col_name (str): The name of the target column.
+        """
         data_encoder = data_encoding.DataEncoder(self.images_destination_path)
         categ_data_description = data_encoder.describe_categorical_data(self.data)
 
@@ -92,6 +120,12 @@ class RunAnalysis:
         pass
 
     def visualize_data(self, target_col_name: str = None) -> None:
+        """
+        Visualizes the dataset.
+
+        Args:
+            target_col_name (str): The name of the target column.
+        """
         # 4. Visualize Data
         data_visualizer = data_visualization.DataVisualizer(
             self.images_destination_path
@@ -120,7 +154,14 @@ class RunAnalysis:
         train_perc: float = 0.8,
         valid_perc: float = 0.2,
     ) -> None:
+        """
+        Samples the dataset into training, validation, and testing sets.
 
+        Args:
+            target_col_name (str): The name of the target column.
+            train_perc (float): The percentage of data to be used for training.
+            valid_perc (float): The percentage of data to be used for validation.
+        """
         # 5. Data Sampling
         data_sampler = data_sampling.DataSampler()
 
@@ -162,9 +203,21 @@ class RunAnalysis:
         return self.train_data, self.valid_data, self.test_data
 
     def get_data(self) -> pd.DataFrame:
+        """
+        Returns the loaded dataset.
+
+        Returns:
+            pd.DataFrame: The loaded dataset.
+        """
         return self.data
 
     def get_partitioned_data(self) -> pd.DataFrame:
+        """
+        Returns the partitioned dataset.
+
+        Returns:
+            pd.DataFrame: The partitioned dataset.
+        """
         return self.train_data, self.test_data
 
 
