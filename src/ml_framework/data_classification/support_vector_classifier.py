@@ -18,18 +18,18 @@ from sklearn.metrics import (
 )
 
 
-class LogisticRegressionClassifier(Classifier):
+class SupportVectorClassifier(Classifier):
     """
-    Logistic Regression Classifier class for fitting a logistic regression model as implemented in scikit-learn and using Optuna for hyperparameter optimization.
+    SupportVectorClassifier class for fitting a support vector classifier model as implemented in scikit-learn and using Optuna for hyperparameter optimization.
 
     Attributes:
         target_col_name (str): The name of the target column.
         train_data (pd.DataFrame): The training data.
         valid_data (pd.DataFrame): The validation data.
-        model: The logistic regression model.
+        model: The support vector classifier model.
 
     Methods:
-        fit(nr_iterations: int = 10): Fit the logistic regression model with
+        fit(nr_iterations: int = 10): Fit the support vector classifier model with
             Optuna for hyperparameter optimization.
     """
 
@@ -40,7 +40,7 @@ class LogisticRegressionClassifier(Classifier):
         valid_data: pd.DataFrame = None,
     ):
         """
-        Initialize the LogisticRegressionClassifier object.
+        Initialize the SupportVectorClassifier object.
 
         Args:
             target_col_name (str): The name of the target column.
@@ -55,7 +55,7 @@ class LogisticRegressionClassifier(Classifier):
 
     def fit(self, nr_iterations: int = 10):
         """
-        Fit the logistic regression model with Optuna for hyperparameter optimization.
+        Fit the support vector classifier model with Optuna for hyperparameter optimization.
 
         Args:
             nr_iterations (int): The number of iterations for Optuna to search
@@ -78,18 +78,18 @@ class LogisticRegressionClassifier(Classifier):
             Returns:
                 float: The mean F1 score of the model predictions on the validation set.
             """
+
             params = {
-                "solver": trial.suggest_categorical(
-                    "solver", ["lbfgs", "liblinear", "sag", "saga"]
+                "C": trial.suggest_float("C", 1e-10, 1e10, log=True),
+                "kernel": trial.suggest_categorical(
+                    "kernel", ["linear", "rbf", "sigmoid"]
                 ),
-                "max_iter": trial.suggest_categorical("max_iter", [500]),
-                "n_jobs": trial.suggest_categorical("n_jobs", [-1]),
+                "gamma": trial.suggest_categorical("gamma", ["scale", "auto"]),
+                "max_iter": trial.suggest_categorical("max_iter", [10 * 1000 * 1000]),
                 "random_state": trial.suggest_categorical("random_state", [42]),
             }
 
-            model = sklearn.linear_model.LogisticRegression(**params).fit(
-                X_train, y_train
-            )
+            model = sklearn.svm.SVC(**params).fit(X_train, y_train)
 
             y_predicted = model.predict(X_valid)
             f1_val = f1_score(y_valid, y_predicted, average=None)
@@ -112,7 +112,7 @@ class LogisticRegressionClassifier(Classifier):
         X_train_valid = np.concatenate((self.X_train, self.X_valid))
         y_train_valid = np.concatenate((self.y_train, self.y_valid))
         best_trial = study.best_trial
-        self.model = sklearn.linear_model.LogisticRegression(**best_trial.params).fit(
+        self.model = sklearn.svm.SVC(**best_trial.params).fit(
             X_train_valid, y_train_valid
         )
 

@@ -11,20 +11,54 @@ from ml_framework.tools.helper_functions import get_fileparts
 
 
 class DataSampler:
+    """
+    A class for sampling and preprocessing data.
+
+    Methods:
+        shuffle(data): Shuffle the rows of the DataFrame.
+        sample(data, sampling_perc): Sample a percentage of rows from the DataFrame.
+        stratified_data_partition(data, target_col_name, train_perc): Split the data into train and test sets.
+        oversample_data(data, target_col_name, oversample_factor): Oversample the minority class.
+        synthetic_sampling_SMOTE(data, target_col_name): Perform Synthetic Minority Over-sampling Technique (SMOTE).
+        synthetic_sampling_ADASYN(data, target_col_name): Perform Adaptive Synthetic Sampling (ADASYN).
+    """
 
     def __init__(self):
+        """
+        Initializes the DataSampler instance.
+        """
         pass
 
     def shuffle(self, data: pd.DataFrame = None) -> pd.DataFrame:
+        """
+        Shuffle the rows of the DataFrame.
 
+        Args:
+            data (pd.DataFrame): The DataFrame to be shuffled.
+
+        Returns:
+            pd.DataFrame: The shuffled DataFrame.
+        """
         idxs = np.arange(len(data))
         np.random.shuffle(idxs)
 
         return data.iloc[idxs, :].reset_index(drop=True)
 
     def sample(
-        self, data: pd.DataFrame = None, sampling_perc: float = None
+        self,
+        data: pd.DataFrame = None,
+        sampling_perc: float = None,
     ) -> pd.DataFrame:
+        """
+        Sample a percentage of rows from the DataFrame.
+
+        Args:
+            data (pd.DataFrame): The DataFrame to be sampled.
+            sampling_perc (float): The percentage of rows to sample.
+
+        Returns:
+            pd.DataFrame: The sampled DataFrame.
+        """
         idxs = np.arange(len(data))
 
         np.random.shuffle(idxs)
@@ -40,6 +74,19 @@ class DataSampler:
         target_col_name: str = None,
         train_perc: float = None,
     ) -> pd.DataFrame:
+        """
+        Split the data into train and test sets.
+
+        Args:
+            data (pd.DataFrame): The DataFrame to be split.
+            target_col_name (str): The name of the target column.
+            train_perc (float): The percentage of data to be used for training.
+
+        Returns:
+            pd.DataFrame: The train DataFrame.
+            pd.DataFrame: The test DataFrame.
+        """
+
         classes_ls = np.sort(data[target_col_name].unique())
         train_df = pd.DataFrame()
         test_df = pd.DataFrame()
@@ -73,6 +120,17 @@ class DataSampler:
         target_col_name: str = None,
         oversample_factor: int = None,
     ) -> pd.DataFrame:
+        """
+        Oversample the minority class.
+
+        Args:
+            data (pd.DataFrame): The DataFrame to be oversampled.
+            target_col_name (str): The name of the target column.
+            oversample_factor (int): The factor by which to oversample the minority class.
+
+        Returns:
+            pd.DataFrame: The oversampled DataFrame.
+        """
 
         # Get majority class label
         classes_ls = np.sort(data[target_col_name].unique())
@@ -119,6 +177,16 @@ class DataSampler:
         data: pd.DataFrame = None,
         target_col_name: str = None,
     ) -> pd.DataFrame:
+        """
+        Perform Synthetic Minority Over-sampling Technique (SMOTE).
+
+        Args:
+            data (pd.DataFrame): The DataFrame to be oversampled.
+            target_col_name (str): The name of the target column.
+
+        Returns:
+            pd.DataFrame: The oversampled DataFrame.
+        """
 
         X = data.loc[:, data.columns != target_col_name]
         y = data.loc[:, data.columns == target_col_name]
@@ -153,7 +221,16 @@ class DataSampler:
         data: pd.DataFrame = None,
         target_col_name: str = None,
     ) -> pd.DataFrame:
+        """
+        Perform Adaptive Synthetic Sampling (ADASYN).
 
+        Args:
+            data (pd.DataFrame): The DataFrame to be oversampled.
+            target_col_name (str): The name of the target column.
+
+        Returns:
+            pd.DataFrame: The oversampled DataFrame.
+        """
         X = data.loc[:, data.columns != target_col_name]
         y = data.loc[:, data.columns == target_col_name]
         oversample = ADASYN()

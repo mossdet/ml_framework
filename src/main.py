@@ -25,13 +25,24 @@ train_data, valid_data, test_data = analyzer.sample_data(
 
 # Classifier
 
-classifiers_ls = ["LogisticRegressionClassifier", "KNN_Classifier"]
+classifiers_ls = [
+    "LogisticRegressionClassifier",
+    "KNN_Classifier",
+    "DecisionTreeClassifier",
+    "RandomForestClassifier",
+    "XGBoostClassifier",
+    "ANN_TF_Classifier",
+    "SupportVectorClassifier",
+]
+
+# classifiers_ls = ["ANN_TF_Classifier"]
 params = {
     "classifier_name": "",
     "target_col_name": target_col_name,
     "train_data": train_data,
     "valid_data": valid_data,
 }
+
 for classifier_name in classifiers_ls:
     params["classifier_name"] = classifier_name
     classifier = run_classifier.RunClassification(**params)
@@ -39,6 +50,7 @@ for classifier_name in classifiers_ls:
     classifier.predict(test_data)
     classifier.score()
     classifier.plot_confusion_matrix()
+    pass
 
 
 pass

@@ -2,7 +2,7 @@ import os
 import pandas as pd
 import numpy as np
 import optuna
-import sklearn
+from xgboost import XGBClassifier
 import seaborn as sns
 import matplotlib.pyplot as plt
 from ml_framework.data_classification.classifier import Classifier
@@ -18,18 +18,18 @@ from sklearn.metrics import (
 )
 
 
-class LogisticRegressionClassifier(Classifier):
+class XGBoostClassifier(Classifier):
     """
-    Logistic Regression Classifier class for fitting a logistic regression model as implemented in scikit-learn and using Optuna for hyperparameter optimization.
+    XGBoostClassifier class for fitting a xgboost classifier model as implemented in scikit-learn and using Optuna for hyperparameter optimization.
 
     Attributes:
         target_col_name (str): The name of the target column.
         train_data (pd.DataFrame): The training data.
         valid_data (pd.DataFrame): The validation data.
-        model: The logistic regression model.
+        model: The xgboost classifier model.
 
     Methods:
-        fit(nr_iterations: int = 10): Fit the logistic regression model with
+        fit(nr_iterations: int = 10): Fit the xgboost classifier model with
             Optuna for hyperparameter optimization.
     """
 
@@ -40,7 +40,7 @@ class LogisticRegressionClassifier(Classifier):
         valid_data: pd.DataFrame = None,
     ):
         """
-        Initialize the LogisticRegressionClassifier object.
+        Initialize the XGBoostClassifier object.
 
         Args:
             target_col_name (str): The name of the target column.
@@ -55,7 +55,7 @@ class LogisticRegressionClassifier(Classifier):
 
     def fit(self, nr_iterations: int = 10):
         """
-        Fit the logistic regression model with Optuna for hyperparameter optimization.
+        Fit the xgboost classifier model with Optuna for hyperparameter optimization.
 
         Args:
             nr_iterations (int): The number of iterations for Optuna to search
@@ -78,18 +78,20 @@ class LogisticRegressionClassifier(Classifier):
             Returns:
                 float: The mean F1 score of the model predictions on the validation set.
             """
+
             params = {
-                "solver": trial.suggest_categorical(
-                    "solver", ["lbfgs", "liblinear", "sag", "saga"]
+                "objective": "binary:logistic",
+                "max_depth": trial.suggest_int("max_depth", 1, 20, step=1),
+                "n_estimators": trial.suggest_int("n_estimators", 10, 1000, step=10),
+                "learning_rate": trial.suggest_float(
+                    "learning_rate", 1e-3, 1, step=1e-6, log=False
                 ),
-                "max_iter": trial.suggest_categorical("max_iter", [500]),
-                "n_jobs": trial.suggest_categorical("n_jobs", [-1]),
-                "random_state": trial.suggest_categorical("random_state", [42]),
+                "subsample": trial.suggest_float("subsample", 0.05, 1.0),
+                "colsample_bytree": trial.suggest_float("colsample_bytree", 0.05, 1.0),
+                "min_child_weight": trial.suggest_int("min_child_weight", 1, 20),
             }
 
-            model = sklearn.linear_model.LogisticRegression(**params).fit(
-                X_train, y_train
-            )
+            model = XGBClassifier(**params, random_state=0).fit(X_train, y_train)
 
             y_predicted = model.predict(X_valid)
             f1_val = f1_score(y_valid, y_predicted, average=None)
@@ -112,7 +114,7 @@ class LogisticRegressionClassifier(Classifier):
         X_train_valid = np.concatenate((self.X_train, self.X_valid))
         y_train_valid = np.concatenate((self.y_train, self.y_valid))
         best_trial = study.best_trial
-        self.model = sklearn.linear_model.LogisticRegression(**best_trial.params).fit(
+        self.model = XGBClassifier(**best_trial.params, random_state=0).fit(
             X_train_valid, y_train_valid
         )
 

@@ -8,13 +8,37 @@ from ml_framework.tools.helper_functions import get_fileparts
 
 
 class DataIngestor:
+    """
+    A class for ingesting and describing data.
+
+    Attributes:
+        datafile_path (str): The path to the data file.
+        images_destination_path (str): The destination path to save images.
+
+    Methods:
+        ingest_data(): Reads and returns the data from the specified file.
+        describe_data(df): Describes the data and saves a visualization.
+    """
 
     def __init__(self, datafile_path: str = None, images_destination_path: str = None):
+        """
+        Initializes the DataIngestor instance.
+
+        Args:
+            datafile_path (str): The path to the data file.
+            images_destination_path (str): The destination path to save images.
+        """
         self.datafile_path = datafile_path
         self.images_destination_path = images_destination_path
 
     # Read and describe data
     def ingest_data(self) -> pd.DataFrame:
+        """
+        Reads and returns the data from the specified file.
+
+        Returns:
+            pd.DataFrame: The DataFrame containing the ingested data.
+        """
         df = None
         if os.path.isfile(self.datafile_path):
             (path, filename, ext) = get_fileparts(self.datafile_path)
@@ -28,7 +52,12 @@ class DataIngestor:
         return df
 
     def describe_data(self, df: pd.DataFrame = None) -> None:
+        """
+        Describes the data and saves a visualization.
 
+        Args:
+            df (pd.DataFrame): The DataFrame containing the data.
+        """
         # print("These are the first 10 entries of the data:")
         # print(df.head(10))
         # print("\n")

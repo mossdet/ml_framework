@@ -19,12 +19,41 @@ from sklearn.metrics import (
 
 
 class KNN_Classifier(Classifier):
+    """
+    A class for implementing a K-Nearest Neighbors classifier.
+
+    This class inherits from the Classifier class and provides methods for fitting
+    and evaluating a KNN model as implemented in scikit-learn and using Optuna for hyperparameter optimization.
+
+    Attributes:
+        target_col_name (str): The name of the target column.
+        train_data (pd.DataFrame): The training dataset.
+        valid_data (pd.DataFrame): The validation dataset.
+        best_k (int): The optimal number of neighbors found during optimization.
+
+    Methods:
+        fit(nr_iterations: int) -> None:
+            Fits the KNN model to the training data using Optuna for hyperparameter optimization.
+
+        get_best_k() -> int:
+            Returns the optimal number of neighbors found during training.
+
+    """
+
     def __init__(
         self,
         target_col_name: str = None,
         train_data: pd.DataFrame = None,
         valid_data: pd.DataFrame = None,
     ):
+        """
+        Initializes the KNN_Classifier.
+
+        Args:
+            target_col_name (str): The name of the target column.
+            train_data (pd.DataFrame): The training dataset.
+            valid_data (pd.DataFrame): The validation dataset.
+        """
         super().__init__(
             target_col_name=target_col_name,
             train_data=train_data,
@@ -33,6 +62,17 @@ class KNN_Classifier(Classifier):
         self.best_k = None
 
     def fit(self, nr_iterations: int = 10):
+        """
+        Fits the KNN model to the training data using Optuna for hyperparameter optimization.
+
+        Args:
+            nr_iterations (int): The number of optimization iterations.
+
+        Returns:
+            None
+        """
+
+        plt.switch_backend("agg")
 
         def optuna_objective_func(trial, X_train, y_train, X_valid, y_valid):
             params = {
@@ -62,7 +102,7 @@ class KNN_Classifier(Classifier):
         optuna.logging.set_verbosity(optuna.logging.WARNING)
         study = optuna.create_study(direction="maximize")
 
-        # Start optimizing with 100 trials
+        # Start optimizing with specified number of trials
         study.optimize(
             lambda trial: optuna_objective_func(
                 trial, self.X_train, self.y_train, self.X_valid, self.y_valid
@@ -82,6 +122,12 @@ class KNN_Classifier(Classifier):
         print("Best K= ", self.best_k)
 
     def get_best_k(self):
+        """
+        Returns the optimal number of neighbors found during training.
+
+        Returns:
+            int: The optimal number of neighbors.
+        """
         return self.best_k
 
 

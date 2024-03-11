@@ -16,22 +16,47 @@ from sklearn.metrics import (
 )
 from ml_framework.tools.helper_functions import get_workspace_path
 
-"""
-    The Classifier class performs three main functions:
-        - Fit: a function that takes the training set and the name of the needed model as input and trains the model.
-        - Predict: a function that takes a testing set and predicts the output.
-        - Score: a function that takes two sets: one for input features and the other for their true labels. The function 
-                 also takes an argument called metric to decide what to return of different classification metrics.
-"""
-
 
 class Classifier:
+    """
+    A class for performing classification tasks.
+
+    Attributes:
+        target_col_name (str): The name of the target column in the dataset.
+        train_data (pd.DataFrame): The training data for the classifier.
+        valid_data (pd.DataFrame): The validation data for the classifier.
+        X_train (np.ndarray): Features of the training data.
+        y_train (np.ndarray): Target labels of the training data.
+        X_valid (np.ndarray): Features of the validation data.
+        y_valid (np.ndarray): Target labels of the validation data.
+        y_test (np.ndarray): Predicted target labels.
+        model: The trained classifier model.
+        y_predicted (np.ndarray): Predicted target labels.
+        confusion_matrix (np.ndarray): Confusion matrix of the predictions.
+        images_destination_path (str): Path to store generated images.
+
+    Methods:
+        fit(): Trains the classifier model.
+        predict(test_data): Predicts target labels for the test data.
+        get_predicted_values(): Returns the predicted target labels.
+        score(): Computes performance metrics of the classifier model.
+        plot_confusion_matrix(): Plots the confusion matrix.
+    """
+
     def __init__(
         self,
         target_col_name: str = None,
         train_data: pd.DataFrame = None,
         valid_data: pd.DataFrame = None,
     ):
+        """
+        Initializes the Classifier instance.
+
+        Args:
+            target_col_name (str): The name of the target column in the dataset.
+            train_data (pd.DataFrame): The training data for the classifier.
+            valid_data (pd.DataFrame): The validation data for the classifier.
+        """
         self.X_train = train_data.loc[
             :, train_data.columns != target_col_name
         ].to_numpy()
@@ -52,6 +77,8 @@ class Classifier:
         self.y_predicted = None
         self.confusion_matrix = None
 
+        self.nr_classes = len(np.unique(self.y_train))
+
         self.images_destination_path = get_workspace_path() + "Images/Modelling_Images/"
         os.makedirs(self.images_destination_path, exist_ok=True)
         print("\n\n****************************************************************")
@@ -60,9 +87,16 @@ class Classifier:
         pass
 
     def fit(self):
+        """Trains the classifier model."""
         pass
 
     def predict(self, test_data: pd.DataFrame = None):
+        """
+        Predicts target labels for the test data.
+
+        Args:
+            test_data (pd.DataFrame): The test data for prediction.
+        """
 
         X_test = test_data.loc[:, test_data.columns != self.target_col_name].to_numpy()
         self.y_test = (
@@ -74,9 +108,16 @@ class Classifier:
         self.confusion_matrix = confusion_matrix(self.y_predicted, self.y_test)
 
     def get_predicted_values(self):
+        """Returns the predicted target labels."""
         return self.y_predicted
 
     def score(self):
+        """
+        Computes performance metrics of the classifier model.
+
+        Returns:
+            dict: A dictionary containing the computed performance metrics.
+        """
         f1_val = f1_score(self.y_predicted, self.y_test, average=None)
         f1_val = np.mean(f1_val)
 
@@ -104,6 +145,7 @@ class Classifier:
         return score_dict
 
     def plot_confusion_matrix(self) -> None:
+        """Plots the confusion matrix."""
         sns.heatmap(self.confusion_matrix, annot=True, fmt=".0f", cmap="crest")
         plt.ylabel("True label")
         plt.ylabel("Predicted label")

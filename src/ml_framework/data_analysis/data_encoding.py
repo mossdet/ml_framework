@@ -9,12 +9,41 @@ from sklearn.preprocessing import StandardScaler
 
 
 class DataEncoder:
+    """
+    A class for encoding and preprocessing data.
+
+    Attributes:
+        images_destination_path (str): The destination path to save images.
+
+    Methods:
+        describe_categorical_data(data): Describes categorical data and saves a visualization.
+        encode_ordinal_data(data, col_name, categorical_order): Encodes ordinal data based on a given order.
+        encode_nominal_data(data): Encodes nominal data using one-hot encoding.
+        encode_target_column(data, target_col_name): Encodes target column labels.
+        z_score_data(data, target_col_name): Performs Z-score normalization on the data.
+
+    """
 
     def __init__(self, images_destination_path):
+        """
+        Initializes the DataEncoder instance.
+
+        Args:
+            images_destination_path (str): The destination path to save images.
+        """
         self.images_destination_path = images_destination_path
         pass
 
     def describe_categorical_data(self, data):
+        """
+        Describes categorical data and saves a visualization.
+
+        Args:
+            data (pd.DataFrame): The DataFrame containing categorical data.
+
+        Returns:
+            dict: A dictionary containing information about the categorical data.
+        """
         data_describer = {"ColumnNr": [], "ColumnName": [], "Categories": []}
         for col_idx, col_name in enumerate(data.columns):
             if isinstance(data.iloc[0, col_idx], str):
@@ -59,10 +88,30 @@ class DataEncoder:
         col_name: str = None,
         categorical_order: Dict[str, int] = None,
     ):
+        """
+        Encodes ordinal data based on a given order.
+
+        Args:
+            data (pd.DataFrame): The DataFrame containing the data.
+            col_name (str): The name of the column to encode.
+            categorical_order (Dict[str, int]): A dictionary mapping categories to their corresponding order.
+
+        Returns:
+            pd.DataFrame: The DataFrame with encoded ordinal data.
+        """
         data[col_name] = data[col_name].apply(lambda x: categorical_order[x])
         return data
 
     def encode_nominal_data(self, data: pd.DataFrame = None):
+        """
+        Encodes nominal data using one-hot encoding.
+
+        Args:
+            data (pd.DataFrame): The DataFrame containing the data.
+
+        Returns:
+            pd.DataFrame: The DataFrame with encoded nominal data.
+        """
         data = pd.get_dummies(data)
         return data
 
@@ -70,7 +119,14 @@ class DataEncoder:
         self, data: pd.DataFrame = None, target_col_name: str = None
     ):
         """
-        Encode target labels with value between 0 and n_classes-1.
+        Encodes target column labels.
+
+        Args:
+            data (pd.DataFrame): The DataFrame containing the data.
+            target_col_name (str): The name of the target column.
+
+        Returns:
+            pd.DataFrame: The DataFrame with encoded target column labels.
         """
         class_labels = data[target_col_name].unique()
         label_coding = defaultdict(int)
@@ -82,6 +138,16 @@ class DataEncoder:
         return data
 
     def z_score_data(self, data: pd.DataFrame = None, target_col_name: str = None):
+        """
+        Performs Z-score normalization on the data.
+
+        Args:
+            data (pd.DataFrame): The DataFrame containing the data.
+            target_col_name (str): The name of the target column.
+
+        Returns:
+            pd.DataFrame: The DataFrame with Z-score normalized data.
+        """
         scaler = StandardScaler()
         data.loc[:, data.columns != target_col_name] = scaler.fit_transform(
             data.loc[:, data.columns != target_col_name]

@@ -18,18 +18,18 @@ from sklearn.metrics import (
 )
 
 
-class LogisticRegressionClassifier(Classifier):
+class RandomForestClassifier(Classifier):
     """
-    Logistic Regression Classifier class for fitting a logistic regression model as implemented in scikit-learn and using Optuna for hyperparameter optimization.
+    RandomForestClassifier class for fitting a random forest model as implemented in scikit-learn and using Optuna for hyperparameter optimization.
 
     Attributes:
         target_col_name (str): The name of the target column.
         train_data (pd.DataFrame): The training data.
         valid_data (pd.DataFrame): The validation data.
-        model: The logistic regression model.
+        model: The random forest model.
 
     Methods:
-        fit(nr_iterations: int = 10): Fit the logistic regression model with
+        fit(nr_iterations: int = 10): Fit the random forest model with
             Optuna for hyperparameter optimization.
     """
 
@@ -40,7 +40,7 @@ class LogisticRegressionClassifier(Classifier):
         valid_data: pd.DataFrame = None,
     ):
         """
-        Initialize the LogisticRegressionClassifier object.
+        Initialize the RandomForestClassifier object.
 
         Args:
             target_col_name (str): The name of the target column.
@@ -55,13 +55,12 @@ class LogisticRegressionClassifier(Classifier):
 
     def fit(self, nr_iterations: int = 10):
         """
-        Fit the logistic regression model with Optuna for hyperparameter optimization.
+        Fit the random forest model with Optuna for hyperparameter optimization.
 
         Args:
             nr_iterations (int): The number of iterations for Optuna to search
                 for the best hyperparameters.
         """
-
         plt.switch_backend("agg")
 
         def optuna_objective_func(trial, X_train, y_train, X_valid, y_valid):
@@ -79,15 +78,18 @@ class LogisticRegressionClassifier(Classifier):
                 float: The mean F1 score of the model predictions on the validation set.
             """
             params = {
-                "solver": trial.suggest_categorical(
-                    "solver", ["lbfgs", "liblinear", "sag", "saga"]
+                "n_estimators": trial.suggest_int("n_estimators", 10, 250, step=10),
+                "max_depth": trial.suggest_int("max_depth", 1, 15),
+                "min_samples_split": trial.suggest_int("min_samples_split", 2, 10),
+                "min_samples_leaf": trial.suggest_int("min_samples_leaf", 1, 10),
+                "criterion": trial.suggest_categorical(
+                    "criterion", ["gini", "entropy"]
                 ),
-                "max_iter": trial.suggest_categorical("max_iter", [500]),
-                "n_jobs": trial.suggest_categorical("n_jobs", [-1]),
                 "random_state": trial.suggest_categorical("random_state", [42]),
+                "n_jobs": trial.suggest_categorical("n_jobs", [-1]),
             }
 
-            model = sklearn.linear_model.LogisticRegression(**params).fit(
+            model = sklearn.ensemble.RandomForestClassifier(**params).fit(
                 X_train, y_train
             )
 
@@ -112,7 +114,7 @@ class LogisticRegressionClassifier(Classifier):
         X_train_valid = np.concatenate((self.X_train, self.X_valid))
         y_train_valid = np.concatenate((self.y_train, self.y_valid))
         best_trial = study.best_trial
-        self.model = sklearn.linear_model.LogisticRegression(**best_trial.params).fit(
+        self.model = sklearn.ensemble.RandomForestClassifier(**best_trial.params).fit(
             X_train_valid, y_train_valid
         )
 

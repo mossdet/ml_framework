@@ -18,19 +18,21 @@ from sklearn.metrics import (
 )
 
 
-class LogisticRegressionClassifier(Classifier):
+class DecisionTreeClassifier(Classifier):
     """
-    Logistic Regression Classifier class for fitting a logistic regression model as implemented in scikit-learn and using Optuna for hyperparameter optimization.
+    A class for implementing a DecisionTree classifier.
+
+    This class inherits from the Classifier class and provides methods for fitting
+    and evaluating a decision tree model as implemented in scikit-learn and using Optuna for hyperparameter optimization.
 
     Attributes:
         target_col_name (str): The name of the target column.
-        train_data (pd.DataFrame): The training data.
-        valid_data (pd.DataFrame): The validation data.
-        model: The logistic regression model.
+        train_data (pd.DataFrame): The training dataset.
+        valid_data (pd.DataFrame): The validation dataset.
 
     Methods:
-        fit(nr_iterations: int = 10): Fit the logistic regression model with
-            Optuna for hyperparameter optimization.
+        fit(nr_iterations: int) -> None:
+            Fits the decision tree model to the training data using Optuna for hyperparameter optimization.
     """
 
     def __init__(
@@ -40,12 +42,12 @@ class LogisticRegressionClassifier(Classifier):
         valid_data: pd.DataFrame = None,
     ):
         """
-        Initialize the LogisticRegressionClassifier object.
+        Initializes the DecisionTreeClassifier.
 
         Args:
             target_col_name (str): The name of the target column.
-            train_data (pd.DataFrame): The training data.
-            valid_data (pd.DataFrame): The validation data.
+            train_data (pd.DataFrame): The training dataset.
+            valid_data (pd.DataFrame): The validation dataset.
         """
         super().__init__(
             target_col_name=target_col_name,
@@ -55,41 +57,33 @@ class LogisticRegressionClassifier(Classifier):
 
     def fit(self, nr_iterations: int = 10):
         """
-        Fit the logistic regression model with Optuna for hyperparameter optimization.
+        Fits the DecisionTree model to the training data using Optuna for hyperparameter optimization.
 
         Args:
-            nr_iterations (int): The number of iterations for Optuna to search
-                for the best hyperparameters.
+            nr_iterations (int): The number of optimization iterations.
+
+        Returns:
+            None
         """
 
         plt.switch_backend("agg")
 
         def optuna_objective_func(trial, X_train, y_train, X_valid, y_valid):
-            """
-            Objective function for Optuna to optimize.
-
-            Args:
-                trial: An Optuna trial object.
-                X_train (pd.DataFrame): The training features.
-                y_train (pd.Series): The training target.
-                X_valid (pd.DataFrame): The validation features.
-                y_valid (pd.Series): The validation target.
-
-            Returns:
-                float: The mean F1 score of the model predictions on the validation set.
-            """
             params = {
-                "solver": trial.suggest_categorical(
-                    "solver", ["lbfgs", "liblinear", "sag", "saga"]
+                "criterion": trial.suggest_categorical(
+                    "criterion", ["gini", "entropy"]
                 ),
-                "max_iter": trial.suggest_categorical("max_iter", [500]),
-                "n_jobs": trial.suggest_categorical("n_jobs", [-1]),
+                "splitter": trial.suggest_categorical("splitter", ["best", "random"]),
+                "max_depth": trial.suggest_int("max_depth", 1, 10),
+                "min_samples_split": trial.suggest_int("min_samples_split", 2, 10),
+                "min_samples_leaf": trial.suggest_int("min_samples_leaf", 1, 10),
+                "max_features": trial.suggest_categorical(
+                    "max_features", ["sqrt", "log2"]
+                ),
                 "random_state": trial.suggest_categorical("random_state", [42]),
             }
 
-            model = sklearn.linear_model.LogisticRegression(**params).fit(
-                X_train, y_train
-            )
+            model = sklearn.tree.DecisionTreeClassifier(**params).fit(X_train, y_train)
 
             y_predicted = model.predict(X_valid)
             f1_val = f1_score(y_valid, y_predicted, average=None)
@@ -112,11 +106,9 @@ class LogisticRegressionClassifier(Classifier):
         X_train_valid = np.concatenate((self.X_train, self.X_valid))
         y_train_valid = np.concatenate((self.y_train, self.y_valid))
         best_trial = study.best_trial
-        self.model = sklearn.linear_model.LogisticRegression(**best_trial.params).fit(
+        self.model = sklearn.tree.DecisionTreeClassifier(**best_trial.params).fit(
             X_train_valid, y_train_valid
         )
-
-        pass
 
 
 if __name__ == "__main__":
