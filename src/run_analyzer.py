@@ -23,6 +23,7 @@ class RunAnalysis:
         valid_data (pd.DataFrame): The validation dataset after sampling.
         test_data (pd.DataFrame): The testing dataset after sampling.
     """
+
     def __init__(self, data_filepath: str = None):
         """
         Initializes the RunAnalysis object.
