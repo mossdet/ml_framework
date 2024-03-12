@@ -4,6 +4,7 @@ import seaborn as sns
 import numpy as np
 import matplotlib.pyplot as plt
 import seaborn as sns
+import plotly.graph_objects as go
 
 from typing import List, Dict, Union
 from ml_framework.tools.helper_functions import get_fileparts
@@ -232,6 +233,29 @@ class DataVisualizer:
         )
         # plt.show()
         plt.close()
+
+    def plot_performance_radar_chart(
+        self,
+        performance_dict: Dict[str, Union[float, str]],
+    ):
+        nr_models = len(performance_dict["Model"])
+        categories = list(performance_dict.keys())
+        categories.remove("Model")
+
+        fig = go.Figure()
+
+        for model_name in performance_dict["Model"]:
+            r = [v[0] for k, v in performance_dict.items() if k != "Model"]
+            fig.add_trace(
+                go.Scatterpolar(r=r, theta=categories, fill="toself", name=model_name)
+            )
+
+        fig.update_layout(
+            polar=dict(radialaxis=dict(visible=True, range=[0, 1])),
+            showlegend=True,
+        )
+
+        fig.show()
 
 
 if __name__ == "__main__":

@@ -83,7 +83,6 @@ class LogisticRegressionClassifier(Classifier):
                     "solver", ["lbfgs", "liblinear", "sag", "saga"]
                 ),
                 "max_iter": trial.suggest_categorical("max_iter", [500]),
-                "n_jobs": trial.suggest_categorical("n_jobs", [-1]),
                 "random_state": trial.suggest_categorical("random_state", [42]),
             }
 

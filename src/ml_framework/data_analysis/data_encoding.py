@@ -149,6 +149,7 @@ class DataEncoder:
             pd.DataFrame: The DataFrame with Z-score normalized data.
         """
         scaler = StandardScaler()
+        data = data.astype("float64")
         data.loc[:, data.columns != target_col_name] = scaler.fit_transform(
             data.loc[:, data.columns != target_col_name]
         )

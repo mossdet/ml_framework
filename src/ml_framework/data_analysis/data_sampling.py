@@ -68,6 +68,37 @@ class DataSampler:
 
         return data.iloc[idxs, :].reset_index(drop=True)
 
+    def data_partition(
+        self,
+        data: pd.DataFrame = None,
+        train_perc: float = None,
+    ) -> pd.DataFrame:
+        """
+        Split the data into train and test sets.
+
+        Args:
+            data (pd.DataFrame): The DataFrame to be split.
+            train_perc (float): The percentage of data to be used for training.
+
+        Returns:
+            pd.DataFrame: The train DataFrame.
+            pd.DataFrame: The test DataFrame.
+        """
+
+        nr_rows = data.shape[0]
+        idxs = np.arange(nr_rows)
+        np.random.shuffle(idxs)
+        train_sel_idxs = idxs[0 : np.int64(nr_rows * train_perc)]
+        test_sel_idxs = idxs[np.int64(nr_rows * train_perc) :]
+
+        train_df = data.iloc[train_sel_idxs, :].copy()
+        test_df = data.iloc[test_sel_idxs, :].copy()
+
+        train_df.reset_index(drop=True)
+        test_df.reset_index(drop=True)
+
+        return train_df, test_df
+
     def stratified_data_partition(
         self,
         data: pd.DataFrame = None,

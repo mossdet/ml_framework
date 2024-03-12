@@ -85,7 +85,7 @@ class SupportVectorClassifier(Classifier):
                     "kernel", ["linear", "rbf", "sigmoid"]
                 ),
                 "gamma": trial.suggest_categorical("gamma", ["scale", "auto"]),
-                "max_iter": trial.suggest_categorical("max_iter", [10 * 1000 * 1000]),
+                "max_iter": trial.suggest_categorical("max_iter", [20000]),
                 "random_state": trial.suggest_categorical("random_state", [42]),
             }
 

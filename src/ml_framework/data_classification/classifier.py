@@ -105,7 +105,7 @@ class Classifier:
             .ravel()
         )
         self.y_predicted = self.model.predict(X_test)
-        self.confusion_matrix = confusion_matrix(self.y_predicted, self.y_test)
+        self.confusion_matrix = confusion_matrix(self.y_test, self.y_predicted)
 
     def get_predicted_values(self):
         """Returns the predicted target labels."""
@@ -118,24 +118,24 @@ class Classifier:
         Returns:
             dict: A dictionary containing the computed performance metrics.
         """
-        f1_val = f1_score(self.y_predicted, self.y_test, average=None)
+        f1_val = f1_score(self.y_test, self.y_predicted, average=None)
         f1_val = np.mean(f1_val)
 
-        prec_val = precision_score(self.y_predicted, self.y_test, average=None)
+        prec_val = precision_score(self.y_test, self.y_predicted, average=None)
         prec_val = np.mean(prec_val)
 
-        recall_val = recall_score(self.y_predicted, self.y_test, average=None)
+        recall_val = recall_score(self.y_test, self.y_predicted, average=None)
         recall_val = np.mean(recall_val)
 
-        acc_val = accuracy_score(self.y_predicted, self.y_test)
+        acc_val = accuracy_score(self.y_test, self.y_predicted)
 
         print(
             f"\n{type(self).__name__}\nPerformance Metrics",
         )
         score_dict = {
-            "Precision:": prec_val,
-            "Recall:": recall_val,
-            "Accuracy:": acc_val,
+            "Precision": prec_val,
+            "Recall": recall_val,
+            "Accuracy": acc_val,
             "F1-Score": f1_val,
         }
 
@@ -148,7 +148,7 @@ class Classifier:
         """Plots the confusion matrix."""
         sns.heatmap(self.confusion_matrix, annot=True, fmt=".0f", cmap="crest")
         plt.ylabel("True label")
-        plt.ylabel("Predicted label")
+        plt.xlabel("Predicted label")
         plt.title("Confusion Matrix")
 
         suffix = "_" + type(self).__name__

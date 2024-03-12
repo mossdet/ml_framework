@@ -1,4 +1,6 @@
 import os
+
+os.environ["TF_ENABLE_ONEDNN_OPTS"] = "0"
 import pandas as pd
 import numpy as np
 import seaborn as sns
@@ -12,13 +14,7 @@ from keras import regularizers
 from ml_framework.data_classification.classifier import Classifier
 from ml_framework.tools.helper_functions import get_workspace_path
 from typing import List, Dict, Union
-from sklearn.metrics import (
-    confusion_matrix,
-    precision_score,
-    recall_score,
-    accuracy_score,
-    f1_score,
-)
+from sklearn.metrics import confusion_matrix
 
 
 class ANN_TF_Classifier(Classifier):
