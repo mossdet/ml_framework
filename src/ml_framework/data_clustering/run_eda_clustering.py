@@ -11,7 +11,7 @@ from ml_framework.data_analysis import (
 )
 
 
-class ClassificationEDA:
+class ClusteringEDA:
     """
     A class to perform data analysis tasks on a dataset.
 
@@ -33,7 +33,7 @@ class ClassificationEDA:
         """
         self.data_filepath = data_filepath
         self.images_destination_path = (
-            get_workspace_path() + "Images/Classification_EDA_Images/"
+            get_workspace_path() + "Images/Clustering_EDA_Images/"
         )
         os.makedirs(self.images_destination_path, exist_ok=True)
         self.data = None
@@ -227,6 +227,6 @@ if __name__ == "__main__":
     data_folder_path = "C:/Users/HFO/Documents/MachineLearning/Capstone_Projects/Data/"
     data_filepath = data_folder_path + "diamonds.csv"
 
-    analyzer = ClassificationEDA(data_filepath)
+    analyzer = ClusteringEDA(data_filepath)
     df_train, df_test = analyzer.analyze_data()
     pass

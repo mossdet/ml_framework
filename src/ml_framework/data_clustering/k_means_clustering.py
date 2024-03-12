@@ -5,22 +5,15 @@ import optuna
 import sklearn
 import seaborn as sns
 import matplotlib.pyplot as plt
-from ml_framework.data_classification.classifier import Classifier
+from ml_framework.data_classification.clustering import Clustering
 
 from ml_framework.tools.helper_functions import get_workspace_path
 from typing import List, Dict, Union
-from sklearn.metrics import (
-    confusion_matrix,
-    precision_score,
-    recall_score,
-    accuracy_score,
-    f1_score,
-)
 
 
-class RandomForestClassifier(Classifier):
+class KMeansClustering(Clustering):
     """
-    RandomForestClassifier class for fitting a random forest model as implemented in scikit-learn and using Optuna for hyperparameter optimization.
+    RandomForestClustering class for fitting a random forest model as implemented in scikit-learn and using Optuna for hyperparameter optimization.
 
     Attributes:
         target_col_name (str): The name of the target column.
@@ -40,7 +33,7 @@ class RandomForestClassifier(Classifier):
         valid_data: pd.DataFrame = None,
     ):
         """
-        Initialize the RandomForestClassifier object.
+        Initialize the RandomForestClustering object.
 
         Args:
             target_col_name (str): The name of the target column.
@@ -89,7 +82,7 @@ class RandomForestClassifier(Classifier):
                 "n_jobs": trial.suggest_categorical("n_jobs", [-1]),
             }
 
-            model = sklearn.ensemble.RandomForestClassifier(**params).fit(
+            model = sklearn.ensemble.RandomForestClustering(**params).fit(
                 X_train, y_train
             )
 
@@ -114,7 +107,7 @@ class RandomForestClassifier(Classifier):
         X_train_valid = np.concatenate((self.X_train, self.X_valid))
         y_train_valid = np.concatenate((self.y_train, self.y_valid))
         best_trial = study.best_trial
-        self.model = sklearn.ensemble.RandomForestClassifier(**best_trial.params).fit(
+        self.model = sklearn.ensemble.RandomForestClustering(**best_trial.params).fit(
             X_train_valid, y_train_valid
         )
 

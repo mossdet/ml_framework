@@ -14,7 +14,7 @@ from ml_framework.data_classification.support_vector_classifier import (
     SupportVectorClassifier,
 )
 from ml_framework.data_classification.xgboost_classifier import XGBoostClassifier
-from ml_framework.data_classification.ann_classifier_tf import ANN_TF_Classifier
+from ml_framework.data_classification.ann_tf_classifier import ANN_TF_Classifier
 
 
 class RunClassification:

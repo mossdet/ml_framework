@@ -33,7 +33,7 @@ class ClassificationEDA:
         """
         self.data_filepath = data_filepath
         self.images_destination_path = (
-            get_workspace_path() + "Images/Classification_EDA_Images/"
+            get_workspace_path() + "Images/Classification/Classification_EDA_Images/"
         )
         os.makedirs(self.images_destination_path, exist_ok=True)
         self.data = None

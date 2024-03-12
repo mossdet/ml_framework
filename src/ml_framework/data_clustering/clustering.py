@@ -42,7 +42,6 @@ class Clustering:
         self,
         target_col_name: str = None,
         train_data: pd.DataFrame = None,
-        valid_data: pd.DataFrame = None,
     ):
         """
         Initializes the Clustering instance.
@@ -52,31 +51,13 @@ class Clustering:
             train_data (pd.DataFrame): The training data for the clustering.
             valid_data (pd.DataFrame): The validation data for the clustering.
         """
-        self.X_train = train_data.loc[
-            :, train_data.columns != target_col_name
-        ].to_numpy()
-        self.y_train = (
-            train_data.loc[:, train_data.columns == target_col_name].to_numpy().ravel()
-        )
-
-        self.X_valid = valid_data.loc[
-            :, valid_data.columns != target_col_name
-        ].to_numpy()
-        self.y_valid = (
-            valid_data.loc[:, valid_data.columns == target_col_name].to_numpy().ravel()
-        )
-
-        self.target_col_name = target_col_name
-        self.y_test = None
+        self.X_train = train_data.to_numpy()
+        self.y_train = None
+        self.y_new_data = None
         self.model = None
-        self.y_predicted = None
-        self.confusion_matrix = None
-
-        self.nr_classes = len(np.unique(self.y_train))
 
         self.images_destination_path = (
-            get_workspace_path()
-            + "Images/Classification/Classification_Modelling_Images/"
+            get_workspace_path() + "Images/Clustering/Clustering_Modelling_Images/"
         )
         os.makedirs(self.images_destination_path, exist_ok=True)
         print("\n\n****************************************************************")
@@ -88,72 +69,44 @@ class Clustering:
         """Trains the clustering model."""
         pass
 
-    def predict(self, test_data: pd.DataFrame = None):
+    def predict(self, new_data: pd.DataFrame = None):
         """
-        Predicts target labels for the test data.
+        Assigns new data points to one of teh clusters.
 
         Args:
-            test_data (pd.DataFrame): The test data for prediction.
+            test_data (pd.DataFrame): The new data points to be assigned to a clust.
         """
 
-        X_test = test_data.loc[:, test_data.columns != self.target_col_name].to_numpy()
-        self.y_test = (
-            test_data.loc[:, test_data.columns == self.target_col_name]
-            .to_numpy()
-            .ravel()
-        )
-        self.y_predicted = self.model.predict(X_test)
-        self.confusion_matrix = confusion_matrix(self.y_test, self.y_predicted)
+        X_test = new_data.to_numpy()
+        self.y_new_data = self.model.predict(X_test)
 
     def get_predicted_values(self):
-        """Returns the predicted target labels."""
-        return self.y_predicted
+        """Returns the cluster labels of new data points"""
+        return self.y_new_data
 
     def score(self):
         """
-        Computes performance metrics of the clustering model.
+        Computes the mean Silhouette Coefficient of all samples.
 
         Returns:
             dict: A dictionary containing the computed performance metrics.
         """
-        f1_val = f1_score(self.y_test, self.y_predicted, average=None)
-        f1_val = np.mean(f1_val)
 
-        prec_val = precision_score(self.y_test, self.y_predicted, average=None)
-        prec_val = np.mean(prec_val)
-
-        recall_val = recall_score(self.y_test, self.y_predicted, average=None)
-        recall_val = np.mean(recall_val)
-
-        acc_val = accuracy_score(self.y_test, self.y_predicted)
+        self.X_all_data
+        self.y_all_data
+        silh_val = silhouette_score(self.X_all_data, self.y_all_data)
 
         print(
             f"\n{type(self).__name__}\nPerformance Metrics",
         )
         score_dict = {
-            "Precision": prec_val,
-            "Recall": recall_val,
-            "Accuracy": acc_val,
-            "F1-Score": f1_val,
+            "Silhouette_Coefficient": silh_val,
         }
 
         for k, v in score_dict.items():
             print(f"{k}: {v}")
 
         return score_dict
-
-    def plot_confusion_matrix(self) -> None:
-        """Plots the confusion matrix."""
-        sns.heatmap(self.confusion_matrix, annot=True, fmt=".0f", cmap="crest")
-        plt.ylabel("True label")
-        plt.xlabel("Predicted label")
-        plt.title("Confusion Matrix")
-
-        suffix = "_" + type(self).__name__
-
-        plt.savefig(self.images_destination_path + f"Confusion_Matrix{suffix}.jpeg")
-        # plt.show()
-        plt.close()
 
 
 if __name__ == "__main__":
