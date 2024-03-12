@@ -14,15 +14,16 @@ xgboost = "2.0.3"
 imbalanced-learn = "0.12"
 optuna = "3.5"
 livelossplot = "0.5.5"
+plotly = "5.19.0"
+openpyxl = "3.1.2"
 
-# TensorFlow experiences an issue with poetry and tensorflow metadata since >=2.11, this is a temporary workaround
-# related to https://github.com/python-poetry/poetry/issues/8271, inspired from https://github.com/tensorflow/tensorflow/blob/adb39b04e9cb116df4659a7e2de9eea27e62f25c/tensorflow/tools/pip_package/setup.py#L148-L162
+# TensorFlow experiences an issue with poetry and tensorflow metadata since >=2.11, this is a temporary workaround. 
+# Related to https://github.com/python-poetry/poetry/issues/8271, inspired from https://github.com/tensorflow/tensorflow/blob/adb39b04e9cb116df4659a7e2de9eea27e62f25c/tensorflow/tools/pip_package/setup.py#L148-L162
 # https://github.com/tensorflow/tensorflow/blob/adb39b04e9cb116df4659a7e2de9eea27e62f25c/tensorflow/tools/pip_package/setup.py#L107-L108
 # https://github.com/python-poetry/poetry/issues/8271#issuecomment-1697740447
 tensorflow = {version = "2.16.1" }
 tensorflow-intel = { version = "2.16.1" }
 tensorflow-io-gcs-filesystem = {version = "< 0.32.0", markers = "platform_system == 'Windows'"}
-plotly = "5.19.0"
 
 [tool.poetry.group.dev.dependencies]
 black = "24.2.0"

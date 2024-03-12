@@ -5,24 +5,17 @@ import optuna
 import sklearn
 import seaborn as sns
 import matplotlib.pyplot as plt
-from ml_framework.data_classification.classifier import Classifier
+from ml_framework.data_regression.regressor import Regressor
 
 from ml_framework.tools.helper_functions import get_workspace_path
 from typing import List, Dict, Union
-from sklearn.metrics import (
-    confusion_matrix,
-    precision_score,
-    recall_score,
-    accuracy_score,
-    f1_score,
-)
 
 
-class DecisionTreeClassifier(Classifier):
+class DecisionTreeRegressor(Regressor):
     """
-    A class for implementing a DecisionTree classifier.
+    A class for implementing a DecisionTree regressor.
 
-    This class inherits from the Classifier class and provides methods for fitting
+    This class inherits from the Regressor class and provides methods for fitting
     and evaluating a decision tree model as implemented in scikit-learn and using Optuna for hyperparameter optimization.
 
     Attributes:
@@ -42,7 +35,7 @@ class DecisionTreeClassifier(Classifier):
         valid_data: pd.DataFrame = None,
     ):
         """
-        Initializes the DecisionTreeClassifier.
+        Initializes the DecisionTreeRegressor.
 
         Args:
             target_col_name (str): The name of the target column.
@@ -71,7 +64,7 @@ class DecisionTreeClassifier(Classifier):
         def optuna_objective_func(trial, X_train, y_train, X_valid, y_valid):
             params = {
                 "criterion": trial.suggest_categorical(
-                    "criterion", ["gini", "entropy"]
+                    "criterion", ["squared_error", "absolute_error", "friedman_mse"]
                 ),
                 "splitter": trial.suggest_categorical("splitter", ["best", "random"]),
                 "max_depth": trial.suggest_int("max_depth", 1, 10),
@@ -83,16 +76,15 @@ class DecisionTreeClassifier(Classifier):
                 "random_state": trial.suggest_categorical("random_state", [42]),
             }
 
-            model = sklearn.tree.DecisionTreeClassifier(**params).fit(X_train, y_train)
+            model = sklearn.tree.DecisionTreeRegressor(**params).fit(X_train, y_train)
 
             y_predicted = model.predict(X_valid)
-            f1_val = f1_score(y_valid, y_predicted, average=None)
-            f1_val = np.mean(f1_val)
+            rmse_val = sklearn.metrics.mean_squared_error(y_valid, y_predicted)
 
-            return f1_val
+            return rmse_val
 
         optuna.logging.set_verbosity(optuna.logging.WARNING)
-        study = optuna.create_study(direction="maximize")
+        study = optuna.create_study(direction="minimize")
 
         # Start optimizing with specified number of trials
         study.optimize(
@@ -106,7 +98,7 @@ class DecisionTreeClassifier(Classifier):
         X_train_valid = np.concatenate((self.X_train, self.X_valid))
         y_train_valid = np.concatenate((self.y_train, self.y_valid))
         best_trial = study.best_trial
-        self.model = sklearn.tree.DecisionTreeClassifier(**best_trial.params).fit(
+        self.model = sklearn.tree.DecisionTreeRegressor(**best_trial.params).fit(
             X_train_valid, y_train_valid
         )
 

@@ -13,7 +13,7 @@ from typing import List, Dict, Union
 
 class LinearRegressor(Regressor):
     """
-    LinearRegressor class for fitting a linear regression model as implemented in scikit-learn and using Optuna for hyperparameter optimization.
+    LinearRegressor class for fitting a linear regression model as implemented in scikit-learn.
 
     Attributes:
         target_col_name (str): The name of the target column.
@@ -22,8 +22,7 @@ class LinearRegressor(Regressor):
         model: The linear regression model.
 
     Methods:
-        fit(nr_iterations: int = 10): Fit the linear regression model with
-            Optuna for hyperparameter optimization.
+        fit(nr_iterations: int = 10): Fit the linear regression model
     """
 
     def __init__(

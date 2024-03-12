@@ -11,24 +11,24 @@ import keras
 from keras.models import Sequential
 from keras.layers import Input, Dense, Activation, Dropout, BatchNormalization
 from keras import regularizers
-from ml_framework.data_classification.classifier import Classifier
+from ml_framework.data_regression.regressor import Regressor
 from ml_framework.tools.helper_functions import get_workspace_path
 from typing import List, Dict, Union
 from sklearn.metrics import confusion_matrix
 
 
-class ANN_TF_Classifier(Classifier):
+class ANN_TF_Regressor(Regressor):
     """
-    ANN_TF_Classifier class for fitting an ANN classifier model as implemented in tensor-flow.
+    ANN_TF_Regressor class for fitting an ANN regressor model as implemented in tensor-flow.
 
     Attributes:
         target_col_name (str): The name of the target column.
         train_data (pd.DataFrame): The training data.
         valid_data (pd.DataFrame): The validation data.
-        model: The xgboost classifier model.
+        model: The xgboost regressor model.
 
     Methods:
-        fit(nr_iterations: int = 10): Fit the ANN classifier model.
+        fit(nr_iterations: int = 10): Fit the ANN regressor model.
     """
 
     def __init__(
@@ -38,7 +38,7 @@ class ANN_TF_Classifier(Classifier):
         valid_data: pd.DataFrame = None,
     ):
         """
-        Initialize the ANN_TF_Classifier object.
+        Initialize the ANN_TF_Regressor object.
 
         Args:
             target_col_name (str): The name of the target column.
@@ -53,7 +53,7 @@ class ANN_TF_Classifier(Classifier):
 
     def fit(self, nr_iterations: int = 10):
         """
-        Fit the ANN classifier model.
+        Fit the ANN regressor model.
 
         Args:
             nr_iterations (int): The number of iterations or epochs to train the ANN parameters.
@@ -84,13 +84,13 @@ class ANN_TF_Classifier(Classifier):
             )
 
         # Output layer
-        self.model.add(Dense(units=self.nr_classes, activation="softmax"))
+        self.model.add(Dense(units=1, activation="relu"))
 
         # Compile model
         self.model.compile(
             optimizer="adam",
-            loss="sparse_categorical_crossentropy",
-            metrics=["accuracy"],
+            loss="mean_squared_error",
+            metrics=["mean_squared_error"],
         )
 
         training_result = self.model.fit(
@@ -113,33 +113,36 @@ class ANN_TF_Classifier(Classifier):
         self, training_result: keras.src.callbacks.History = None
     ):
         fig, axes = plt.subplots(nrows=1, ncols=2, figsize=(18, 9))
-        axes[0].plot(training_result.history["loss"], label="Loss")
-        axes[0].plot(training_result.history["val_loss"], label="Validation loss")
-        axes[0].set_title("Loss")
+
+        hist_key = list(training_result.history.keys())[0]
+        hist_key_val = list(training_result.history.keys())[2]
+        axes[0].plot(training_result.history[hist_key], label=hist_key)
+        axes[0].plot(training_result.history[hist_key_val], label=hist_key_val)
+        axes[0].set_title(hist_key)
         axes[0].set_xlabel("Epoch")
-        axes[0].set_ylabel("Loss")
+        axes[0].set_ylabel(hist_key)
         axes[0].legend()
 
-        # Accuracy
-        axes[1].plot(training_result.history["accuracy"], label="Accuracy")
-        axes[1].plot(
-            training_result.history["val_accuracy"], label="Validation accuracy"
-        )
-        axes[1].set_title("Accuracy")
+        hist_key = list(training_result.history.keys())[1]
+        hist_key_val = list(training_result.history.keys())[3]
+        axes[1].plot(training_result.history[hist_key], label=hist_key)
+        axes[1].plot(training_result.history[hist_key_val], label=hist_key_val)
+        axes[1].set_title(hist_key)
         axes[1].set_xlabel("Epoch")
-        axes[1].set_ylabel("Accuracy")
+        axes[1].set_ylabel(hist_key)
         axes[1].legend()
+
         plt.tight_layout()
         plt.show()
         plt.savefig(
-            self.images_destination_path + f"ANN_TF_Classifier_TrainingResult.jpeg"
+            self.images_destination_path + f"ANN_TF_Regressor_TrainingResult.jpeg"
         )
         # plt.show()
         plt.close()
 
     def predict(self, test_data: pd.DataFrame = None):
         """
-        Predicts target labels for the test data.
+        Predicts target values from the test data.
 
         Args:
             test_data (pd.DataFrame): The test data for prediction.
@@ -151,11 +154,7 @@ class ANN_TF_Classifier(Classifier):
             .to_numpy()
             .ravel()
         )
-
-        self.y_predicted = self.model.predict(X_test, verbose=1)
-        self.y_predicted = np.argmax(self.y_predicted, axis=1)
-
-        self.confusion_matrix = confusion_matrix(self.y_predicted, self.y_test)
+        self.y_predicted = self.model.predict(X_test).ravel()
 
 
 if __name__ == "__main__":

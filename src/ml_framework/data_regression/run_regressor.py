@@ -3,6 +3,24 @@ import pandas as pd
 from ml_framework.data_regression.linear_regression import (
     LinearRegressor,
 )
+from ml_framework.data_regression.knn_regressor import (
+    KNN_Regressor,
+)
+from ml_framework.data_regression.decision_tree_regressor import (
+    DecisionTreeRegressor,
+)
+from ml_framework.data_regression.random_forest_regressor import (
+    RandomForestRegressor,
+)
+from ml_framework.data_regression.support_vector_regressor import (
+    SupportVectorRegressor,
+)
+from ml_framework.data_regression.xgboost_regressor import (
+    XGBoostRegressor,
+)
+from ml_framework.data_regression.ann_tf_regressor import (
+    ANN_TF_Regressor,
+)
 
 """
 from ml_framework.data_regression.knn_regressor import KNN_Regressor

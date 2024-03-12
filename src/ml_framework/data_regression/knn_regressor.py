@@ -5,24 +5,17 @@ import optuna
 import sklearn
 import seaborn as sns
 import matplotlib.pyplot as plt
-from ml_framework.data_classification.classifier import Classifier
 
+from ml_framework.data_regression.regressor import Regressor
 from ml_framework.tools.helper_functions import get_workspace_path
 from typing import List, Dict, Union
-from sklearn.metrics import (
-    confusion_matrix,
-    precision_score,
-    recall_score,
-    accuracy_score,
-    f1_score,
-)
 
 
-class KNN_Classifier(Classifier):
+class KNN_Regressor(Regressor):
     """
-    A class for implementing a K-Nearest Neighbors classifier.
+    A class for implementing a K-Nearest Neighbors regressor.
 
-    This class inherits from the Classifier class and provides methods for fitting
+    This class inherits from the Regressor class and provides methods for fitting
     and evaluating a KNN model as implemented in scikit-learn and using Optuna for hyperparameter optimization.
 
     Attributes:
@@ -47,7 +40,7 @@ class KNN_Classifier(Classifier):
         valid_data: pd.DataFrame = None,
     ):
         """
-        Initializes the KNN_Classifier.
+        Initializes the KNN_Regressor.
 
         Args:
             target_col_name (str): The name of the target column.
@@ -76,7 +69,7 @@ class KNN_Classifier(Classifier):
 
         def optuna_objective_func(trial, X_train, y_train, X_valid, y_valid):
             params = {
-                "n_neighbors": trial.suggest_int("n_neighbors", 10, 250, step=10),
+                "n_neighbors": trial.suggest_int("n_neighbors", 5, 100, step=5),
                 "weights": trial.suggest_categorical(
                     "weights", ["uniform", "distance"]
                 ),
@@ -86,21 +79,20 @@ class KNN_Classifier(Classifier):
                 "metric": trial.suggest_categorical(
                     "metric", ["cityblock", "euclidean", "l1", "l2", "manhattan"]
                 ),
-                "n_jobs": trial.suggest_categorical("n_jobs", [-1]),
+                "n_jobs": -1,
             }
 
-            model = sklearn.neighbors.KNeighborsClassifier(**params).fit(
+            model = sklearn.neighbors.KNeighborsRegressor(**params).fit(
                 X_train, y_train
             )
 
             y_predicted = model.predict(X_valid)
-            f1_val = f1_score(y_valid, y_predicted, average=None)
-            f1_val = np.mean(f1_val)
+            rmse_val = sklearn.metrics.mean_squared_error(y_valid, y_predicted)
 
-            return f1_val
+            return rmse_val
 
         optuna.logging.set_verbosity(optuna.logging.WARNING)
-        study = optuna.create_study(direction="maximize")
+        study = optuna.create_study(direction="minimize")
 
         # Start optimizing with specified number of trials
         study.optimize(

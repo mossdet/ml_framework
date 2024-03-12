@@ -2,34 +2,28 @@ import os
 import pandas as pd
 import numpy as np
 import optuna
-from xgboost import XGBClassifier
+import sklearn
+from xgboost import XGBRegressor
 import seaborn as sns
 import matplotlib.pyplot as plt
-from ml_framework.data_classification.classifier import Classifier
+from ml_framework.data_regression.regressor import Regressor
 
 from ml_framework.tools.helper_functions import get_workspace_path
 from typing import List, Dict, Union
-from sklearn.metrics import (
-    confusion_matrix,
-    precision_score,
-    recall_score,
-    accuracy_score,
-    f1_score,
-)
 
 
-class XGBoostClassifier(Classifier):
+class XGBoostRegressor(Regressor):
     """
-    XGBoostClassifier class for fitting a xgboost classifier model as implemented in scikit-learn and using Optuna for hyperparameter optimization.
+    XGBoostRegressor class for fitting a xgboost regressor model as implemented in scikit-learn and using Optuna for hyperparameter optimization.
 
     Attributes:
         target_col_name (str): The name of the target column.
         train_data (pd.DataFrame): The training data.
         valid_data (pd.DataFrame): The validation data.
-        model: The xgboost classifier model.
+        model: The xgboost regressor model.
 
     Methods:
-        fit(nr_iterations: int = 10): Fit the xgboost classifier model with
+        fit(nr_iterations: int = 10): Fit the xgboost regressor model with
             Optuna for hyperparameter optimization.
     """
 
@@ -40,7 +34,7 @@ class XGBoostClassifier(Classifier):
         valid_data: pd.DataFrame = None,
     ):
         """
-        Initialize the XGBoostClassifier object.
+        Initialize the XGBoostRegressor object.
 
         Args:
             target_col_name (str): The name of the target column.
@@ -55,7 +49,7 @@ class XGBoostClassifier(Classifier):
 
     def fit(self, nr_iterations: int = 10):
         """
-        Fit the xgboost classifier model with Optuna for hyperparameter optimization.
+        Fit the xgboost regressor model with Optuna for hyperparameter optimization.
 
         Args:
             nr_iterations (int): The number of iterations for Optuna to search
@@ -80,27 +74,27 @@ class XGBoostClassifier(Classifier):
             """
 
             params = {
-                "objective": "binary:logistic",
-                "max_depth": trial.suggest_int("max_depth", 1, 20, step=1),
-                "n_estimators": trial.suggest_int("n_estimators", 10, 1000, step=10),
+                "objective": "reg:squarederror",
+                "max_depth": trial.suggest_int("max_depth", 5, 100, step=5),
+                "n_estimators": trial.suggest_int("n_estimators", 25, 1000, step=25),
                 "learning_rate": trial.suggest_float(
-                    "learning_rate", 1e-3, 1, step=1e-6, log=False
+                    "learning_rate", 1e-6, 1, log=False
                 ),
-                "subsample": trial.suggest_float("subsample", 0.05, 1.0),
-                "colsample_bytree": trial.suggest_float("colsample_bytree", 0.05, 1.0),
-                "min_child_weight": trial.suggest_int("min_child_weight", 1, 20),
+                "reg_alpha": trial.suggest_float("reg_alpha", 1e-6, 1000, log=True),
+                # "subsample": trial.suggest_float("subsample", 0.05, 1.0),
+                # "colsample_bytree": trial.suggest_float("colsample_bytree", 0.05, 1.0),
+                # "min_child_weight": trial.suggest_int("min_child_weight", 1, 20),
             }
 
-            model = XGBClassifier(**params, random_state=0).fit(X_train, y_train)
+            model = XGBRegressor(**params, random_state=0).fit(X_train, y_train)
 
             y_predicted = model.predict(X_valid)
-            f1_val = f1_score(y_valid, y_predicted, average=None)
-            f1_val = np.mean(f1_val)
+            rmse_val = sklearn.metrics.mean_squared_error(y_valid, y_predicted)
 
-            return f1_val
+            return rmse_val
 
         optuna.logging.set_verbosity(optuna.logging.WARNING)
-        study = optuna.create_study(direction="maximize")
+        study = optuna.create_study(direction="minimize")
 
         # Start optimizing with specified number of trials
         study.optimize(
@@ -114,7 +108,7 @@ class XGBoostClassifier(Classifier):
         X_train_valid = np.concatenate((self.X_train, self.X_valid))
         y_train_valid = np.concatenate((self.y_train, self.y_valid))
         best_trial = study.best_trial
-        self.model = XGBClassifier(**best_trial.params, random_state=0).fit(
+        self.model = XGBRegressor(**best_trial.params, random_state=0).fit(
             X_train_valid, y_train_valid
         )
 

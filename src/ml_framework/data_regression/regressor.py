@@ -76,7 +76,9 @@ class Regressor:
 
         self.nr_classes = len(np.unique(self.y_train))
 
-        self.images_destination_path = get_workspace_path() + "Images/Modelling_Images/"
+        self.images_destination_path = (
+            get_workspace_path() + "Images/Regression/Regression_Modelling_Images/"
+        )
         os.makedirs(self.images_destination_path, exist_ok=True)
         print("\n\n****************************************************************")
         print("\nRunning ", type(self).__name__)

@@ -1,5 +1,7 @@
+import os
 import socket
 import matplotlib
+import pandas as pd
 
 matplotlib.use("Agg")
 from matplotlib import pyplot
@@ -7,6 +9,7 @@ from collections import defaultdict
 from ml_framework.data_classification.run_eda_classification import ClassificationEDA
 from ml_framework.data_classification.run_classifier import RunClassification
 from ml_framework.data_analysis.data_visualization import DataVisualizer
+from ml_framework.tools.helper_functions import get_workspace_path
 
 # Set Data path
 data_folder_path = ""
@@ -62,6 +65,12 @@ for classifier_name in classifiers_ls:
 
     pass
 
-DataVisualizer().plot_performance_radar_chart(performance_dict=all_models_performance)
+# DataVisualizer().plot_performance_radar_chart(performance_dict=all_models_performance)
 
+perf_df = pd.DataFrame(all_models_performance)
+print(perf_df)
+
+tables_destination_path = get_workspace_path() + "Tables/"
+os.makedirs(tables_destination_path, exist_ok=True)
+perf_df.to_excel(tables_destination_path + "Classification_Results.xlsx")
 pass

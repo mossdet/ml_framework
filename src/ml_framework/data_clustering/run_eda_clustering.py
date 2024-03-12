@@ -11,7 +11,7 @@ from ml_framework.data_analysis import (
 )
 
 
-class RegressionEDA:
+class ClassificationEDA:
     """
     A class to perform data analysis tasks on a dataset.
 
@@ -33,7 +33,7 @@ class RegressionEDA:
         """
         self.data_filepath = data_filepath
         self.images_destination_path = (
-            get_workspace_path() + "Images/Regression/Regression_EDA_Images/"
+            get_workspace_path() + "Images/Classification_EDA_Images/"
         )
         os.makedirs(self.images_destination_path, exist_ok=True)
         self.data = None
@@ -167,11 +167,12 @@ class RegressionEDA:
         data_sampler = data_sampling.DataSampler()
 
         # df_reduced = data_sampler.sample(self.data, sampling_perc=0.5)
-        self.train_data, self.test_data = data_sampler.data_partition(
-            self.data, train_perc=train_perc
+        self.train_data, self.test_data = data_sampler.stratified_data_partition(
+            self.data, target_col_name=target_col_name, train_perc=train_perc
         )
-        self.train_data, self.valid_data = data_sampler.data_partition(
+        self.train_data, self.valid_data = data_sampler.stratified_data_partition(
             self.train_data,
+            target_col_name=target_col_name,
             train_perc=(1 - valid_perc),
         )
 
@@ -186,6 +187,19 @@ class RegressionEDA:
         # )
 
         self.train_data = data_sampler.shuffle(self.train_data)
+
+        data_visualizer = data_visualization.DataVisualizer(
+            self.images_destination_path
+        )
+        data_visualizer.plot_classes_distribution(
+            data=self.train_data, target_col_name=target_col_name, suffix="train_set"
+        )
+        data_visualizer.plot_classes_distribution(
+            data=self.valid_data, target_col_name=target_col_name, suffix="valid_set"
+        )
+        data_visualizer.plot_classes_distribution(
+            data=self.test_data, target_col_name=target_col_name, suffix="test_set"
+        )
 
         return self.train_data, self.valid_data, self.test_data
 
@@ -213,6 +227,6 @@ if __name__ == "__main__":
     data_folder_path = "C:/Users/HFO/Documents/MachineLearning/Capstone_Projects/Data/"
     data_filepath = data_folder_path + "diamonds.csv"
 
-    analyzer = RegressionEDA(data_filepath)
+    analyzer = ClassificationEDA(data_filepath)
     df_train, df_test = analyzer.analyze_data()
     pass

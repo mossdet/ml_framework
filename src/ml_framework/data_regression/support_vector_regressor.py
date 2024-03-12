@@ -5,31 +5,24 @@ import optuna
 import sklearn
 import seaborn as sns
 import matplotlib.pyplot as plt
-from ml_framework.data_classification.classifier import Classifier
+from ml_framework.data_regression.regressor import Regressor
 
 from ml_framework.tools.helper_functions import get_workspace_path
 from typing import List, Dict, Union
-from sklearn.metrics import (
-    confusion_matrix,
-    precision_score,
-    recall_score,
-    accuracy_score,
-    f1_score,
-)
 
 
-class SupportVectorClassifier(Classifier):
+class SupportVectorRegressor(Regressor):
     """
-    SupportVectorClassifier class for fitting a support vector classifier model as implemented in scikit-learn and using Optuna for hyperparameter optimization.
+    SupportVectorRegressor class for fitting a support vector regressor model as implemented in scikit-learn and using Optuna for hyperparameter optimization.
 
     Attributes:
         target_col_name (str): The name of the target column.
         train_data (pd.DataFrame): The training data.
         valid_data (pd.DataFrame): The validation data.
-        model: The support vector classifier model.
+        model: The support vector regressor model.
 
     Methods:
-        fit(nr_iterations: int = 10): Fit the support vector classifier model with
+        fit(nr_iterations: int = 10): Fit the support vector regressor model with
             Optuna for hyperparameter optimization.
     """
 
@@ -40,7 +33,7 @@ class SupportVectorClassifier(Classifier):
         valid_data: pd.DataFrame = None,
     ):
         """
-        Initialize the SupportVectorClassifier object.
+        Initialize the SupportVectorRegressor object.
 
         Args:
             target_col_name (str): The name of the target column.
@@ -55,7 +48,7 @@ class SupportVectorClassifier(Classifier):
 
     def fit(self, nr_iterations: int = 10):
         """
-        Fit the support vector classifier model with Optuna for hyperparameter optimization.
+        Fit the support vector regressor model with Optuna for hyperparameter optimization.
 
         Args:
             nr_iterations (int): The number of iterations for Optuna to search
@@ -85,20 +78,18 @@ class SupportVectorClassifier(Classifier):
                     "kernel", ["linear", "rbf", "sigmoid"]
                 ),
                 "gamma": trial.suggest_categorical("gamma", ["scale", "auto"]),
-                "max_iter": trial.suggest_categorical("max_iter", [10 * 1000 * 1000]),
-                "random_state": trial.suggest_categorical("random_state", [42]),
+                "max_iter": trial.suggest_categorical("max_iter", [20000]),
             }
 
-            model = sklearn.svm.SVC(**params).fit(X_train, y_train)
+            model = sklearn.svm.SVR(**params).fit(X_train, y_train)
 
             y_predicted = model.predict(X_valid)
-            f1_val = f1_score(y_valid, y_predicted, average=None)
-            f1_val = np.mean(f1_val)
+            rmse_val = sklearn.metrics.mean_squared_error(y_valid, y_predicted)
 
-            return f1_val
+            return rmse_val
 
         optuna.logging.set_verbosity(optuna.logging.WARNING)
-        study = optuna.create_study(direction="maximize")
+        study = optuna.create_study(direction="minimize")
 
         # Start optimizing with specified number of trials
         study.optimize(
@@ -112,7 +103,7 @@ class SupportVectorClassifier(Classifier):
         X_train_valid = np.concatenate((self.X_train, self.X_valid))
         y_train_valid = np.concatenate((self.y_train, self.y_valid))
         best_trial = study.best_trial
-        self.model = sklearn.svm.SVC(**best_trial.params).fit(
+        self.model = sklearn.svm.SVR(**best_trial.params).fit(
             X_train_valid, y_train_valid
         )
 

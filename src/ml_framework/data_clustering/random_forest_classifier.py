@@ -5,15 +5,22 @@ import optuna
 import sklearn
 import seaborn as sns
 import matplotlib.pyplot as plt
-from ml_framework.data_regression.regressor import Regressor
+from ml_framework.data_classification.classifier import Classifier
 
 from ml_framework.tools.helper_functions import get_workspace_path
 from typing import List, Dict, Union
+from sklearn.metrics import (
+    confusion_matrix,
+    precision_score,
+    recall_score,
+    accuracy_score,
+    f1_score,
+)
 
 
-class RandomForestRegressor(Regressor):
+class RandomForestClassifier(Classifier):
     """
-    RandomForestRegressor class for fitting a random forest model as implemented in scikit-learn and using Optuna for hyperparameter optimization.
+    RandomForestClassifier class for fitting a random forest model as implemented in scikit-learn and using Optuna for hyperparameter optimization.
 
     Attributes:
         target_col_name (str): The name of the target column.
@@ -33,7 +40,7 @@ class RandomForestRegressor(Regressor):
         valid_data: pd.DataFrame = None,
     ):
         """
-        Initialize the RandomForestRegressor object.
+        Initialize the RandomForestClassifier object.
 
         Args:
             target_col_name (str): The name of the target column.
@@ -76,23 +83,24 @@ class RandomForestRegressor(Regressor):
                 "min_samples_split": trial.suggest_int("min_samples_split", 2, 10),
                 "min_samples_leaf": trial.suggest_int("min_samples_leaf", 1, 10),
                 "criterion": trial.suggest_categorical(
-                    "criterion", ["squared_error", "absolute_error", "friedman_mse"]
+                    "criterion", ["gini", "entropy"]
                 ),
                 "random_state": trial.suggest_categorical("random_state", [42]),
                 "n_jobs": trial.suggest_categorical("n_jobs", [-1]),
             }
 
-            model = sklearn.ensemble.RandomForestRegressor(**params).fit(
+            model = sklearn.ensemble.RandomForestClassifier(**params).fit(
                 X_train, y_train
             )
 
             y_predicted = model.predict(X_valid)
-            rmse_val = sklearn.metrics.mean_squared_error(y_valid, y_predicted)
+            f1_val = f1_score(y_valid, y_predicted, average=None)
+            f1_val = np.mean(f1_val)
 
-            return rmse_val
+            return f1_val
 
         optuna.logging.set_verbosity(optuna.logging.WARNING)
-        study = optuna.create_study(direction="minimize")
+        study = optuna.create_study(direction="maximize")
 
         # Start optimizing with specified number of trials
         study.optimize(
@@ -106,7 +114,7 @@ class RandomForestRegressor(Regressor):
         X_train_valid = np.concatenate((self.X_train, self.X_valid))
         y_train_valid = np.concatenate((self.y_train, self.y_valid))
         best_trial = study.best_trial
-        self.model = sklearn.ensemble.RandomForestRegressor(**best_trial.params).fit(
+        self.model = sklearn.ensemble.RandomForestClassifier(**best_trial.params).fit(
             X_train_valid, y_train_valid
         )
 
