@@ -1,7 +1,7 @@
 {
-    "workbench.colorTheme": "Default Dark Modern",
+    "workbench.colorTheme": "GitHub Dark",
     "workbench.preferredHighContrastColorTheme": "Visual Studio Dark",
-    "workbench.preferredDarkColorTheme": "Visual Studio Dark",
+    "workbench.preferredDarkColorTheme": "Monokai Dimmed",
     "workbench.preferredHighContrastLightColorTheme": "Visual Studio Dark",
     "workbench.preferredLightColorTheme": "Visual Studio Dark"
 }

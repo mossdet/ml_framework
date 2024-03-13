@@ -33,12 +33,11 @@ class ClusteringEDA:
         """
         self.data_filepath = data_filepath
         self.images_destination_path = (
-            get_workspace_path() + "Images/Clustering_EDA_Images/"
+            get_workspace_path() + "Images/Clustering/Clustering_EDA_Images/"
         )
         os.makedirs(self.images_destination_path, exist_ok=True)
         self.data = None
         self.train_data = None
-        self.valid_data = None
         self.test_data = None
 
     def read_data(self) -> None:
@@ -153,7 +152,6 @@ class ClusteringEDA:
         self,
         target_col_name: str = None,
         train_perc: float = 0.8,
-        valid_perc: float = 0.2,
     ) -> None:
         """
         Samples the dataset into training, validation, and testing sets.
@@ -161,19 +159,13 @@ class ClusteringEDA:
         Args:
             target_col_name (str): The name of the target column.
             train_perc (float): The percentage of data to be used for training.
-            valid_perc (float): The percentage of data to be used for validation.
         """
         # 5. Data Sampling
         data_sampler = data_sampling.DataSampler()
 
         # df_reduced = data_sampler.sample(self.data, sampling_perc=0.5)
-        self.train_data, self.test_data = data_sampler.stratified_data_partition(
-            self.data, target_col_name=target_col_name, train_perc=train_perc
-        )
-        self.train_data, self.valid_data = data_sampler.stratified_data_partition(
-            self.train_data,
-            target_col_name=target_col_name,
-            train_perc=(1 - valid_perc),
+        self.train_data, self.test_data = data_sampler.data_partition(
+            self.data, train_perc=train_perc
         )
 
         # self.train_data = data_sampler.oversample_data(
@@ -188,20 +180,7 @@ class ClusteringEDA:
 
         self.train_data = data_sampler.shuffle(self.train_data)
 
-        data_visualizer = data_visualization.DataVisualizer(
-            self.images_destination_path
-        )
-        data_visualizer.plot_classes_distribution(
-            data=self.train_data, target_col_name=target_col_name, suffix="train_set"
-        )
-        data_visualizer.plot_classes_distribution(
-            data=self.valid_data, target_col_name=target_col_name, suffix="valid_set"
-        )
-        data_visualizer.plot_classes_distribution(
-            data=self.test_data, target_col_name=target_col_name, suffix="test_set"
-        )
-
-        return self.train_data, self.valid_data, self.test_data
+        return self.train_data, self.test_data
 
     def get_data(self) -> pd.DataFrame:
         """

@@ -17,30 +17,23 @@ class Clustering:
     A class for performing clustering tasks.
 
     Attributes:
-        target_col_name (str): The name of the target column in the dataset.
-        train_data (pd.DataFrame): The training data for the clustering.
-        valid_data (pd.DataFrame): The validation data for the clustering.
-        X_train (np.ndarray): Features of the training data.
-        y_train (np.ndarray): Target labels of the training data.
-        X_valid (np.ndarray): Features of the validation data.
-        y_valid (np.ndarray): Target labels of the validation data.
-        y_test (np.ndarray): Predicted target labels.
+        X_train (pd.DataFrame): The training data for the clustering.
+        y_clustering (np.ndarray): the cluster labels assigned to each sample.
+        X_new (pd.DataFrame): New datapoints to be clustered.
+        y_new (np.ndarray): the cluster labels assigned to new data.
         model: The trained clustering model.
-        y_predicted (np.ndarray): Predicted target labels.
-        confusion_matrix (np.ndarray): Confusion matrix of the predictions.
         images_destination_path (str): Path to store generated images.
 
     Methods:
         fit(): Trains the clustering model.
-        predict(test_data): Predicts target labels for the test data.
-        get_predicted_values(): Returns the predicted target labels.
-        score(): Computes performance metrics of the clustering model.
-        plot_confusion_matrix(): Plots the confusion matrix.
+        predict(test_data): Predicts cluster labels for new data.
+        get_predicted_values(): Returns the predicted cluster labels.
+        score(): Computes the inter and/or intra cluster distance scores.
+        plot_clusters(): Plots the clusters using different visualization techniques.
     """
 
     def __init__(
         self,
-        target_col_name: str = None,
         train_data: pd.DataFrame = None,
     ):
         """
@@ -52,8 +45,9 @@ class Clustering:
             valid_data (pd.DataFrame): The validation data for the clustering.
         """
         self.X_train = train_data.to_numpy()
-        self.y_train = None
-        self.y_new_data = None
+        self.y_clustering = None
+        self.X_new = None
+        self.y_new = None
         self.model = None
 
         self.images_destination_path = (
@@ -71,14 +65,15 @@ class Clustering:
 
     def predict(self, new_data: pd.DataFrame = None):
         """
-        Assigns new data points to one of teh clusters.
+        Assigns new data points to one of the clusters.
 
         Args:
             test_data (pd.DataFrame): The new data points to be assigned to a clust.
         """
 
-        X_test = new_data.to_numpy()
-        self.y_new_data = self.model.predict(X_test)
+        self.X_new = new_data.to_numpy()
+        self.y_new_data = self.model.predict(self.X_new)
+        pass
 
     def get_predicted_values(self):
         """Returns the cluster labels of new data points"""
@@ -91,22 +86,23 @@ class Clustering:
         Returns:
             dict: A dictionary containing the computed performance metrics.
         """
-
-        self.X_all_data
-        self.y_all_data
-        silh_val = silhouette_score(self.X_all_data, self.y_all_data)
+        # self.X_train, self.y_clustering, self.X_new, self.y_new
+        silhouette_val = silhouette_score(self.X_train, self.y_clustering)
 
         print(
             f"\n{type(self).__name__}\nPerformance Metrics",
         )
         score_dict = {
-            "Silhouette_Coefficient": silh_val,
+            "Silhouette_Coefficient": silhouette_val,
         }
 
         for k, v in score_dict.items():
             print(f"{k}: {v}")
 
         return score_dict
+
+    def plot_score_evolution(self):
+        pass
 
 
 if __name__ == "__main__":
