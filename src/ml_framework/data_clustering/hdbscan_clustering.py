@@ -10,15 +10,15 @@ from ml_framework.tools.helper_functions import get_workspace_path
 from typing import List, Dict, Union
 
 
-class DBSCAN_Clustering(Clustering):
+class HDBSCAN_Clustering(Clustering):
     """
-    DBSCAN_Clustering class for fitting a dbscan-clustering model as implemented in scikit-learn.
+    HDBSCAN_Clustering class for fitting a hdbscan-clustering model as implemented in scikit-learn.
 
     Attributes:
         train_data (pd.DataFrame): The training data.
 
     Methods:
-        fit(nr_iterations: int = 10): Fit the dbscan-clustering model.
+        fit(nr_iterations: int = 10): Fit the hdbscan-clustering model.
     """
 
     def __init__(
@@ -26,7 +26,7 @@ class DBSCAN_Clustering(Clustering):
         train_data: pd.DataFrame = None,
     ):
         """
-        Initialize the DBSCAN_Clustering object.
+        Initialize the HDBSCAN_Clustering object.
 
         Args:
             train_data (pd.DataFrame): The training data.
@@ -37,7 +37,7 @@ class DBSCAN_Clustering(Clustering):
 
     def fit(self, nr_iterations: int = 10):
         """
-        Fit the dbscan-clustering model.
+        Fit the hdbscan-clustering model.
 
         Args:
             nr_iterations (int): The number of iterations.
@@ -45,13 +45,18 @@ class DBSCAN_Clustering(Clustering):
         plt.switch_backend("agg")
 
         def optuna_objective_func(trial, train_data):
+            # params = {
+            #    "eps": trial.suggest_float("eps", 1e-6, 10, log=True),
+            #    "min_samples": trial.suggest_int("min_samples", 2, 50, step=2),
+            #    "metric": trial.suggest_categorical("metric", ["euclidean"]),
+            # }
+            # model = sklearn.cluster.DBSCAN(**params).fit(train_data)
+
             params = {
-                "eps": trial.suggest_float("eps", 1e-6, 1e9, log=True),
-                "min_samples": trial.suggest_int("min_samples", 1, 60, step=3),
-                "metric": trial.suggest_categorical("metric", ["euclidean"]),
+                "min_samples": trial.suggest_int("min_samples", 2, 50, step=2),
             }
 
-            model = sklearn.cluster.DBSCAN(**params).fit(train_data)
+            model = sklearn.cluster.HDBSCAN(**params, copy=True).fit(train_data)
 
             if len(np.unique(model.labels_)) > 1:
                 silhouette_val = silhouette_score(train_data, model.labels_)
@@ -59,6 +64,7 @@ class DBSCAN_Clustering(Clustering):
                 silhouette_val = 0
 
             trial.set_user_attr("model", model)
+            print(f"Trial: {trial.number},\tSilhouetteScore: {silhouette_val}")
 
             return silhouette_val
 

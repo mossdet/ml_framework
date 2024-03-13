@@ -5,12 +5,16 @@ import numpy as np
 from typing import List, Dict, Union
 
 
-class DataCleaner():
+class DataCleaner:
 
     def __init__(self):
         pass
 
-    def replace_missing_data(self, data: Union[np.ndarray, pd.DataFrame], nan_replace_metrics: Union[str, Dict[int, str]]) -> pd.DataFrame:
+    def replace_missing_data(
+        self,
+        data: Union[np.ndarray, pd.DataFrame],
+        nan_replace_metrics: Union[str, Dict[int, str]],
+    ) -> pd.DataFrame:
         """
         Replaces missing values in columns of a numpy array or a pandas DataFrame.
         If  data is a numpy array, then nan_replace_metrics must be a string specifying the interpolation-operation used to fill missing values
@@ -21,7 +25,7 @@ class DataCleaner():
         data : Union[np.ndarray, pd.DataFrame]
             input numpy array or pandas DataFrame
         nan_replace_metrics : Union[str, Dict[int, str]]
-            name of the interpolation-operation used to fill missing values 
+            name of the interpolation-operation used to fill missing values
             or
             dictionary specifying pairs of column_name and interpolation-operation to replace missing values
 
@@ -39,7 +43,8 @@ class DataCleaner():
 
                     if np.sum(np.isnan(data_array)) > 0:
                         data_array = self.__replace_missing_data_array(
-                            data_array, this_metric)
+                            data_array, this_metric
+                        )
                         data.iloc[:, k] = data_array
                     pass
             else:
@@ -48,24 +53,30 @@ class DataCleaner():
 
         return data
 
-    def __replace_missing_data_array(self, data: np.ndarray, nan_replace_metrics: str) -> np.ndarray:
+    def __replace_missing_data_array(
+        self, data: np.ndarray, nan_replace_metrics: str
+    ) -> np.ndarray:
         """
         Replaces missing values in columns of a numpy array.
         If  data is a numpy array, then nan_replace_metrics must be a string specifying the interpolation-operation used to fill missing values
         """
-        if isinstance(nan_replace_metrics, str) and nan_replace_metrics in ['mean', 'median', 'interpolate']:
+        if isinstance(nan_replace_metrics, str) and nan_replace_metrics in [
+            "mean",
+            "median",
+            "interpolate",
+        ]:
             non_nan_values = data[np.logical_not(np.isnan(data))]
             if not isinstance(non_nan_values[0], str):
-                if nan_replace_metrics in ['mean', 'median']:
+                if nan_replace_metrics in ["mean", "median"]:
                     try:
-                        op_str = f'pd.Series(data).{nan_replace_metrics}(skipna=True)'
+                        op_str = f"pd.Series(data).{nan_replace_metrics}(skipna=True)"
                         replace_value = eval(op_str)
                         data[np.isnan(data)] = replace_value
                     except:
-                        this_pyfile_name = os.path.split(
-                            os.path.abspath(__file__))[1]
+                        this_pyfile_name = os.path.split(os.path.abspath(__file__))[1]
                         print(
-                            f"An exception occurred in {this_pyfile_name}, __replace_missing_data_array")
+                            f"An exception occurred in {this_pyfile_name}, __replace_missing_data_array"
+                        )
                 else:
                     data = pd.Series(data).interpolate().to_numpy()
                     pass
@@ -77,7 +88,12 @@ class DataCleaner():
             print("Wrong nan_replace_metrics type!")
         return data
 
-    def drop_columns(self, df: pd.DataFrame = None, drop_idxs: Union[int, List[int]] = None, drop_perc: float = 1):
+    def drop_columns(
+        self,
+        data: pd.DataFrame = None,
+        drop_idxs: Union[int, List[int]] = None,
+        drop_perc: float = 1,
+    ):
         """
         Cleans the data by dropping selected columns and columns with a percentage of missing values higher than drop_perc.
         Parameters:
@@ -91,22 +107,24 @@ class DataCleaner():
             drop_idxs = [drop_idxs]
 
         if drop_perc < 1:
-            nr_rows = df.iloc[:, col_idx].shape[0]
-            for col_idx, col_name in enumerate(df.columns):
-                nr_nan = df.iloc[:, col_idx].isna().sum(
-                ) + df.iloc[:, col_idx].isnull().sum()
-                nan_perctg = nr_nan/nr_rows
+            nr_rows = data.shape[0]
+            for col_idx, col_name in enumerate(data.columns):
+                nr_nan = (
+                    data.iloc[:, col_idx].isna().sum()
+                    + data.iloc[:, col_idx].isnull().sum()
+                )
+                nan_perctg = nr_nan / nr_rows
                 if nan_perctg > drop_perc:
                     drop_idxs.append(col_idx)
 
         if drop_idxs is not None:
-            drop_col_names_ls = df.columns[drop_idxs]
+            drop_col_names_ls = data.columns[drop_idxs]
             print("Drop columns: ", drop_col_names_ls)
-            df = df.drop(columns=drop_col_names_ls)
+            data = data.drop(columns=drop_col_names_ls)
         else:
             print("No columns to drop!")
 
-        return df
+        return data
 
     def drop_rows(self, data: Union[np.ndarray, pd.DataFrame]) -> pd.DataFrame:
         """
@@ -131,5 +149,5 @@ class DataCleaner():
         return data
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     pass

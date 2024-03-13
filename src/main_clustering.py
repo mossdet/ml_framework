@@ -9,7 +9,7 @@ from collections import defaultdict
 from ml_framework.data_clustering.run_eda_clustering import ClusteringEDA
 from ml_framework.data_clustering.k_means_clustering import KMeansClustering
 from ml_framework.data_clustering.mean_shift_clustering import MeanShiftClustering
-from ml_framework.data_clustering.dbscan_clustering import DBSCAN_Clustering
+from ml_framework.data_clustering.hdbscan_clustering import HDBSCAN_Clustering
 from ml_framework.data_clustering.agglomerative_clustering import (
     AgglomerativeClustering,
 )
@@ -26,25 +26,22 @@ data_filepath = data_folder_path + "diamonds.csv"
 
 
 # Analyzer
-target_col_name = "price"
 analyzer = ClusteringEDA(data_filepath)
 analyzer.read_data()
 analyzer.clean_data()
-analyzer.encode_data(target_col_name=target_col_name)
+analyzer.encode_data()
 # analyzer.visualize_data(target_col_name=target_col_name)
-train_data, test_data = analyzer.sample_data(
-    target_col_name=target_col_name, train_perc=0.8
-)
+train_data, test_data = analyzer.sample_data(train_perc=0.8)
 
 
 # Clustering
 clusterings_ls = [
     "KMeansClustering",
     "MeanShiftClustering",
-    "DBSCAN_Clustering",
+    "HDBSCAN_Clustering",
 ]
 
-# clusterings_ls = ["DBSCAN_Clustering"]
+clusterings_ls = ["HDBSCAN_Clustering"]
 
 params = {
     "clustering_name": "",

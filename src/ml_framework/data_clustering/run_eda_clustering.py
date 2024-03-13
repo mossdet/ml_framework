@@ -63,7 +63,7 @@ class ClusteringEDA:
         )  # drop unnamed column
         self.data = data_cleaner.drop_rows(self.data)
 
-    def encode_data(self, target_col_name: str = None) -> None:
+    def encode_data(self) -> None:
         """
         Encodes categorical data and normalizes the dataset.
 
@@ -73,17 +73,34 @@ class ClusteringEDA:
         data_encoder = data_encoding.DataEncoder(self.images_destination_path)
         categ_data_description = data_encoder.describe_categorical_data(self.data)
 
+        print("Categorical Data Description:")
+        print(pd.DataFrame(categ_data_description))
+
         # 3.1 Encode Ordinal Data
         # Worst to best: Fair, Good, Very Good, Premium, Ideal
         col_name = "cut"
-        cut_encoding = {"Fair": 1, "Good": 2, "Very Good": 3, "Premium": 4, "Ideal": 5}
+        cut_encoding = {
+            "Fair": 1,
+            "Good": 2,
+            "Very Good": 3,
+            "Premium": 4,
+            "Ideal": 5,
+        }
         self.data = data_encoder.encode_ordinal_data(
             data=self.data, col_name=col_name, categorical_order=cut_encoding
         )
 
         # J (worst) to D (best)
         col_name = "color"
-        color_encoding = {"J": 1, "I": 2, "H": 3, "G": 4, "F": 5, "E": 6, "D": 7}
+        color_encoding = {
+            "J": 1,
+            "I": 2,
+            "H": 3,
+            "G": 4,
+            "F": 5,
+            "E": 6,
+            "D": 7,
+        }
         self.data = data_encoder.encode_ordinal_data(
             data=self.data, col_name=col_name, categorical_order=color_encoding
         )
@@ -107,15 +124,8 @@ class ClusteringEDA:
         # 3.2 Encode Nominal Data
         # self.data = data_encoder.encode_nominal_data(data=self.data)
 
-        # 3.3 Encode Target Column Data
-        self.data = data_encoder.encode_target_column(
-            data=self.data, target_col_name=target_col_name
-        )
-
         # 3.4 Normalize (Z-Score) Data
-        self.data = data_encoder.z_score_data(
-            data=self.data, target_col_name=target_col_name
-        )
+        self.data = data_encoder.z_score_data(data=self.data)
 
         pass
 
@@ -150,7 +160,6 @@ class ClusteringEDA:
 
     def sample_data(
         self,
-        target_col_name: str = None,
         train_perc: float = 0.8,
     ) -> None:
         """
@@ -167,16 +176,6 @@ class ClusteringEDA:
         self.train_data, self.test_data = data_sampler.data_partition(
             self.data, train_perc=train_perc
         )
-
-        # self.train_data = data_sampler.oversample_data(
-        #    data=self.train_data, target_col_name=target_col_name, oversample_factor=-1
-        # )
-        # self.train_data = data_sampler.synthetic_sampling_SMOTE(
-        #    data=self.train_data, target_col_name=target_col_name
-        # )
-        # self.train_data = data_sampler.synthetic_sampling_ADASYN(
-        #    data=self.train_data, target_col_name=target_col_name
-        # )
 
         self.train_data = data_sampler.shuffle(self.train_data)
 

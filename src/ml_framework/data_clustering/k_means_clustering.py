@@ -77,6 +77,10 @@ class KMeansClustering(Clustering):
 
             trial.set_user_attr("model", model)
 
+            print(
+                f"K: {k},\t Trial: {trial.number},\t SilhouetteScore: {silhouette_val}"
+            )
+
             return inertia_val
 
         optuna.logging.set_verbosity(optuna.logging.WARNING)
