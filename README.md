@@ -96,6 +96,31 @@ for regressor_name in regressors_ls:
         regressors_performance[k].append(v)
 ```
 
+### Development of Clustering
+```python
+# Clustering
+clusterings_ls = [
+    "KMeansClustering",
+    "AgglomerativeClustering",
+    "MeanShiftClustering",
+    "DBSCAN_Clustering",
+]
+
+# clusterings_ls = ["AgglomerativeClustering"]
+
+clustering_performance = defaultdict(list)
+for clustering_name in clusterings_ls:
+    clustering = eval(clustering_name + "(train_data=train_data)")
+    clustering.fit(nr_iterations=100)
+    clustering.predict(test_data)
+    score_dict = clustering.score()
+
+    clustering_performance["Model"].append(clustering_name)
+    for k, v in score_dict.items():
+        clustering_performance[k].append(v)
+    clustering_performance["NrClusters"].append(clustering.get_num_clusters())
+```
+
 ## Contributing
 
 Pull requests are welcome. For major changes, please open an issue first
