@@ -8,7 +8,7 @@ This project defines the framework for future ML projects
 <br /><br /><br /><br />
 
 
-# Foobar
+# Machine Learning Framework
 
 This Python library facilitates the steps needed for the training and testing of machine-learning models dealing with structured data. The framework provides methods for data analysis, classification regression and clustering.
 
@@ -42,6 +42,7 @@ train_data, valid_data, test_data = analyzer.sample_data(
 )
 ```
 
+
 ### Development of Classifiers
 ```python
 # Classifier
@@ -69,6 +70,18 @@ for classifier_name in classifiers_ls:
     for k, v in score_dict.items():
         classifiers_performance[k].append(v)
 ```
+```console
+(ml-framework-py3.11) PS C:\Documents\ml_framework\src> python .\main_classification.py
+                          Model  Precision    Recall  Accuracy  F1-Score
+0  LogisticRegressionClassifier   0.636091  0.520693  0.651469  0.541070
+1                KNN_Classifier   0.684462  0.637773  0.686313  0.654432
+2        DecisionTreeClassifier   0.693999  0.645946  0.717820  0.655758
+3        RandomForestClassifier   0.801956  0.759292  0.779817  0.769552
+4             XGBoostClassifier   0.819495  0.793395  0.810861  0.805071
+5             ANN_TF_Classifier   0.806076  0.777483  0.800297  0.790336
+6       SupportVectorClassifier   0.782612  0.747490  0.780743  0.762896
+```
+
 
 ### Development of Regressors
 ```python
@@ -95,6 +108,18 @@ for regressor_name in regressors_ls:
     for k, v in score_dict.items():
         regressors_performance[k].append(v)
 ```
+```console
+(ml-framework-py3.11) PS C:\Documents\ml_framework\src> python .\main_regression.py
+                    Model  R2_Score  ...  Mean_Absolute_Error  Mean_Absolute_Percentage_Error
+0         LinearRegressor  0.904075  ...           822.070293                        0.437571
+1           KNN_Regressor  0.959968  ...           400.844642                        0.113064
+2   DecisionTreeRegressor  0.952484  ...           435.645532                        0.109457
+3   RandomForestRegressor  0.982113  ...           274.680662                        0.070769
+4        XGBoostRegressor  0.982173  ...           276.939906                        0.073591
+5        ANN_TF_Regressor  0.975925  ...           322.883121                        0.088762
+6  SupportVectorRegressor  0.965810  ...           513.631381                        0.250324
+```
+
 
 ### Development of Clustering
 ```python
@@ -105,8 +130,6 @@ clusterings_ls = [
     "MeanShiftClustering",
     "DBSCAN_Clustering",
 ]
-
-# clusterings_ls = ["AgglomerativeClustering"]
 
 clustering_performance = defaultdict(list)
 for clustering_name in clusterings_ls:
@@ -120,6 +143,18 @@ for clustering_name in clusterings_ls:
         clustering_performance[k].append(v)
     clustering_performance["NrClusters"].append(clustering.get_num_clusters())
 ```
+```console
+(ml-framework-py3.11) PS C:\Documents\ml_framework\src> python .\main_clustering.py
+                    Model  R2_Score  ...  Mean_Absolute_Error  Mean_Absolute_Percentage_Error
+0         LinearRegressor  0.904075  ...           822.070293                        0.437571
+1           KNN_Regressor  0.959968  ...           400.844642                        0.113064
+2   DecisionTreeRegressor  0.952484  ...           435.645532                        0.109457
+3   RandomForestRegressor  0.982113  ...           274.680662                        0.070769
+4        XGBoostRegressor  0.982173  ...           276.939906                        0.073591
+5        ANN_TF_Regressor  0.975925  ...           322.883121                        0.088762
+6  SupportVectorRegressor  0.965810  ...           513.631381                        0.250324
+```
+
 
 ## Contributing
 
