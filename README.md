@@ -6,3 +6,103 @@ This project defines the framework for future ML projects
 
 ![Alt text](Flowchart/ml_framework_diagram.drawio.png "")
 <br /><br /><br /><br />
+
+
+# Foobar
+
+This Python library facilitates the steps needed for the training and testing of machine-learning models dealing with structured data. The framework provides methods for data analysis, classification regression and clustering.
+
+## Installation
+
+The library was developed using [poetry](https://python-poetry.org/) for dependency, environment and package management. A wheel file can be generated with the command:
+```bash
+poetry build
+```
+
+The wheel file itself can be used to install the library using [pip](https://pip.pypa.io/en/stable/):
+```bash
+pip install ml_framework-0.1.0-py3-none-any.whl
+```
+
+## Usage
+
+### Data Analysis
+```python
+import ml_framework
+
+# Analyzer
+target_col_name = "target"
+analyzer = ClassificationEDA(data_filepath)
+analyzer.read_data()
+analyzer.clean_data()
+analyzer.encode_data(target_col_name=target_col_name)
+analyzer.visualize_data(target_col_name=target_col_name)
+train_data, valid_data, test_data = analyzer.sample_data(
+  target_col_name=target_col_name, train_perc=0.8, valid_perc=0.2
+)
+```
+
+### Development of Classifiers
+```python
+# Classifier
+import ml_framework
+
+classifiers_ls = [
+    "LogisticRegressionClassifier",
+    "KNN_Classifier",
+    "DecisionTreeClassifier",
+    "RandomForestClassifier",
+    "XGBoostClassifier",
+    "ANN_TF_Classifier",
+    "SupportVectorClassifier",
+]
+
+classifiers_performance = defaultdict(list)
+for classifier_name in classifiers_ls:
+    classifier = eval(classifier_name + "(target_col_name, train_data, valid_data)")
+    classifier.fit(nr_iterations=100)
+    classifier.predict(test_data)
+    score_dict = classifier.score()
+    classifier.plot_confusion_matrix()
+
+    classifiers_performance["Model"].append(classifier_name)
+    for k, v in score_dict.items():
+        classifiers_performance[k].append(v)
+```
+
+### Development of Regressors
+```python
+# Regression
+regressors_ls = [
+    "LinearRegressor",
+    "KNN_Regressor",
+    "DecisionTreeRegressor",
+    "RandomForestRegressor",
+    "XGBoostRegressor",
+    "ANN_TF_Regressor",
+    "SupportVectorRegressor",
+]
+
+regressors_performance = defaultdict(list)
+for regressor_name in regressors_ls:
+    regressor = eval(regressor_name + "(target_col_name, train_data, valid_data)")
+    regressor.fit(nr_iterations=100)
+    regressor.predict(test_data)
+    score_dict = regressor.score()
+    regressor.plot_scatterplot()
+
+    regressors_performance["Model"].append(regressor_name)
+    for k, v in score_dict.items():
+        regressors_performance[k].append(v)
+```
+
+## Contributing
+
+Pull requests are welcome. For major changes, please open an issue first
+to discuss what you would like to change.
+
+Please make sure to update tests as appropriate.
+
+## License
+
+[MIT](https://choosealicense.com/licenses/mit/)
