@@ -41,6 +41,28 @@ train_data, valid_data, test_data = analyzer.sample_data(
 
 <br />
 
+#### Data Description Output:
+![Alt text](Images/Classification/Classification_EDA_Images/data_description.jpeg "")
+<br />
+
+#### Description of Categorical Features:
+![Alt text](Images/Classification/Classification_EDA_Images/categorical_data_description.jpeg "")
+<br />
+
+#### Stratified Sampling to form the Train, Validation and Test Sets:
+Training Set
+![Alt text](Images/Classification/Classification_EDA_Images/class_distribution_plot_train_set.jpeg "")
+Validation Set
+![Alt text](Images/Classification/Classification_EDA_Images/class_distribution_plot_valid_set.jpeg "")
+Test Set
+![Alt text](Images/Classification/Classification_EDA_Images/class_distribution_plot_test_set.jpeg "")
+<br />
+
+#### Stratified Sampling to form the Train, Validation and Test Sets:
+![Alt text](Images/Classification/Classification_EDA_Images/data_description.jpeg "")
+
+<br />
+
 #### Example of output for the data analysis methods:
 ```console
 Data Description:
@@ -190,6 +212,7 @@ for clustering_name in clusterings_ls:
 <br />
 
 #### Example of output for the clustering methods:
+#### K-Means Clustering:
 ```console
 ****************************************************************
 
@@ -205,6 +228,7 @@ Cluster: 2, Size%: 10.94
 ![Alt text](Images/Clustering/Clustering_Modelling_Images/Elbow_Plot_KMeansClustering.jpeg "")
 <br /><br />
 
+#### Agglomerative Clustering:
 ```console
 ****************************************************************
 
@@ -220,6 +244,7 @@ Cluster: 2, Size%: 39.23
 ![Alt text](Images/Clustering/Clustering_Modelling_Images/Hierarchical_Clustering_Dendrogram_AgglomerativeClustering.jpeg "")
 <br /><br />
 
+#### Mean-Shift Clustering:
 ```console
 ****************************************************************
 
@@ -239,6 +264,7 @@ Cluster: 6, Size%: 0.00
 
 <br /><br />
 
+#### DBSCAN Clustering:
 ```console
 ****************************************************************
 
@@ -254,6 +280,7 @@ Cluster: 1, Size%: 4.06
 
 <br /><br />
 
+#### Summary of results obtained with the different clustering approaches:
 ```console
 ****************************************************************
 
