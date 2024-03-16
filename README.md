@@ -20,7 +20,8 @@ The wheel file itself can be used to install the library using [pip](https://pip
 pip install ml_framework-0.1.0-py3-none-any.whl
 ```
 
-<br /><br /><br /><br />
+<br /><br /><br />
+
 ## Usage
 
 ### 1.Data Analysis
@@ -43,11 +44,9 @@ train_data, valid_data, test_data = analyzer.sample_data(
 
 #### Data Description Output:
 ![Alt text](Images/Classification/Classification_EDA_Images/data_description.jpeg "")
-<br />
 
 #### Description of Categorical Features:
 ![Alt text](Images/Classification/Classification_EDA_Images/categorical_data_description.jpeg "")
-<br />
 
 #### Stratified Sampling to form the Train, Validation and Test Sets:
 Training Set
@@ -56,12 +55,6 @@ Validation Set
 ![Alt text](Images/Classification/Classification_EDA_Images/class_distribution_plot_valid_set.jpeg "")
 Test Set
 ![Alt text](Images/Classification/Classification_EDA_Images/class_distribution_plot_test_set.jpeg "")
-<br />
-
-#### Stratified Sampling to form the Train, Validation and Test Sets:
-![Alt text](Images/Classification/Classification_EDA_Images/data_description.jpeg "")
-
-<br />
 
 #### Example of output for the data analysis methods:
 ```console
@@ -186,7 +179,7 @@ for regressor_name in regressors_ls:
 
 <br /><br /><br /><br />
 
-### Development of Clustering
+### 4.Development of Clustering
 ```python
 # Clustering
 clusterings_ls = [
