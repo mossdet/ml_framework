@@ -177,6 +177,33 @@ for regressor_name in regressors_ls:
 6  SupportVectorRegressor  0.965810  ...           513.631381                        0.250324
 ```
 
+#### Linear Regression:
+![Alt text](Images/Regression/Regression_Modelling_Images/Regression_Scatterplot_LinearRegressor.jpeg "")
+<br /><br />
+
+#### KNN Regression:
+![Alt text](Images/Regression/Regression_Modelling_Images/Regression_Scatterplot_KNN_Regressor.jpeg "")
+<br /><br />
+
+#### Decision Tree Regression:
+![Alt text](Images/Regression/Regression_Modelling_Images/Regression_Scatterplot_DecisionTreeRegressor.jpeg "")
+<br /><br />
+
+#### Random Forest Regression:
+![Alt text](Images/Regression/Regression_Modelling_Images/Regression_Scatterplot_RandomForestRegressor.jpeg "")
+<br /><br />
+
+#### XGBoost Regression:
+![Alt text](Images/Regression/Regression_Modelling_Images/Regression_Scatterplot_XGBoostRegressor.jpeg "")
+<br /><br />
+
+#### Artificial Neural Network Regression:
+![Alt text](Images/Regression/Regression_Modelling_Images/ANN_TF_Regressor_TrainingResult.jpeg "")
+![Alt text](Images/Regression/Regression_Modelling_Images/Regression_Scatterplot_ANN_TF_Regressor.jpeg "")
+<br /><br />
+
+#### Suport Vector Machine Regression:
+![Alt text](Images/Regression/Regression_Modelling_Images/Regression_Scatterplot_SupportVectorRegressor.jpeg "")
 <br /><br /><br /><br />
 
 ### 4.Development of Clustering
