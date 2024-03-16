@@ -102,6 +102,7 @@ for classifier_name in classifiers_ls:
     for k, v in score_dict.items():
         classifiers_performance[k].append(v)
 ```
+
 <br />
 #### Example of output for the classification methods:
 ```console
@@ -141,6 +142,7 @@ for regressor_name in regressors_ls:
     for k, v in score_dict.items():
         regressors_performance[k].append(v)
 ```
+
 <br />
 #### Example of output for the regression methods:
 ```console
@@ -177,6 +179,7 @@ for clustering_name in clusterings_ls:
         clustering_performance[k].append(v)
     clustering_performance["NrClusters"].append(clustering.get_num_clusters())
 ```
+
 <br />
 #### Example of output for the clustering methods:
 ```console
