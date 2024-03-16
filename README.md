@@ -1,16 +1,12 @@
-# ml_framework
-This project defines the framework for future ML projects
+# Machine Learning Framework
+
+This Python library facilitates the steps needed for the training and testing of machine-learning models dealing with structured data. The framework provides methods for data analysis, classification regression and clustering.
 
 ## Package Description:
 <br />
 
 ![Alt text](Flowchart/ml_framework_diagram.drawio.png "")
 <br /><br /><br /><br />
-
-
-# Machine Learning Framework
-
-This Python library facilitates the steps needed for the training and testing of machine-learning models dealing with structured data. The framework provides methods for data analysis, classification regression and clustering.
 
 ## Installation
 
@@ -24,11 +20,10 @@ The wheel file itself can be used to install the library using [pip](https://pip
 pip install ml_framework-0.1.0-py3-none-any.whl
 ```
 
-
-
+<br /><br /><br /><br />
 ## Usage
 
-### Data Analysis
+### 1.Data Analysis
 ```python
 import ml_framework
 
@@ -43,7 +38,7 @@ train_data, valid_data, test_data = analyzer.sample_data(
   target_col_name=target_col_name, train_perc=0.8, valid_perc=0.2
 )
 ```
-
+<br />
 #### Example of output for the data analysis methods:
 ```console
 Data Description:
@@ -79,9 +74,8 @@ Categories:
 ['I1', 'IF', 'SI1', 'SI2', 'VS1', 'VS2', 'VVS1', 'VVS2']
 ```
 
-
-
-### Development of Classifiers
+<br /><br /><br /><br />
+### 2.Development of Classifiers
 ```python
 # Classifier
 import ml_framework
@@ -108,7 +102,7 @@ for classifier_name in classifiers_ls:
     for k, v in score_dict.items():
         classifiers_performance[k].append(v)
 ```
-
+<br />
 #### Example of output for the classification methods:
 ```console
                           Model  Precision    Recall  Accuracy  F1-Score
@@ -121,9 +115,8 @@ for classifier_name in classifiers_ls:
 6       SupportVectorClassifier   0.782612  0.747490  0.780743  0.762896
 ```
 
-
-
-### Development of Regressors
+<br /><br /><br /><br />
+### 3.Development of Regressors
 ```python
 # Regression
 regressors_ls = [
@@ -148,7 +141,7 @@ for regressor_name in regressors_ls:
     for k, v in score_dict.items():
         regressors_performance[k].append(v)
 ```
-
+<br />
 #### Example of output for the regression methods:
 ```console
                     Model  R2_Score  ...  Mean_Absolute_Error  Mean_Absolute_Percentage_Error
@@ -161,8 +154,7 @@ for regressor_name in regressors_ls:
 6  SupportVectorRegressor  0.965810  ...           513.631381                        0.250324
 ```
 
-
-
+<br /><br /><br /><br />
 ### Development of Clustering
 ```python
 # Clustering
@@ -185,7 +177,7 @@ for clustering_name in clusterings_ls:
         clustering_performance[k].append(v)
     clustering_performance["NrClusters"].append(clustering.get_num_clusters())
 ```
-
+<br />
 #### Example of output for the clustering methods:
 ```console
                     Model  R2_Score  ...  Mean_Absolute_Error  Mean_Absolute_Percentage_Error
@@ -198,7 +190,7 @@ for clustering_name in clusterings_ls:
 6  SupportVectorRegressor  0.965810  ...           513.631381                        0.250324
 ```
 
-
+<br /><br /><br /><br />
 ## Contributing
 
 Pull requests are welcome. For major changes, please open an issue first
