@@ -59,11 +59,11 @@ class ClusteringEDA:
         data_cleaner = data_cleaning.DataCleaner()
         # self.data = data_cleaner.replace_missing_data(data=self.data, nan_replace_metrics={0: 'interpolate'})
         self.data = data_cleaner.drop_columns(
-            self.data, drop_idxs=0
+            self.data, drop_idxs=[0, 2, 3, 4, 5, 6, 8, 9, 10]
         )  # drop unnamed column
         self.data = data_cleaner.drop_rows(self.data)
 
-    def encode_data(self) -> None:
+    def encode_data(self, target_col_name: str = None) -> None:
         """
         Encodes categorical data and normalizes the dataset.
 
@@ -71,60 +71,57 @@ class ClusteringEDA:
             target_col_name (str): The name of the target column.
         """
         data_encoder = data_encoding.DataEncoder(self.images_destination_path)
-        categ_data_description = data_encoder.describe_categorical_data(self.data)
+        # categ_data_description = data_encoder.describe_categorical_data(self.data)
 
-        print("Categorical Data Description:")
-        print(pd.DataFrame(categ_data_description))
+        # print("Categorical Data Description:")
+        # print(pd.DataFrame(categ_data_description))
 
-        # 3.1 Encode Ordinal Data
+        # Encode Ordinal Data
         # Worst to best: Fair, Good, Very Good, Premium, Ideal
-        col_name = "cut"
-        cut_encoding = {
-            "Fair": 1,
-            "Good": 2,
-            "Very Good": 3,
-            "Premium": 4,
-            "Ideal": 5,
-        }
-        self.data = data_encoder.encode_ordinal_data(
-            data=self.data, col_name=col_name, categorical_order=cut_encoding
-        )
+        # col_name = "cut"
+        # cut_encoding = {
+        #     "Fair": 0,
+        #     "Good": 1,
+        #     "Very Good": 2,
+        #     "Premium": 3,
+        #     "Ideal": 4,
+        # }
+        # self.data = data_encoder.encode_ordinal_data(
+        #     data=self.data, col_name=col_name, categorical_order=cut_encoding
+        # )
 
-        # J (worst) to D (best)
-        col_name = "color"
-        color_encoding = {
-            "J": 1,
-            "I": 2,
-            "H": 3,
-            "G": 4,
-            "F": 5,
-            "E": 6,
-            "D": 7,
-        }
-        self.data = data_encoder.encode_ordinal_data(
-            data=self.data, col_name=col_name, categorical_order=color_encoding
-        )
+        # # J (worst) to D (best)
+        # col_name = "color"
+        # color_encoding = {
+        #     "J": 0,
+        #     "I": 1,
+        #     "H": 2,
+        #     "G": 3,
+        #     "F": 4,
+        #     "E": 5,
+        #     "D": 6,
+        # }
+        # self.data = data_encoder.encode_ordinal_data(
+        #     data=self.data, col_name=col_name, categorical_order=color_encoding
+        # )
 
-        # Worst to best: I1, SI2, SI1, VS2, VS1, VVS2, VVS1, IF
-        col_name = "clarity"
-        clarity_encoding = {
-            "I1": 1,
-            "SI2": 2,
-            "SI1": 3,
-            "VS2": 4,
-            "VS1": 5,
-            "VVS2": 6,
-            "VVS1": 7,
-            "IF": 8,
-        }
-        self.data = data_encoder.encode_ordinal_data(
-            data=self.data, col_name=col_name, categorical_order=clarity_encoding
-        )
+        # # Worst to best: I1, SI2, SI1, VS2, VS1, VVS2, VVS1, IF
+        # col_name = "clarity"
+        # clarity_encoding = {
+        #     "I1": 0,
+        #     "SI2": 1,
+        #     "SI1": 2,
+        #     "VS2": 3,
+        #     "VS1": 4,
+        #     "VVS2": 5,
+        #     "VVS1": 6,
+        #     "IF": 7,
+        # }
+        # self.data = data_encoder.encode_ordinal_data(
+        #     data=self.data, col_name=col_name, categorical_order=clarity_encoding
+        # )
 
-        # 3.2 Encode Nominal Data
-        # self.data = data_encoder.encode_nominal_data(data=self.data)
-
-        # 3.4 Normalize (Z-Score) Data
+        # Normalize (Z-Score) Data
         self.data = data_encoder.z_score_data(data=self.data)
 
         pass
@@ -161,6 +158,7 @@ class ClusteringEDA:
     def sample_data(
         self,
         train_perc: float = 0.8,
+        valid_perc: float = None,
     ) -> None:
         """
         Samples the dataset into training, validation, and testing sets.

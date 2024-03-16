@@ -49,6 +49,7 @@ class Clustering:
         self.X_new = None
         self.y_new = None
         self.model = None
+        self.n_clusters = None
 
         self.images_destination_path = (
             get_workspace_path() + "Images/Clustering/Clustering_Modelling_Images/"
@@ -72,12 +73,16 @@ class Clustering:
         """
 
         self.X_new = new_data.to_numpy()
-        self.y_new_data = self.model.predict(self.X_new)
+        self.y_new = self.model.predict(self.X_new)
         pass
 
     def get_predicted_values(self):
         """Returns the cluster labels of new data points"""
-        return self.y_new_data
+        return self.y_new
+
+    def get_num_clusters(self):
+        """Returns the cluster labels of new data points"""
+        return len(np.unique(self.y_clustering))
 
     def score(self):
         """
@@ -86,7 +91,6 @@ class Clustering:
         Returns:
             dict: A dictionary containing the computed performance metrics.
         """
-        # self.X_train, self.y_clustering, self.X_new, self.y_new
         silhouette_val = silhouette_score(self.X_train, self.y_clustering)
 
         print(
@@ -99,6 +103,10 @@ class Clustering:
         for k, v in score_dict.items():
             print(f"{k}: {v}")
 
+        for label in np.unique(self.y_clustering):
+            print(
+                f"Cluster: {label}, Size%: {np.sum(self.y_clustering==label)/len(self.y_clustering)*100:.2f}"
+            )
         return score_dict
 
     def plot_score_evolution(self):

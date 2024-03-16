@@ -77,14 +77,28 @@ class ClassificationEDA:
         # 3.1 Encode Ordinal Data
         # Worst to best: Fair, Good, Very Good, Premium, Ideal
         col_name = "cut"
-        cut_encoding = {"Fair": 1, "Good": 2, "Very Good": 3, "Premium": 4, "Ideal": 5}
+        cut_encoding = {
+            "Fair": 0,
+            "Good": 1,
+            "Very Good": 2,
+            "Premium": 3,
+            "Ideal": 4,
+        }
         self.data = data_encoder.encode_ordinal_data(
             data=self.data, col_name=col_name, categorical_order=cut_encoding
         )
 
         # J (worst) to D (best)
         col_name = "color"
-        color_encoding = {"J": 1, "I": 2, "H": 3, "G": 4, "F": 5, "E": 6, "D": 7}
+        color_encoding = {
+            "J": 0,
+            "I": 1,
+            "H": 2,
+            "G": 3,
+            "F": 4,
+            "E": 5,
+            "D": 6,
+        }
         self.data = data_encoder.encode_ordinal_data(
             data=self.data, col_name=col_name, categorical_order=color_encoding
         )
@@ -92,25 +106,17 @@ class ClassificationEDA:
         # Worst to best: I1, SI2, SI1, VS2, VS1, VVS2, VVS1, IF
         col_name = "clarity"
         clarity_encoding = {
-            "I1": 1,
-            "SI2": 2,
-            "SI1": 3,
-            "VS2": 4,
-            "VS1": 5,
-            "VVS2": 6,
-            "VVS1": 7,
-            "IF": 8,
+            "I1": 0,
+            "SI2": 1,
+            "SI1": 2,
+            "VS2": 3,
+            "VS1": 4,
+            "VVS2": 5,
+            "VVS1": 6,
+            "IF": 7,
         }
         self.data = data_encoder.encode_ordinal_data(
             data=self.data, col_name=col_name, categorical_order=clarity_encoding
-        )
-
-        # 3.2 Encode Nominal Data
-        # self.data = data_encoder.encode_nominal_data(data=self.data)
-
-        # 3.3 Encode Target Column Data
-        self.data = data_encoder.encode_target_column(
-            data=self.data, target_col_name=target_col_name
         )
 
         # 3.4 Normalize (Z-Score) Data

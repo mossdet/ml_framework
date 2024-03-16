@@ -46,90 +46,60 @@ class KMeansClustering(Clustering):
         """
         plt.switch_backend("agg")
 
-        def optuna_objective_func(trial, train_data, n_clusters):
-            """
-            Objective function for Optuna to optimize.
-
-            Args:
-                trial: An Optuna trial object.
-                X_train (pd.DataFrame): The training features.
-                y_train (pd.Series): The training target.
-                X_valid (pd.DataFrame): The validation features.
-                y_valid (pd.Series): The validation target.
-
-            Returns:
-                float: The mean F1 score of the model predictions on the validation set.
-            """
-            params = {
-                "init": trial.suggest_categorical("init", ["k-means++", "random"]),
-                "tol": trial.suggest_float("tol", 1e-9, 1e9, log=True),
-                "algorithm": trial.suggest_categorical("algorithm", ["lloyd", "elkan"]),
-                # Constants
-                "n_clusters": trial.suggest_categorical("n_clusters", [n_clusters]),
-                "n_init": trial.suggest_categorical("n_init", [10]),
-                "max_iter": trial.suggest_categorical("max_iter", [1000]),
-                "random_state": trial.suggest_categorical("random_state", [42]),
-            }
-
-            model = sklearn.cluster.KMeans(**params).fit(train_data)
-
-            inertia_val = model.inertia_
-
-            trial.set_user_attr("model", model)
-
-            print(
-                f"K: {k},\t Trial: {trial.number},\t SilhouetteScore: {silhouette_val}"
-            )
-
-            return inertia_val
-
-        optuna.logging.set_verbosity(optuna.logging.WARNING)
-
         models_log = {
             "inertia": [],
             "silhouette": [],
             "k": [],
-            "optuna_trial": [],
             "model": [],
         }
-        silhouette_ls = []
-        k_ls = []
-        early_stop_history_sz = 10
-        early_stop_tol = 0.05
-        for k in range(2, nr_iterations):
-            study = optuna.create_study(direction="minimize")
-            # Start optimizing with specified number of trials
-            study.optimize(
-                lambda trial: optuna_objective_func(trial, self.X_train, k),
-                n_trials=nr_iterations,
-            )
 
-            model = study.best_trial.user_attrs["model"]
-            inertia_val = study.best_trial.value
+        early_stop_history_sz = 3
+        early_stop_tol = 0.05
+        nr_no_improve = 0
+
+        for k in range(2, 10):
+            params = {
+                "n_clusters": k,
+                "init": "k-means++",
+                "n_init": 50,
+                "max_iter": nr_iterations,
+                "random_state": 42,
+            }
+
+            model = sklearn.cluster.KMeans(**params).fit(self.X_train)
+
             silhouette_val = silhouette_score(self.X_train, model.labels_)
 
-            models_log["inertia"].append(inertia_val)
+            models_log["inertia"].append(model.inertia_)
             models_log["silhouette"].append(silhouette_val)
             models_log["k"].append(k)
-            models_log["optuna_trial"].append(study.best_trial)
             models_log["model"].append(model)
 
-            silhouette_ls.append(silhouette_val)
-            k_ls.append(k)
+            # print(f"K = {k}, silhouette_score = {silhouette_val}")
 
-            print(f"K = {k}, silhouette_score = {silhouette_val}")
-            if len(silhouette_ls) > early_stop_history_sz:
-                improvement_history = np.diff(silhouette_ls) / silhouette_ls[1:]
-                avg_improvement = np.mean(improvement_history)
-                if avg_improvement < early_stop_tol:
+            if len(models_log["silhouette"]) > 1:
+                score_diff = models_log["silhouette"][-1] / models_log["silhouette"][-2]
+                if score_diff < 1 + early_stop_tol:
+                    nr_no_improve += 1
+                else:
+                    nr_no_improve = 0
+
+                if nr_no_improve >= early_stop_history_sz:
                     break
 
-        best_model_idx = np.argmax(silhouette_ls)
+        best_model_idx = np.argmax(models_log["silhouette"])
 
         # Retrain on training+validation set
         self.model = models_log["model"][best_model_idx]
         self.y_clustering = self.model.labels_
-        self.plot_score_evolution(k_ls, silhouette_ls, k_ls[best_model_idx])
+        self.n_clusters = len(np.unique(self.model.labels_))
+
+        # for label in np.unique(self.y_clustering):
+        #     print(f"Cluster: {label}, Size: {np.sum(self.y_clustering==label)}")
+
+        self.plot_score_evolution(
+            models_log["k"], models_log["silhouette"], models_log["k"][best_model_idx]
+        )
 
         pass
 

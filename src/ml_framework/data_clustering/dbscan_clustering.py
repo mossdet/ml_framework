@@ -3,7 +3,7 @@ import numpy as np
 import optuna
 import sklearn
 import matplotlib.pyplot as plt
-from sklearn.metrics import silhouette_score
+from sklearn.metrics import silhouette_score, davies_bouldin_score
 from ml_framework.data_clustering.clustering import Clustering
 
 from ml_framework.tools.helper_functions import get_workspace_path
@@ -73,18 +73,31 @@ class DBSCAN_Clustering(Clustering):
             # model = sklearn.cluster.DBSCAN(**params, copy=True).fit(train_data)
 
             nr_clusters = len(np.unique(model.labels_))
-            if nr_clusters > 1:
-                silhouette_val = silhouette_score(train_data, model.labels_)
+            cluster_ratios = {"ClusterLabel": [], "ClusterRatio": []}
+            for label in np.unique(model.labels_):
+                cluster_ratios["ClusterLabel"].append(label)
+                cluster_ratio = np.sum(model.labels_ == label) / len(model.labels_)
+                cluster_ratios["ClusterRatio"].append(cluster_ratio)
+
+            silhouette_val = -100
+            davies_bouldin_val = 100
+            if (nr_clusters < 2) or (
+                np.sum(np.array(cluster_ratios["ClusterRatio"]) > 0.99) > 0
+            ):
+                silhouette_val = -100
+                davies_bouldin_val = 100
             else:
-                silhouette_val = 0
+                silhouette_val = silhouette_score(train_data, model.labels_)
+                davies_bouldin_val = davies_bouldin_score(train_data, model.labels_)
+                pass
 
             trial.set_user_attr("model", model)
+            trial.set_user_attr("silhouette_val", silhouette_val)
+            trial.set_user_attr("davies_bouldin_val", davies_bouldin_val)
 
-            print(
-                f"Trial: {trial.number},\tSilhouetteScore: {silhouette_val},\tNr.Clusters: {nr_clusters}"
-            )
-            for k, v in enumerate(trial.params.items()):
-                print(f"{k} {v[0]}={v[1]}")
+            # print(
+            #     f"Trial: {trial.number},\t Silhouette_Score: {silhouette_val},\t Davies_Bouldin_Score: {davies_bouldin_val},\tNr.Clusters: {nr_clusters}"
+            # )
 
             return silhouette_val
 
@@ -101,8 +114,16 @@ class DBSCAN_Clustering(Clustering):
         self.y_clustering = self.model.labels_
         self.n_clusters = len(np.unique(self.model.labels_))
 
-        for label in np.unique(self.y_clustering):
-            print(f"Cluster: {label}, Size: {np.sum(self.y_clustering==label)}")
+        davies_bouldin_val = study.best_trial.user_attrs["davies_bouldin_val"]
+        silhouette_val = silhouette_score(self.X_train, self.y_clustering)
+
+        # print(
+        #     f"DBSCAN, Nr.Clusters: {self.n_clusters}, Silhouette Score: {silhouette_val}, Davies-Bouldin Score: {davies_bouldin_val}"
+        # )
+        # for label in np.unique(self.y_clustering):
+        #     print(
+        #         f"Cluster: {label}, Size%: {np.sum(self.y_clustering==label)/len(self.y_clustering)*100:.2f}"
+        #     )
 
         pass
 

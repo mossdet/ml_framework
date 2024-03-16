@@ -191,14 +191,138 @@ for clustering_name in clusterings_ls:
 
 #### Example of output for the clustering methods:
 ```console
-                    Model  R2_Score  ...  Mean_Absolute_Error  Mean_Absolute_Percentage_Error
-0         LinearRegressor  0.904075  ...           822.070293                        0.437571
-1           KNN_Regressor  0.959968  ...           400.844642                        0.113064
-2   DecisionTreeRegressor  0.952484  ...           435.645532                        0.109457
-3   RandomForestRegressor  0.982113  ...           274.680662                        0.070769
-4        XGBoostRegressor  0.982173  ...           276.939906                        0.073591
-5        ANN_TF_Regressor  0.975925  ...           322.883121                        0.088762
-6  SupportVectorRegressor  0.965810  ...           513.631381                        0.250324
+****************************************************************
+
+Running  KMeansClustering
+
+KMeansClustering
+Performance Metrics
+Silhouette_Coefficient: 0.6304530605897998
+Cluster: 0, Size%: 31.52
+Cluster: 1, Size%: 57.90
+Cluster: 2, Size%: 10.59
+
+
+****************************************************************
+
+Running  AgglomerativeClustering
+
+AgglomerativeClustering
+Performance Metrics
+Silhouette_Coefficient: 0.6060526931983101
+Cluster: 1, Size%: 59.01
+Cluster: 2, Size%: 40.99
+
+
+****************************************************************
+
+Running  MeanShiftClustering
+
+MeanShiftClustering
+Performance Metrics
+Silhouette_Coefficient: 0.563353896853357
+Cluster: 0, Size%: 47.72
+Cluster: 1, Size%: 42.12
+Cluster: 2, Size%: 9.84
+Cluster: 3, Size%: 0.06
+Cluster: 4, Size%: 0.13
+Cluster: 5, Size%: 0.11
+Cluster: 6, Size%: 0.02
+
+
+****************************************************************
+
+Running  DBSCAN_Clustering
+
+DBSCAN_Clustering
+Performance Metrics
+Silhouette_Coefficient: 0.616890578908906
+Cluster: -1, Size%: 0.91
+Cluster: 0, Size%: 95.03
+Cluster: 1, Size%: 4.06
+                     Model  Silhouette_Coefficient  NrClusters
+0         KMeansClustering                0.630453           3
+1  AgglomerativeClustering                0.606053           2
+2      MeanShiftClustering                0.563354           7
+3        DBSCAN_Clustering                0.616891           3
+PS C:\Users\HFO\Documents\MachineLearning\Capstone_Projects\ml_framework>  c:; cd 'c:\Users\HFO\Documents\MachineLearning\Capstone_Projects\ml_framework'; & 'c:\Users\HFO\Documents\MachineLearning\Capstone_Projects\ml_framework\.venv\Scripts\python.exe' 'c:\Users\HFO\.vscode\extensions\ms-python.debugpy-2024.2.0-win32-x64\bundled\libs\debugpy\adapter/../..\debugpy\launcher' '52305' '--' 'C:\Users\HFO\Documents\MachineLearning\Capstone_Projects\ml_framework\src\main_clustering.py'
+Nr. rows: 53940
+Nr. columns: 11
+
+
+
+Data Description:
+    ColumnNr  ColumnName               ColumnType  NrNaNs  NrNulls
+0          0  Unnamed: 0    <class 'numpy.int64'>       0        0
+1          1       carat  <class 'numpy.float64'>       0        0
+2          2         cut            <class 'str'>       0        0
+3          3       color            <class 'str'>       0        0
+4          4     clarity            <class 'str'>       0        0
+5          5       depth  <class 'numpy.float64'>       0        0
+6          6       table  <class 'numpy.float64'>       0        0
+7          7       price    <class 'numpy.int64'>       0        0
+8          8           x  <class 'numpy.float64'>       0        0
+9          9           y  <class 'numpy.float64'>       0        0
+10        10           z  <class 'numpy.float64'>       0        0
+Drop columns:  Index(['Unnamed: 0', 'cut', 'color', 'clarity', 'depth', 'table', 'x', 'y',
+       'z'],
+      dtype='object')
+
+
+****************************************************************
+
+Running  KMeansClustering
+
+KMeansClustering
+Performance Metrics
+Silhouette_Coefficient: 0.6200733351348301
+Cluster: 0, Size%: 57.96
+Cluster: 1, Size%: 31.11
+Cluster: 2, Size%: 10.94
+
+
+****************************************************************
+
+Running  AgglomerativeClustering
+
+AgglomerativeClustering
+Performance Metrics
+Silhouette_Coefficient: 0.6024892950496797
+Cluster: 1, Size%: 60.77
+Cluster: 2, Size%: 39.23
+
+
+****************************************************************
+
+Running  MeanShiftClustering
+
+MeanShiftClustering
+Performance Metrics
+Silhouette_Coefficient: 0.6287381491519984
+Cluster: 0, Size%: 86.27
+Cluster: 1, Size%: 13.63
+Cluster: 2, Size%: 0.01
+Cluster: 3, Size%: 0.04
+Cluster: 4, Size%: 0.05
+Cluster: 5, Size%: 0.00
+Cluster: 6, Size%: 0.00
+
+
+****************************************************************
+
+Running  DBSCAN_Clustering
+
+DBSCAN_Clustering
+Performance Metrics
+Silhouette_Coefficient: 0.616890578908906
+Cluster: -1, Size%: 0.91
+Cluster: 0, Size%: 95.03
+Cluster: 1, Size%: 4.06
+                     Model  Silhouette_Coefficient  NrClusters
+0         KMeansClustering                0.630453           3
+1  AgglomerativeClustering                0.606053           2
+2      MeanShiftClustering                0.563354           7
+3        DBSCAN_Clustering                0.616891           3
 ```
 
 <br /><br /><br /><br />

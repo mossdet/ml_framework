@@ -2,13 +2,26 @@ import os
 import socket
 import matplotlib
 import pandas as pd
+from collections import defaultdict
+from ml_framework.tools.helper_functions import get_workspace_path
+from ml_framework.data_regression.run_eda_regression import RegressionEDA
+from ml_framework.data_regression.linear_regression import (
+    LinearRegressor,
+)
+from ml_framework.data_regression.knn_regressor import KNN_Regressor
+from ml_framework.data_regression.decision_tree_regressor import (
+    DecisionTreeRegressor,
+)
+from ml_framework.data_regression.random_forest_regressor import (
+    RandomForestRegressor,
+)
+from ml_framework.data_regression.support_vector_regressor import (
+    SupportVectorRegressor,
+)
+from ml_framework.data_regression.xgboost_regressor import XGBoostRegressor
+from ml_framework.data_regression.ann_tf_regressor import ANN_TF_Regressor
 
 matplotlib.use("Agg")
-from matplotlib import pyplot
-from collections import defaultdict
-from ml_framework.data_regression.run_eda_regression import RegressionEDA
-from ml_framework.data_regression.run_regressor import RunRegression
-from ml_framework.tools.helper_functions import get_workspace_path
 
 # Set Data path
 data_folder_path = ""
@@ -43,16 +56,9 @@ regressors_ls = [
     "SupportVectorRegressor",
 ]
 
-params = {
-    "regressor_name": "",
-    "target_col_name": target_col_name,
-    "train_data": train_data,
-    "valid_data": valid_data,
-}
 all_models_performance = defaultdict(list)
 for regressor_name in regressors_ls:
-    params["regressor_name"] = regressor_name
-    regressor = RunRegression(**params)
+    regressor = eval(regressor_name + "(target_col_name, train_data, valid_data)")
     regressor.fit(nr_iterations=100)
     regressor.predict(test_data)
     score_dict = regressor.score()

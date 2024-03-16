@@ -44,21 +44,25 @@ class MeanShiftClustering(Clustering):
         """
         plt.switch_backend("agg")
 
-        # meanshift
-        model = sklearn.cluster.MeanShift(
+        # # meanshift
+        self.model = sklearn.cluster.MeanShift(
             bandwidth=None,
-            bin_seeding=True,
+            seeds=None,
+            bin_seeding=False,
+            min_bin_freq=1,
             cluster_all=True,
-            max_iter=nr_iterations,
             n_jobs=-1,
+            max_iter=nr_iterations,
         )
-        self.model = model.fit(self.X_train)
+        self.model = self.model.fit(self.X_train)
         self.y_clustering = self.model.labels_
+        self.n_clusters = len(np.unique(self.model.labels_))
 
-        # Retrain on training+validation set
-        # self.model = models_log["model"][best_model_idx]
-        # self.y_clustering = self.model.labels_
-        # self.plot_score_evolution(k_ls, silhouette_ls, k_ls[best_model_idx])
+        # silhouette_val = silhouette_score(self.X_train, self.model.labels_)
+        # print(f"Mean-Shift Clustering\tSilhouette Score = {silhouette_val}")
+
+        # for label in np.unique(self.y_clustering):
+        #     print(f"Cluster: {label}, Size: {np.sum(self.y_clustering==label)}")
 
         pass
 

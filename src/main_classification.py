@@ -2,14 +2,27 @@ import os
 import socket
 import matplotlib
 import pandas as pd
-
-matplotlib.use("Agg")
-from matplotlib import pyplot
 from collections import defaultdict
 from ml_framework.data_classification.run_eda_classification import ClassificationEDA
-from ml_framework.data_classification.run_classifier import RunClassification
-from ml_framework.data_analysis.data_visualization import DataVisualizer
+
+from ml_framework.data_classification.logistic_regression import (
+    LogisticRegressionClassifier,
+)
+from ml_framework.data_classification.knn_classifier import KNN_Classifier
+from ml_framework.data_classification.decision_tree_classifier import (
+    DecisionTreeClassifier,
+)
+from ml_framework.data_classification.random_forest_classifier import (
+    RandomForestClassifier,
+)
+from ml_framework.data_classification.support_vector_classifier import (
+    SupportVectorClassifier,
+)
+from ml_framework.data_classification.xgboost_classifier import XGBoostClassifier
+from ml_framework.data_classification.ann_tf_classifier import ANN_TF_Classifier
 from ml_framework.tools.helper_functions import get_workspace_path
+
+matplotlib.use("Agg")
 
 # Set Data path
 data_folder_path = ""
@@ -42,18 +55,10 @@ classifiers_ls = [
     "ANN_TF_Classifier",
     "SupportVectorClassifier",
 ]
-# classifiers_ls = ["SupportVectorClassifier"]
 
-params = {
-    "classifier_name": "",
-    "target_col_name": target_col_name,
-    "train_data": train_data,
-    "valid_data": valid_data,
-}
 all_models_performance = defaultdict(list)
 for classifier_name in classifiers_ls:
-    params["classifier_name"] = classifier_name
-    classifier = RunClassification(**params)
+    classifier = eval(classifier_name + "(target_col_name, train_data, valid_data)")
     classifier.fit(nr_iterations=100)
     classifier.predict(test_data)
     score_dict = classifier.score()

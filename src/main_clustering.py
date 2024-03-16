@@ -2,18 +2,17 @@ import os
 import socket
 import matplotlib
 import pandas as pd
-
-matplotlib.use("Agg")
-from matplotlib import pyplot
 from collections import defaultdict
 from ml_framework.data_clustering.run_eda_clustering import ClusteringEDA
 from ml_framework.data_clustering.k_means_clustering import KMeansClustering
-from ml_framework.data_clustering.mean_shift_clustering import MeanShiftClustering
-from ml_framework.data_clustering.hdbscan_clustering import HDBSCAN_Clustering
 from ml_framework.data_clustering.agglomerative_clustering import (
     AgglomerativeClustering,
 )
+from ml_framework.data_clustering.mean_shift_clustering import MeanShiftClustering
+from ml_framework.data_clustering.dbscan_clustering import DBSCAN_Clustering
 from ml_framework.tools.helper_functions import get_workspace_path
+
+matplotlib.use("Agg")
 
 # Set Data path
 data_folder_path = ""
@@ -31,22 +30,19 @@ analyzer.read_data()
 analyzer.clean_data()
 analyzer.encode_data()
 # analyzer.visualize_data(target_col_name=target_col_name)
-train_data, test_data = analyzer.sample_data(train_perc=0.8)
+train_data, test_data = analyzer.sample_data(train_perc=0.95)
 
 
 # Clustering
 clusterings_ls = [
     "KMeansClustering",
+    "AgglomerativeClustering",
     "MeanShiftClustering",
-    "HDBSCAN_Clustering",
+    "DBSCAN_Clustering",
 ]
 
-clusterings_ls = ["HDBSCAN_Clustering"]
+# clusterings_ls = ["DBSCAN_Clustering"]
 
-params = {
-    "clustering_name": "",
-    "train_data": train_data,
-}
 all_models_performance = defaultdict(list)
 for clustering_name in clusterings_ls:
     clustering = eval(clustering_name + "(train_data=train_data)")
@@ -57,6 +53,9 @@ for clustering_name in clusterings_ls:
     all_models_performance["Model"].append(clustering_name)
     for k, v in score_dict.items():
         all_models_performance[k].append(v)
+    all_models_performance["NrClusters"].append(clustering.get_num_clusters())
+
+    pass
 
 perf_df = pd.DataFrame(all_models_performance)
 print(perf_df)
