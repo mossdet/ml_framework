@@ -272,10 +272,11 @@ Running  DBSCAN_Clustering
 
 DBSCAN_Clustering
 Performance Metrics
-Silhouette_Coefficient: 0.616890578908906
-Cluster: -1, Size%: 0.91
-Cluster: 0, Size%: 95.03
-Cluster: 1, Size%: 4.06
+Silhouette_Coefficient: 0.6118046690512592
+Cluster: -1, Size%: 0.77
+Cluster: 0, Size%: 95.69
+Cluster: 1, Size%: 3.54
+
 ```
 
 <br /><br />
@@ -285,13 +286,11 @@ Cluster: 1, Size%: 4.06
 ****************************************************************
 
                      Model  Silhouette_Coefficient  NrClusters
-0         KMeansClustering                0.630453           3
-1  AgglomerativeClustering                0.606053           2
-2      MeanShiftClustering                0.563354           7
-3        DBSCAN_Clustering                0.616891           3
-PS C:\Users\HFO\Documents\MachineLearning\Capstone_Projects\ml_framework>  c:; cd 'c:\Users\HFO\Documents\MachineLearning\Capstone_Projects\ml_framework'; & 'c:\Users\HFO\Documents\MachineLearning\Capstone_Projects\ml_framework\.venv\Scripts\python.exe' 'c:\Users\HFO\.vscode\extensions\ms-python.debugpy-2024.2.0-win32-x64\bundled\libs\debugpy\adapter/../..\debugpy\launcher' '52305' '--' 'C:\Users\HFO\Documents\MachineLearning\Capstone_Projects\ml_framework\src\main_clustering.py'
-Nr. rows: 53940
-Nr. columns: 11
+0         KMeansClustering                0.620073           3
+1  AgglomerativeClustering                0.602489           2
+2      MeanShiftClustering                0.628738           7
+3        DBSCAN_Clustering                0.611805           3
+
 ```
 
 <br /><br /><br /><br />
