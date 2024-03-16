@@ -210,7 +210,7 @@ for regressor_name in regressors_ls:
 ![Alt text](Images/Regression/Regression_Modelling_Images/Regression_Scatterplot_SupportVectorRegressor.jpeg "")
 <br /><br /><br /><br />
 
-### 4.Development of Clustering
+### 4.Development of Clustering Models
 ```python
 # Clustering
 clusterings_ls = [

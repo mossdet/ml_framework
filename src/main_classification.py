@@ -24,10 +24,26 @@ from ml_framework.data_classification.xgboost_classifier import XGBoostClassifie
 from ml_framework.data_classification.ann_tf_classifier import ANN_TF_Classifier
 from ml_framework.tools.helper_functions import get_workspace_path
 
+
+this_filename = os.path.split(os.path.abspath(__file__))[1]
+logger = logging.getLogger(this_filename)
+logging.basicConfig(
+    filename=this_filename.replace(".py", ".log"),
+    encoding="utf-8",
+    level=logging.DEBUG,
+    format="%(parent)s - %(asctime)s - %(name)s - %(levelname)s - %(message)s",
+)
+
 matplotlib.use("Agg")
-logging.debug(
+logger.debug(
     'matplotlib.use("Agg") must be called to avoid crashing because of image plotting'
 )
+
+
+logger.info("info level log message test")
+logger.warning("warning level log message test")
+logger.error("error level log message test")
+
 
 # Set Data path
 data_folder_path = ""
@@ -84,3 +100,6 @@ tables_destination_path = get_workspace_path() + "Tables/"
 os.makedirs(tables_destination_path, exist_ok=True)
 perf_df.to_excel(tables_destination_path + "Classification_Results.xlsx")
 pass
+
+if __name__ == "__main__":
+    pass
