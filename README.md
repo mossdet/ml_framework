@@ -24,6 +24,8 @@ The wheel file itself can be used to install the library using [pip](https://pip
 pip install ml_framework-0.1.0-py3-none-any.whl
 ```
 
+
+
 ## Usage
 
 ### Data Analysis
@@ -41,6 +43,42 @@ train_data, valid_data, test_data = analyzer.sample_data(
   target_col_name=target_col_name, train_perc=0.8, valid_perc=0.2
 )
 ```
+
+#### Example of output for the data analysis methods:
+```console
+Data Description:
+    ColumnNr  ColumnName               ColumnType  NrNaNs  NrNulls
+0          0  Unnamed: 0    <class 'numpy.int64'>       0        0
+1          1       carat  <class 'numpy.float64'>       0        0
+2          2         cut            <class 'str'>       0        0
+3          3       color            <class 'str'>       0        0
+4          4     clarity            <class 'str'>       0        0
+5          5       depth  <class 'numpy.float64'>       0        0
+6          6       table  <class 'numpy.float64'>       0        0
+7          7       price    <class 'numpy.int64'>       0        0
+8          8           x  <class 'numpy.float64'>       0        0
+9          9           y  <class 'numpy.float64'>       0        0
+10        10           z  <class 'numpy.float64'>       0        0
+Drop columns:  Index(['Unnamed: 0'], dtype='object')
+
+Column Name: cut
+Column Number: 1
+Categories:
+['Fair', 'Good', 'Ideal', 'Premium', 'Very Good']
+
+
+Column Name: color
+Column Number: 2
+Categories:
+['D', 'E', 'F', 'G', 'H', 'I', 'J']
+
+
+Column Name: clarity
+Column Number: 3
+Categories:
+['I1', 'IF', 'SI1', 'SI2', 'VS1', 'VS2', 'VVS1', 'VVS2']
+```
+
 
 
 ### Development of Classifiers
@@ -70,8 +108,9 @@ for classifier_name in classifiers_ls:
     for k, v in score_dict.items():
         classifiers_performance[k].append(v)
 ```
+
+#### Example of output for the classification methods:
 ```console
-(ml-framework-py3.11) PS C:\Documents\ml_framework\src> python .\main_classification.py
                           Model  Precision    Recall  Accuracy  F1-Score
 0  LogisticRegressionClassifier   0.636091  0.520693  0.651469  0.541070
 1                KNN_Classifier   0.684462  0.637773  0.686313  0.654432
@@ -81,6 +120,7 @@ for classifier_name in classifiers_ls:
 5             ANN_TF_Classifier   0.806076  0.777483  0.800297  0.790336
 6       SupportVectorClassifier   0.782612  0.747490  0.780743  0.762896
 ```
+
 
 
 ### Development of Regressors
@@ -108,8 +148,9 @@ for regressor_name in regressors_ls:
     for k, v in score_dict.items():
         regressors_performance[k].append(v)
 ```
+
+#### Example of output for the regression methods:
 ```console
-(ml-framework-py3.11) PS C:\Documents\ml_framework\src> python .\main_regression.py
                     Model  R2_Score  ...  Mean_Absolute_Error  Mean_Absolute_Percentage_Error
 0         LinearRegressor  0.904075  ...           822.070293                        0.437571
 1           KNN_Regressor  0.959968  ...           400.844642                        0.113064
@@ -119,6 +160,7 @@ for regressor_name in regressors_ls:
 5        ANN_TF_Regressor  0.975925  ...           322.883121                        0.088762
 6  SupportVectorRegressor  0.965810  ...           513.631381                        0.250324
 ```
+
 
 
 ### Development of Clustering
@@ -143,8 +185,9 @@ for clustering_name in clusterings_ls:
         clustering_performance[k].append(v)
     clustering_performance["NrClusters"].append(clustering.get_num_clusters())
 ```
+
+#### Example of output for the clustering methods:
 ```console
-(ml-framework-py3.11) PS C:\Documents\ml_framework\src> python .\main_clustering.py
                     Model  R2_Score  ...  Mean_Absolute_Error  Mean_Absolute_Percentage_Error
 0         LinearRegressor  0.904075  ...           822.070293                        0.437571
 1           KNN_Regressor  0.959968  ...           400.844642                        0.113064
