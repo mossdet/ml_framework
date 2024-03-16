@@ -38,7 +38,9 @@ train_data, valid_data, test_data = analyzer.sample_data(
   target_col_name=target_col_name, train_perc=0.8, valid_perc=0.2
 )
 ```
+
 <br />
+
 #### Example of output for the data analysis methods:
 ```console
 Data Description:
@@ -75,6 +77,7 @@ Categories:
 ```
 
 <br /><br /><br /><br />
+
 ### 2.Development of Classifiers
 ```python
 # Classifier
@@ -104,6 +107,7 @@ for classifier_name in classifiers_ls:
 ```
 
 <br />
+
 #### Example of output for the classification methods:
 ```console
                           Model  Precision    Recall  Accuracy  F1-Score
@@ -117,6 +121,7 @@ for classifier_name in classifiers_ls:
 ```
 
 <br /><br /><br /><br />
+
 ### 3.Development of Regressors
 ```python
 # Regression
@@ -144,6 +149,7 @@ for regressor_name in regressors_ls:
 ```
 
 <br />
+
 #### Example of output for the regression methods:
 ```console
                     Model  R2_Score  ...  Mean_Absolute_Error  Mean_Absolute_Percentage_Error
