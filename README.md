@@ -163,6 +163,7 @@ for regressor_name in regressors_ls:
 ```
 
 <br /><br /><br /><br />
+
 ### Development of Clustering
 ```python
 # Clustering
@@ -187,6 +188,7 @@ for clustering_name in clusterings_ls:
 ```
 
 <br />
+
 #### Example of output for the clustering methods:
 ```console
                     Model  R2_Score  ...  Mean_Absolute_Error  Mean_Absolute_Percentage_Error
@@ -200,6 +202,7 @@ for clustering_name in clusterings_ls:
 ```
 
 <br /><br /><br /><br />
+
 ## Contributing
 
 Pull requests are welcome. For major changes, please open an issue first
