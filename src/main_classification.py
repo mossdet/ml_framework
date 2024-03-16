@@ -2,6 +2,8 @@ import os
 import socket
 import matplotlib
 import pandas as pd
+import logging
+
 from collections import defaultdict
 from ml_framework.data_classification.run_eda_classification import ClassificationEDA
 
@@ -23,6 +25,9 @@ from ml_framework.data_classification.ann_tf_classifier import ANN_TF_Classifier
 from ml_framework.tools.helper_functions import get_workspace_path
 
 matplotlib.use("Agg")
+logging.debug(
+    'matplotlib.use("Agg") must be called to avoid crashing because of image plotting'
+)
 
 # Set Data path
 data_folder_path = ""
