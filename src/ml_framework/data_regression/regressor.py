@@ -142,11 +142,13 @@ class Regressor:
 
     def plot_scatterplot(self) -> None:
         """Plots the predicted and real values as a scatterplot."""
+        plt.figure(figsize=(16, 8))
         sns.scatterplot(x=self.y_predicted, y=self.y_test)
+        plt.plot(self.y_test, self.y_test, "r--", linewidth=2)
         plt.ylabel("True Values")
         plt.xlabel("Predicted Values")
         plt.title(
-            f"Regression Results\nR2:{self.perf_metrics['R2_Score']}, Mean Absolute Percentage Error:{self.perf_metrics['Mean_Absolute_Percentage_Error']}"
+            f"{type(self).__name__} Results\nR2:{self.perf_metrics['R2_Score']:.2f} \n Mean Absolute Percentage Error:{self.perf_metrics['Mean_Absolute_Percentage_Error']:.2f}"
         )
 
         suffix = "_" + type(self).__name__
