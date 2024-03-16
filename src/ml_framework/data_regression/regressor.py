@@ -142,7 +142,7 @@ class Regressor:
 
     def plot_scatterplot(self) -> None:
         """Plots the predicted and real values as a scatterplot."""
-        plt.figure(figsize=(16, 8))
+        plt.figure(figsize=(10, 8))
         sns.scatterplot(x=self.y_predicted, y=self.y_test)
         plt.plot(self.y_test, self.y_test, "r--", linewidth=2)
         plt.ylabel("True Values")
