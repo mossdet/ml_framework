@@ -48,14 +48,21 @@ train_data, valid_data, test_data = analyzer.sample_data(
 #### Description of Categorical Features:
 ![Alt text](Images/Classification/Classification_EDA_Images/categorical_data_description.jpeg "")
 
+#### Pair-plot showing the distribution of numerical-feature pairs:
+![Alt text](Images/Classification/Classification_EDA_Images/Pair_Plot_Numerical_Features.jpeg "")
+
+#### Heatmap showing the correlation between features:
+![Alt text](Images/Classification/Classification_EDA_Images/correlation_matrix.jpeg "")
+
+#### Histogramm showing the distribution of numerical-features:
+![Alt text](Images/Classification/Classification_EDA_Images/histograms_numerical.jpeg "")
+
+#### Histogramm showing the distribution of categorical-features:
+![Alt text](Images/Classification/Classification_EDA_Images/histograms_categorical.jpeg "")
+
 #### Boxplots showing the distribution of a given feature across target classes:
 ![Alt text](Images/Classification/Classification_EDA_Images/boxplot_x.jpeg "")
 
-#### Histogramm showing the distribution of the features:
-![Alt text](Images/Classification/Classification_EDA_Images/histograms_numerical.jpeg "")
-
-#### Pair Plot showing correlation between features:
-![Alt text](Images/Classification/Classification_EDA_Images/correlation_matrix.jpeg "")
 
 #### Stratified Sampling to form the Train, Validation and Test Sets:
 Training Set
@@ -135,7 +142,7 @@ for classifier_name in classifiers_ls:
 #### Example of output for the classification methods:
 
 #### Classification Confusion Matrix:
-![Alt text](Images/Classification/Classification_Modelling_Images/Confusion_Matrix_RandomForestClassifier.jpeg "")
+![Alt text](Images/Classification/Classification_Modelling_Images/Confusion_Matrix_ANN_TF_Classifier.jpeg "")
 <br /><br />
 
 #### Performance metrics for all classifiers:

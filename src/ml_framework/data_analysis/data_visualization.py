@@ -66,7 +66,9 @@ class DataVisualizer:
         # plt.show()
         plt.close()
 
-    def plot_pairplot(self, data: pd.DataFrame = None, hue: str = None) -> None:
+    def plot_pairplot_numerical(
+        self, data: pd.DataFrame = None, hue: str = None
+    ) -> None:
         """
         Plots pairwise relationships in the dataset using a pairplot.
 
@@ -77,12 +79,41 @@ class DataVisualizer:
         Returns:
             None
         """
+        plt.figure(figsize=(20, 10))
         # diag_kind="kde" or "hist"
         mrkr_sz = 3
         sns.pairplot(
             data, diag_kind="kde", hue=hue, corner=False, plot_kws={"s": mrkr_sz}
         )
-        plt.savefig(self.images_destination_path + "pair_plot.jpeg")
+        plt.suptitle(f"Pair Plot for Numerical Features")
+        plt.savefig(self.images_destination_path + "Pair_Plot_Numerical_Features.jpeg")
+        # plt.show()
+        plt.close()
+
+    def plot_pairplot_categorical(
+        self, data: pd.DataFrame = None, hue: str = None
+    ) -> None:
+        """
+        Plots pairwise relationships in the dataset using a pairplot.
+
+        Args:
+            data (pd.DataFrame): The input DataFrame.
+            hue (str): The variable to map plot aspects to different colors.
+
+        Returns:
+            None
+        """
+        plt.figure(figsize=(20, 10))
+        # diag_kind="kde" or "hist"
+        mrkr_sz = 3
+        sns.pairplot(
+            data, diag_kind="hist", hue=hue, corner=False, plot_kws={"s": mrkr_sz}
+        )
+        plt.suptitle(f"Pair Plot for Categorical Features")
+
+        plt.savefig(
+            self.images_destination_path + "Pair_Plot_Categorical_Features.jpeg"
+        )
         # plt.show()
         plt.close()
 
@@ -136,7 +167,8 @@ class DataVisualizer:
         Returns:
             None
         """
-        df_categorical = data.select_dtypes(include="category")
+        # df_categorical = data.select_dtypes(include="category")
+        df_categorical = data
         columns = df_categorical.columns
         nr_cols = len(columns)
         if nr_cols > 0:

@@ -138,9 +138,14 @@ class ClassificationEDA:
             self.images_destination_path
         )
         data_visualizer.plot_correlation_matrix(data=self.data)
-        data_visualizer.plot_histograms_numerical(data=self.data)
-        data_visualizer.plot_histograms_categorical(data=self.data)
-        # data_visualizer.plot_pairplot(data=self.data, hue=target_col_name)
+
+        categ_cols = ["cut", "color", "clarity"]
+        num_cols = [col for col in self.data.columns if col not in categ_cols]
+        data_visualizer.plot_histograms_numerical(data=self.data[num_cols])
+        data_visualizer.plot_histograms_categorical(data=self.data[categ_cols])
+        data_visualizer.plot_pairplot_numerical(data=self.data[num_cols])
+        data_visualizer.plot_pairplot_categorical(data=self.data[categ_cols])
+
         data_visualizer.plot_classes_distribution(
             data=self.data, target_col_name=target_col_name
         )

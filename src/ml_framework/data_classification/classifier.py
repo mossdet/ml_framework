@@ -149,6 +149,7 @@ class Classifier:
 
     def plot_confusion_matrix(self) -> None:
         """Plots the confusion matrix."""
+        plt.figure(figsize=(10, 8))
         sns.heatmap(
             self.confusion_matrix,
             annot=True,
