@@ -220,6 +220,22 @@ for regressor_name in regressors_ls:
 <br /><br />
 
 #### Artificial Neural Network Regression:
+Running  ANN_TF_Regressor
+Model: "sequential"
+┏━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━┳━━━━━━━━━━━━━━━━━━━━┓
+┃ Layer (type)                         ┃ Output Shape                ┃         Param # ┃
+┡━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━╇━━━━━━━━━━━━━━━━━━━━┩
+│ dense (Dense)                        │ (None, 90)                  │             900 │
+├──────────────────────────────────────┼─────────────────────────────┼─────────────────┤
+│ dense_1 (Dense)                      │ (None, 90)                  │           8,190 │
+├──────────────────────────────────────┼─────────────────────────────┼─────────────────┤
+│ dense_2 (Dense)                      │ (None, 1)                   │              91 │
+└──────────────────────────────────────┴─────────────────────────────┴─────────────────┘
+ Total params: 27,545 (107.60 KB)
+ Trainable params: 9,181 (35.86 KB)
+ Non-trainable params: 0 (0.00 B)
+ Optimizer params: 18,364 (71.74 KB)
+└──────────────────────────────────────┴─────────────────────────────┴─────────────────┘
 ![Alt text](Images/Regression/Regression_Modelling_Images/ANN_TF_Regressor_TrainingResult.jpeg "")
 ![Alt text](Images/Regression/Regression_Modelling_Images/Regression_Scatterplot_ANN_TF_Regressor.jpeg "")
 <br /><br />
