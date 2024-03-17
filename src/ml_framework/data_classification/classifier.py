@@ -149,10 +149,16 @@ class Classifier:
 
     def plot_confusion_matrix(self) -> None:
         """Plots the confusion matrix."""
-        sns.heatmap(self.confusion_matrix, annot=True, fmt=".0f", cmap="crest")
+        sns.heatmap(
+            self.confusion_matrix,
+            annot=True,
+            fmt=".0f",
+            cmap="crest",
+            cbar_kws={"label": "# of Events"},
+        )
         plt.ylabel("True label")
         plt.xlabel("Predicted label")
-        plt.title("Confusion Matrix")
+        plt.title(f"{type(self).__name__}\nConfusion Matrix\n")
 
         suffix = "_" + type(self).__name__
 

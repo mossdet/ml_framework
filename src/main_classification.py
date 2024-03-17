@@ -25,24 +25,23 @@ from ml_framework.data_classification.ann_tf_classifier import ANN_TF_Classifier
 from ml_framework.tools.helper_functions import get_workspace_path
 
 
-this_filename = os.path.split(os.path.abspath(__file__))[1]
-logger = logging.getLogger(this_filename)
-logging.basicConfig(
-    filename=this_filename.replace(".py", ".log"),
-    encoding="utf-8",
-    level=logging.DEBUG,
-    format="%(parent)s - %(asctime)s - %(name)s - %(levelname)s - %(message)s",
-)
+# this_filename = os.path.split(os.path.abspath(__file__))[1]
+# logger = logging.getLogger(this_filename)
+# logging.basicConfig(
+#     filename=this_filename.replace(".py", ".log"),
+#     encoding="utf-8",
+#     level=logging.DEBUG,
+#     format="%(module)s - %(parent)s - %(asctime)s - %(name)s - %(levelname)s - %(message)s",
+# )
 
 matplotlib.use("Agg")
-logger.debug(
-    'matplotlib.use("Agg") must be called to avoid crashing because of image plotting'
-)
 
-
-logger.info("info level log message test")
-logger.warning("warning level log message test")
-logger.error("error level log message test")
+# logger.debug(
+#     'matplotlib.use("Agg") must be called to avoid crashing because of image plotting'
+# )
+# logger.info("info level log message test")
+# logger.warning("warning level log message test")
+# logger.error("error level log message test")
 
 
 # Set Data path
@@ -60,7 +59,7 @@ analyzer = ClassificationEDA(data_filepath)
 analyzer.read_data()
 analyzer.clean_data()
 analyzer.encode_data(target_col_name=target_col_name)
-# analyzer.visualize_data(target_col_name=target_col_name)
+analyzer.visualize_data(target_col_name=target_col_name)
 train_data, valid_data, test_data = analyzer.sample_data(
     target_col_name=target_col_name, train_perc=0.8, valid_perc=0.2
 )

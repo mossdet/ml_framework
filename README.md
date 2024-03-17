@@ -1,7 +1,3 @@
-```none
-no colors applied
-```
-
 # Machine Learning Framework
 
 This Python library facilitates the steps needed for the training and testing of machine-learning models dealing with structured data. The framework provides methods for data analysis, classification regression and clustering.
@@ -21,7 +17,7 @@ poetry build
 
 The wheel file itself can be used to install the library using [pip](https://pip.pypa.io/en/stable/):
 ```bash
-pip install ml_framework-0.1.0-py3-none-any.whl
+pip install path_to_wheelfile/ml_framework-0.1.0-py3-none-any.whl
 ```
 
 <br /><br /><br />
@@ -51,6 +47,15 @@ train_data, valid_data, test_data = analyzer.sample_data(
 
 #### Description of Categorical Features:
 ![Alt text](Images/Classification/Classification_EDA_Images/categorical_data_description.jpeg "")
+
+#### Boxplots showing the distribution of a given feature across target classes:
+![Alt text](Images/Classification/Classification_EDA_Images/boxplot_x.jpeg "")
+
+#### Histogramm showing the distribution of the features:
+![Alt text](Images/Classification/Classification_EDA_Images/histograms_numerical.jpeg "")
+
+#### Pair Plot showing correlation between features:
+![Alt text](Images/Classification/Classification_EDA_Images/correlation_matrix.jpeg "")
 
 #### Stratified Sampling to form the Train, Validation and Test Sets:
 Training Set
@@ -128,6 +133,12 @@ for classifier_name in classifiers_ls:
 <br />
 
 #### Example of output for the classification methods:
+
+#### Classification Confusion Matrix:
+![Alt text](Images/Classification/Classification_Modelling_Images/Confusion_Matrix_RandomForestClassifier.jpeg "")
+<br /><br />
+
+#### Performance metrics for all classifiers:
 ```console
                           Model  Precision    Recall  Accuracy  F1-Score
 0  LogisticRegressionClassifier   0.636091  0.520693  0.651469  0.541070
@@ -171,14 +182,14 @@ for regressor_name in regressors_ls:
 
 #### Example of output for the regression methods:
 ```console
-                    Model  R2_Score  ...  Mean_Absolute_Error  Mean_Absolute_Percentage_Error
-0         LinearRegressor  0.904075  ...           822.070293                        0.437571
-1           KNN_Regressor  0.959968  ...           400.844642                        0.113064
-2   DecisionTreeRegressor  0.952484  ...           435.645532                        0.109457
-3   RandomForestRegressor  0.982113  ...           274.680662                        0.070769
-4        XGBoostRegressor  0.982173  ...           276.939906                        0.073591
-5        ANN_TF_Regressor  0.975925  ...           322.883121                        0.088762
-6  SupportVectorRegressor  0.965810  ...           513.631381                        0.250324
+                    Model  R2_Score  Mean_Squared_Error  Root_Mean_Squared_Error  Mean_Absolute_Error  Mean_Absolute_Percentage_Error
+0         LinearRegressor  0.908591        1.404287e+06              1185.026250           796.390373                        0.442653
+1           KNN_Regressor  0.956235        6.723409e+05               819.963933           391.774657                        0.110497
+2   DecisionTreeRegressor  0.955435        6.846317e+05               827.424764           439.768585                        0.120691
+3   RandomForestRegressor  0.981591        2.828040e+05               531.793147           270.126756                        0.070488
+4        XGBoostRegressor  0.982977        2.615119e+05               511.382309           263.932371                        0.070356
+5        ANN_TF_Regressor  0.978419        3.315374e+05               575.792877           309.422360                        0.094138
+6  SupportVectorRegressor  0.977465        3.461919e+05               588.380725           339.591720                        0.112032
 ```
 
 #### Linear Regression:
