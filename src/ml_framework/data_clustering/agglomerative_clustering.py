@@ -3,6 +3,8 @@ import numpy as np
 import optuna
 import sklearn
 import matplotlib.pyplot as plt
+import logging
+
 from ml_framework.data_clustering.clustering import Clustering
 from sklearn.metrics import silhouette_score
 from scipy.cluster.hierarchy import dendrogram, linkage, fcluster, ward
@@ -132,7 +134,7 @@ class AgglomerativeClustering(Clustering):
             models_log["n_clusters"].append(n_clusters)
             models_log["model"].append(model)
 
-            # print(f"K = {n_clusters}, silhouette_score = {silhouette_val}")
+            # logging.info(f"K = {n_clusters}, silhouette_score = {silhouette_val}")
 
             if len(models_log["silhouette"]) > 1:
                 score_diff = models_log["silhouette"][-1] / models_log["silhouette"][-2]
@@ -164,7 +166,7 @@ class AgglomerativeClustering(Clustering):
         self.model.plot_dendrogram(image_filepath)
 
         # for label in np.unique(self.y_clustering):
-        #     print(f"Cluster: {label}, Size: {np.sum(self.y_clustering==label)}")
+        #     logging.info(f"Cluster: {label}, Size: {np.sum(self.y_clustering==label)}")
 
         pass
 

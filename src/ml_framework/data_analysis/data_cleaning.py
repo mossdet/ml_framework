@@ -1,6 +1,7 @@
 import os
 import pandas as pd
 import numpy as np
+import logging
 
 from typing import List, Dict, Union
 
@@ -48,6 +49,7 @@ class DataCleaner:
                         data.iloc[:, k] = data_array
                     pass
             else:
+                logging.info("Wrong nan_replace_metrics type!")
                 print("Wrong nan_replace_metrics type!")
         pass
 
@@ -74,6 +76,9 @@ class DataCleaner:
                         data[np.isnan(data)] = replace_value
                     except:
                         this_pyfile_name = os.path.split(os.path.abspath(__file__))[1]
+                        logging.info(
+                            f"An exception occurred in {this_pyfile_name}, __replace_missing_data_array"
+                        )
                         print(
                             f"An exception occurred in {this_pyfile_name}, __replace_missing_data_array"
                         )
@@ -82,10 +87,13 @@ class DataCleaner:
                     pass
 
             else:
+                logging.info("Wrong data type in the selected column!")
                 print("Wrong data type in the selected column!")
 
         else:
+            logging.info("Wrong nan_replace_metrics type!")
             print("Wrong nan_replace_metrics type!")
+
         return data
 
     def drop_columns(
@@ -119,10 +127,10 @@ class DataCleaner:
 
         if drop_idxs is not None:
             drop_col_names_ls = data.columns[drop_idxs]
-            print("Drop columns: ", drop_col_names_ls)
+            logging.info("Drop columns: ", drop_col_names_ls)
             data = data.drop(columns=drop_col_names_ls)
         else:
-            print("No columns to drop!")
+            logging.info("No columns to drop!")
 
         return data
 

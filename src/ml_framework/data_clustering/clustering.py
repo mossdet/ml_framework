@@ -5,6 +5,7 @@ import optuna
 import sklearn
 import seaborn as sns
 import matplotlib.pyplot as plt
+import logging
 
 from typing import List, Dict, Union
 from sklearn.metrics import silhouette_samples, silhouette_score
@@ -55,8 +56,10 @@ class Clustering:
             get_workspace_path() + "Images/Clustering/Clustering_Modelling_Images/"
         )
         os.makedirs(self.images_destination_path, exist_ok=True)
-        print("\n\n****************************************************************")
-        print("\nRunning ", type(self).__name__)
+        logging.info(
+            "\n\n****************************************************************"
+        )
+        logging.info("\nRunning ", type(self).__name__)
 
         pass
 
@@ -93,7 +96,7 @@ class Clustering:
         """
         silhouette_val = silhouette_score(self.X_train, self.y_clustering)
 
-        print(
+        logging.info(
             f"\n{type(self).__name__}\nPerformance Metrics",
         )
         score_dict = {
@@ -101,10 +104,10 @@ class Clustering:
         }
 
         for k, v in score_dict.items():
-            print(f"{k}: {v}")
+            logging.info(f"{k}: {v}")
 
         for label in np.unique(self.y_clustering):
-            print(
+            logging.info(
                 f"Cluster: {label}, Size%: {np.sum(self.y_clustering==label)/len(self.y_clustering)*100:.2f}"
             )
         return score_dict

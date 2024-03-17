@@ -3,6 +3,7 @@ import pandas as pd
 import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
+import logging
 
 from typing import List, Dict, Union
 from sklearn.metrics import (
@@ -80,8 +81,10 @@ class Regressor:
             get_workspace_path() + "Images/Regression/Regression_Modelling_Images/"
         )
         os.makedirs(self.images_destination_path, exist_ok=True)
-        print("\n\n****************************************************************")
-        print("\nRunning ", type(self).__name__)
+        logging.info(
+            "\n\n****************************************************************"
+        )
+        logging.info("\nRunning ", type(self).__name__)
 
         pass
 
@@ -122,7 +125,7 @@ class Regressor:
         mae_val = mean_absolute_error(self.y_test, self.y_predicted)
         mape_val = mean_absolute_percentage_error(self.y_test, self.y_predicted)
 
-        print(
+        logging.info(
             f"\n{type(self).__name__}\nPerformance Metrics",
         )
         score_dict = {
@@ -136,7 +139,7 @@ class Regressor:
         self.perf_metrics = score_dict
 
         for k, v in score_dict.items():
-            print(f"{k}: {v}")
+            logging.info(f"{k}: {v}")
 
         return score_dict
 

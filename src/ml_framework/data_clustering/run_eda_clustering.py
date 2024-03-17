@@ -1,5 +1,6 @@
 import os
 import pandas as pd
+import logging
 
 from ml_framework.tools.helper_functions import get_workspace_path
 from ml_framework.data_analysis import (
@@ -73,8 +74,8 @@ class ClusteringEDA:
         data_encoder = data_encoding.DataEncoder(self.images_destination_path)
         # categ_data_description = data_encoder.describe_categorical_data(self.data)
 
-        # print("Categorical Data Description:")
-        # print(pd.DataFrame(categ_data_description))
+        # logging.info("Categorical Data Description:")
+        # logging.info(pd.DataFrame(categ_data_description))
 
         # Encode Ordinal Data
         # Worst to best: Fair, Good, Very Good, Premium, Ideal
@@ -146,7 +147,7 @@ class ClusteringEDA:
         )
 
         for class_name in self.data.columns:
-            print(class_name)
+            logging.info(class_name)
             data_visualizer.plot_boxplot(
                 data=self.data,
                 x=target_col_name,

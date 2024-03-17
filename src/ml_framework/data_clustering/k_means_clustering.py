@@ -3,6 +3,8 @@ import numpy as np
 import optuna
 import sklearn
 import matplotlib.pyplot as plt
+import logging
+
 from sklearn.metrics import silhouette_score
 from ml_framework.data_clustering.clustering import Clustering
 
@@ -75,7 +77,7 @@ class KMeansClustering(Clustering):
             models_log["k"].append(k)
             models_log["model"].append(model)
 
-            # print(f"K = {k}, silhouette_score = {silhouette_val}")
+            # logging.info(f"K = {k}, silhouette_score = {silhouette_val}")
 
             if len(models_log["silhouette"]) > 1:
                 score_diff = models_log["silhouette"][-1] / models_log["silhouette"][-2]
@@ -95,7 +97,7 @@ class KMeansClustering(Clustering):
         self.n_clusters = len(np.unique(self.model.labels_))
 
         # for label in np.unique(self.y_clustering):
-        #     print(f"Cluster: {label}, Size: {np.sum(self.y_clustering==label)}")
+        #     logging.info(f"Cluster: {label}, Size: {np.sum(self.y_clustering==label)}")
 
         self.plot_score_evolution(
             models_log["k"], models_log["silhouette"], models_log["k"][best_model_idx]

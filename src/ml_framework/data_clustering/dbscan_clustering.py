@@ -3,6 +3,8 @@ import numpy as np
 import optuna
 import sklearn
 import matplotlib.pyplot as plt
+import logging
+
 from sklearn.metrics import silhouette_score, davies_bouldin_score
 from ml_framework.data_clustering.clustering import Clustering
 
@@ -95,7 +97,7 @@ class DBSCAN_Clustering(Clustering):
             trial.set_user_attr("silhouette_val", silhouette_val)
             trial.set_user_attr("davies_bouldin_val", davies_bouldin_val)
 
-            # print(
+            # logging.info(
             #     f"Trial: {trial.number},\t Silhouette_Score: {silhouette_val},\t Davies_Bouldin_Score: {davies_bouldin_val},\tNr.Clusters: {nr_clusters}"
             # )
 
@@ -117,11 +119,11 @@ class DBSCAN_Clustering(Clustering):
         davies_bouldin_val = study.best_trial.user_attrs["davies_bouldin_val"]
         silhouette_val = silhouette_score(self.X_train, self.y_clustering)
 
-        # print(
+        # logging.info(
         #     f"DBSCAN, Nr.Clusters: {self.n_clusters}, Silhouette Score: {silhouette_val}, Davies-Bouldin Score: {davies_bouldin_val}"
         # )
         # for label in np.unique(self.y_clustering):
-        #     print(
+        #     logging.info(
         #         f"Cluster: {label}, Size%: {np.sum(self.y_clustering==label)/len(self.y_clustering)*100:.2f}"
         #     )
 

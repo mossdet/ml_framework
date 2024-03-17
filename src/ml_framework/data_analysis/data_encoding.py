@@ -2,6 +2,7 @@ import os
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+import logging
 
 from collections import defaultdict
 from typing import List, Dict, Union
@@ -72,13 +73,13 @@ class DataEncoder:
 
         nr_categorical_columns = len(data_describer["ColumnNr"])
         for idx in range(nr_categorical_columns):
-            print("Column Name:", data_describer["ColumnName"][idx])
-            print("Column Number:", data_describer["ColumnNr"][idx])
-            print("Categories:")
+            logging.info("Column Name:", data_describer["ColumnName"][idx])
+            logging.info("Column Number:", data_describer["ColumnNr"][idx])
+            logging.info("Categories:")
             categories = data_describer["Categories"][idx]
             cats_ls = data_describer["Categories"][idx].tolist()
-            print(sorted(cats_ls))
-            print("\n")
+            logging.info(sorted(cats_ls))
+            logging.info("\n")
 
         return data_describer
 

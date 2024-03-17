@@ -5,6 +5,7 @@ import optuna
 import sklearn
 import seaborn as sns
 import matplotlib.pyplot as plt
+import logging
 
 from typing import List, Dict, Union
 from sklearn.metrics import (
@@ -84,8 +85,10 @@ class Classifier:
             + "Images/Classification/Classification_Modelling_Images/"
         )
         os.makedirs(self.images_destination_path, exist_ok=True)
-        print("\n\n****************************************************************")
-        print("\nRunning ", type(self).__name__)
+        logging.info(
+            "\n\n****************************************************************"
+        )
+        logging.info("\nRunning ", type(self).__name__)
 
         pass
 
@@ -132,7 +135,7 @@ class Classifier:
 
         acc_val = accuracy_score(self.y_test, self.y_predicted)
 
-        print(
+        logging.info(
             f"\n{type(self).__name__}\nPerformance Metrics",
         )
         score_dict = {
@@ -143,7 +146,7 @@ class Classifier:
         }
 
         for k, v in score_dict.items():
-            print(f"{k}: {v}")
+            logging.info(f"{k}: {v}")
 
         return score_dict
 

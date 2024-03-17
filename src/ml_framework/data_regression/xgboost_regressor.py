@@ -3,9 +3,11 @@ import pandas as pd
 import numpy as np
 import optuna
 import sklearn
-from xgboost import XGBRegressor
 import seaborn as sns
 import matplotlib.pyplot as plt
+import logging
+
+from xgboost import XGBRegressor
 from ml_framework.data_regression.regressor import Regressor
 
 from ml_framework.tools.helper_functions import get_workspace_path

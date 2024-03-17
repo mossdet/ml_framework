@@ -1,5 +1,6 @@
 import os
 import pandas as pd
+import logging
 
 from ml_framework.tools.helper_functions import get_workspace_path
 from ml_framework.data_analysis import (
@@ -146,7 +147,7 @@ class RegressionEDA:
         )
 
         for class_name in self.data.columns:
-            print(class_name)
+            logging.info(class_name)
             data_visualizer.plot_boxplot(
                 data=self.data,
                 x=target_col_name,

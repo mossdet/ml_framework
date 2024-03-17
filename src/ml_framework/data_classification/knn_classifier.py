@@ -5,8 +5,9 @@ import optuna
 import sklearn
 import seaborn as sns
 import matplotlib.pyplot as plt
-from ml_framework.data_classification.classifier import Classifier
+import logging
 
+from ml_framework.data_classification.classifier import Classifier
 from ml_framework.tools.helper_functions import get_workspace_path
 from typing import List, Dict, Union
 from sklearn.metrics import (
@@ -119,7 +120,7 @@ class KNN_Classifier(Classifier):
             X_train_valid, y_train_valid
         )
 
-        print("Best K= ", self.best_k)
+        logging.info("Best K= ", self.best_k)
 
     def get_best_k(self):
         """

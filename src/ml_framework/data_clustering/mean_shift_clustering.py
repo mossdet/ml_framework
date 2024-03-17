@@ -3,6 +3,8 @@ import numpy as np
 import optuna
 import sklearn
 import matplotlib.pyplot as plt
+import logging
+
 from sklearn.metrics import silhouette_score
 from ml_framework.data_clustering.clustering import Clustering
 
@@ -59,10 +61,10 @@ class MeanShiftClustering(Clustering):
         self.n_clusters = len(np.unique(self.model.labels_))
 
         # silhouette_val = silhouette_score(self.X_train, self.model.labels_)
-        # print(f"Mean-Shift Clustering\tSilhouette Score = {silhouette_val}")
+        # logging.info(f"Mean-Shift Clustering\tSilhouette Score = {silhouette_val}")
 
         # for label in np.unique(self.y_clustering):
-        #     print(f"Cluster: {label}, Size: {np.sum(self.y_clustering==label)}")
+        #     logging.info(f"Cluster: {label}, Size: {np.sum(self.y_clustering==label)}")
 
         pass
 

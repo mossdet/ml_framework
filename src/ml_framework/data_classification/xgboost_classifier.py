@@ -5,8 +5,9 @@ import optuna
 from xgboost import XGBClassifier
 import seaborn as sns
 import matplotlib.pyplot as plt
-from ml_framework.data_classification.classifier import Classifier
+import logging
 
+from ml_framework.data_classification.classifier import Classifier
 from ml_framework.tools.helper_functions import get_workspace_path
 from typing import List, Dict, Union
 from sklearn.metrics import (

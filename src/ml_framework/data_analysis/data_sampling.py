@@ -4,6 +4,7 @@ import numpy as np
 import seaborn as sns
 import numpy as np
 import matplotlib.pyplot as plt
+import logging
 
 from imblearn.over_sampling import SMOTE, ADASYN
 from typing import List, Dict, Union
@@ -227,14 +228,14 @@ class DataSampler:
         synth_data = np.hstack((X_synthetic, y_synthetic))
         synth_cols = X_synthetic.columns.to_list() + y_synthetic.columns.to_list()
         synth_data_df = pd.DataFrame(columns=synth_cols, data=synth_data)
-        print(
+        logging.info(
             "Class distribution pre-SMOTE:\n",
             [
                 (class_label, sum(y.to_numpy() == class_label)[0])
                 for class_label in np.unique(y)
             ],
         )
-        print(
+        logging.info(
             "Class distribution post-SMOTE:\n",
             [
                 (
@@ -270,14 +271,14 @@ class DataSampler:
         synth_data = np.hstack((X_synthetic, y_synthetic))
         synth_cols = X_synthetic.columns.to_list() + y_synthetic.columns.to_list()
         synth_data_df = pd.DataFrame(columns=synth_cols, data=synth_data)
-        print(
+        logging.info(
             "Class distribution pre-SMOTE:\n",
             [
                 (class_label, sum(y.to_numpy() == class_label)[0])
                 for class_label in np.unique(y)
             ],
         )
-        print(
+        logging.info(
             "Class distribution post-SMOTE:\n",
             [
                 (

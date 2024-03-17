@@ -5,6 +5,7 @@ import optuna
 import sklearn
 import seaborn as sns
 import matplotlib.pyplot as plt
+import logging
 
 from ml_framework.data_regression.regressor import Regressor
 from ml_framework.tools.helper_functions import get_workspace_path
@@ -111,7 +112,7 @@ class KNN_Regressor(Regressor):
             X_train_valid, y_train_valid
         )
 
-        print("Best K= ", self.best_k)
+        logging.info("Best K= ", self.best_k)
 
     def get_best_k(self):
         """

@@ -7,6 +7,7 @@ import seaborn as sns
 import matplotlib.pyplot as plt
 import tensorflow as tf
 import keras
+import logging
 
 from keras.models import Sequential
 from keras.layers import Input, Dense, Activation, Dropout, BatchNormalization
@@ -105,7 +106,7 @@ class ANN_TF_Classifier(Classifier):
 
         self.plot_training_results(training_result)
 
-        print(self.model.summary())
+        logging.info(self.model.summary())
 
         pass
 

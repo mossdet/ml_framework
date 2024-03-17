@@ -2,6 +2,7 @@ import os
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
+import logging
 
 from typing import List, Dict, Union
 from ml_framework.tools.helper_functions import get_fileparts
@@ -45,9 +46,9 @@ class DataIngestor:
             if ext == "csv":
                 df = pd.read_csv(self.datafile_path)
             else:
-                print(f"No reader found for file tye: .{ext}")
+                logging.info(f"No reader found for file tye: .{ext}")
         else:
-            print("Not a valid data file!")
+            logging.info("Not a valid data file!")
 
         return df
 
@@ -58,13 +59,13 @@ class DataIngestor:
         Args:
             df (pd.DataFrame): The DataFrame containing the data.
         """
-        # print("These are the first 10 entries of the data:")
-        # print(df.head(10))
-        # print("\n")
+        # logging.info("These are the first 10 entries of the data:")
+        # logging.info(df.head(10))
+        # logging.info("\n")
 
-        print("Nr. rows:", df.shape[0])
-        print("Nr. columns:", df.shape[1])
-        print("\n")
+        logging.info("Nr. rows:", df.shape[0])
+        logging.info("Nr. columns:", df.shape[1])
+        logging.info("\n")
 
         data_describer = {
             "ColumnNr": [],
@@ -82,8 +83,8 @@ class DataIngestor:
 
         describe_df = pd.DataFrame(data_describer)
 
-        print("\nData Description:")
-        print(describe_df)
+        logging.info("\nData Description:")
+        logging.info(describe_df)
 
         fig, ax = plt.subplots(1, 1, figsize=(16, 8))
         ax.axis("off")
