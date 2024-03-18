@@ -1,7 +1,7 @@
 # Machine Learning Framework
 # check-code-coverage [![ci status][ci image]][ci url] ![check-code-coverage](https://img.shields.io/badge/code--coverage-100%25-brightgreen)
 
-![Static Badge](https://img.shields.io/badge/2%25-gray?label=coverage&labelColor=green&color=gray)
+![Static Badge](https://img.shields.io/badge/2%25-gray?label=code coverage&labelColor=25-brightgreen&color=gray)
 
 This Python library facilitates the steps needed for the training and testing of machine-learning models dealing with structured data. The framework provides methods for data analysis, classification regression and clustering.
 
