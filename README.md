@@ -6,7 +6,10 @@
 
 # Machine Learning Framework
 
-This Python library facilitates the steps needed for the training and testing of machine-learning models dealing with structured data. The framework provides methods for data analysis, classification regression and clustering.
+This Python library facilitates the steps needed for the training and testing of machine-learning models dealing with structured data. 
+The framework provides methods for data analysis, classification, regression and clustering.
+
+<br /><br /><br /><br />
 
 ## Package Description:
 <br />
