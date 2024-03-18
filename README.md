@@ -337,6 +337,66 @@ Cluster: 1, Size%: 3.54
 
 <br /><br /><br /><br />
 
+## Unit Testing
+To run all test you can just run the power shell script run_tests.ps1 or the command 
+```
+poetry run pytest --cov=ml_framework ./tests
+```
+#### Unit Testing coverage
+```console
+============================================================================================= test session starts ==============================================================================================
+platform win32 -- Python 3.11.8, pytest-8.0.2, pluggy-1.4.0
+rootdir: F:\Weiterbildung\UOC_ML_Bootcamp\Capstone_Projects\ml_framework
+plugins: anyio-4.3.0, dash-2.15.0, cov-4.1.0
+collected 2 items
+
+tests\test_data_analysis\test_data_cleaning.py ..                                                                                                                                                         [100%]
+
+---------- coverage: platform win32, python 3.11.8-final-0 -----------
+Name                                                                Stmts   Miss  Cover
+---------------------------------------------------------------------------------------
+src\ml_framework\__init__.py                                            0      0   100%
+src\ml_framework\data_analysis\__init__.py                              0      0   100%
+src\ml_framework\data_analysis\data_cleaning.py                        67     34    49%
+src\ml_framework\data_analysis\data_encoding.py                        58     58     0%
+src\ml_framework\data_analysis\data_ingestion.py                       44     44     0%
+src\ml_framework\data_analysis\data_sampling.py                        94     94     0%
+src\ml_framework\data_analysis\data_visualization.py                   96     96     0%
+src\ml_framework\data_classification\__init__.py                        0      0   100%
+src\ml_framework\data_classification\ann_tf_classifier.py              61     61     0%
+src\ml_framework\data_classification\classifier.py                     61     61     0%
+src\ml_framework\data_classification\decision_tree_classifier.py       33     33     0%
+src\ml_framework\data_classification\knn_classifier.py                 38     38     0%
+src\ml_framework\data_classification\logistic_regression.py            34     34     0%
+src\ml_framework\data_classification\random_forest_classifier.py       34     34     0%
+src\ml_framework\data_classification\run_eda_classification.py         67     67     0%
+src\ml_framework\data_classification\support_vector_classifier.py      34     34     0%
+src\ml_framework\data_classification\xgboost_classifier.py             34     34     0%
+src\ml_framework\data_clustering\__init__.py                            0      0   100%
+src\ml_framework\data_clustering\agglomerative_clustering.py           86     86     0%
+src\ml_framework\data_clustering\clustering.py                         47     47     0%
+src\ml_framework\data_clustering\dbscan_clustering.py                  64     64     0%
+src\ml_framework\data_clustering\k_means_clustering.py                 49     49     0%
+src\ml_framework\data_clustering\mean_shift_clustering.py              22     22     0%
+src\ml_framework\data_clustering\run_eda_clustering.py                 49     49     0%
+src\ml_framework\data_input\__init__.py                                 0      0   100%
+src\ml_framework\data_regression\__init__.py                            0      0   100%
+src\ml_framework\data_regression\ann_tf_regressor.py                   63     63     0%
+src\ml_framework\data_regression\decision_tree_regressor.py            31     31     0%
+src\ml_framework\data_regression\knn_regressor.py                      36     36     0%
+src\ml_framework\data_regression\linear_regression.py                  25     25     0%
+src\ml_framework\data_regression\random_forest_regressor.py            32     32     0%
+src\ml_framework\data_regression\regressor.py                          58     58     0%
+src\ml_framework\data_regression\run_eda_regression.py                 61     61     0%
+src\ml_framework\data_regression\support_vector_regressor.py           32     32     0%
+src\ml_framework\data_regression\xgboost_regressor.py                  33     33     0%
+src\ml_framework\tools\__init__.py                                      0      0   100%
+src\ml_framework\tools\helper_functions.py                             15     15     0%
+---------------------------------------------------------------------------------------
+TOTAL                                                                1458   1425     2%
+```
+<br /><br /><br /><br />
+
 ## Contributing
 
 Pull requests are welcome. For major changes, please open an issue first

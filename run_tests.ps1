@@ -1,0 +1,1 @@
+poetry run pytest --cov=ml_framework ./tests
