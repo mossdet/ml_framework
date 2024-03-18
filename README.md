@@ -1,5 +1,5 @@
 # Machine Learning Framework
-![Testspace pass ratio](https://img.shields.io/testspace/pass-ratio/:org/https%3A%2F%2Fgithub.com%2Fmossdet%2Fml_framework/:space)
+![Static Badge](https://img.shields.io/badge/2%25-gray?label=coverage&labelColor=green&color=gray)
 
 This Python library facilitates the steps needed for the training and testing of machine-learning models dealing with structured data. The framework provides methods for data analysis, classification regression and clustering.
 
