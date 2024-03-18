@@ -1,5 +1,5 @@
 # Machine Learning Framework
-![Static Badge](https://img.shields.io/badge/2%25-gray?label=coverage&labelColor=green&color=gray)
+![Static Badge](https://img.shields.io/badge/10%25-gray?label=coverage&labelColor=green&color=gray)
 
 This Python library facilitates the steps needed for the training and testing of machine-learning models dealing with structured data. The framework provides methods for data analysis, classification regression and clustering.
 
