@@ -347,10 +347,13 @@ Cluster: 1, Size%: 3.54
 <br /><br /><br /><br />
 
 ## Unit Testing
-To run all test you can just run the power shell script run_tests.ps1 or the command 
+To run all test you can just run the power shell script run_tests.ps1 or the command
 ```
 poetry run pytest --cov=ml_framework ./tests
+poetry run pytest --cov=ml_framework ./tests --cov-report=html
 ```
+
+
 #### Unit Testing coverage
 ```console
 ============================================================================================= test session starts ==============================================================================================
@@ -366,7 +369,7 @@ Name                                                                Stmts   Miss
 ---------------------------------------------------------------------------------------
 src\ml_framework\__init__.py                                            0      0   100%
 src\ml_framework\data_analysis\__init__.py                              0      0   100%
-src\ml_framework\data_analysis\data_cleaning.py                        67     34    49%
+src\ml_framework\data_analysis\data_cleaning.py                        95     11    88%
 src\ml_framework\data_analysis\data_encoding.py                        58     58     0%
 src\ml_framework\data_analysis\data_ingestion.py                       44     44     0%
 src\ml_framework\data_analysis\data_sampling.py                        94     94     0%
@@ -402,7 +405,7 @@ src\ml_framework\data_regression\xgboost_regressor.py                  33     33
 src\ml_framework\tools\__init__.py                                      0      0   100%
 src\ml_framework\tools\helper_functions.py                             15     15     0%
 ---------------------------------------------------------------------------------------
-TOTAL                                                                1458   1425     2%
+TOTAL                                                                1486   1402     6%
 ```
 <br /><br /><br /><br />
 
