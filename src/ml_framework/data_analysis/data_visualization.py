@@ -1,5 +1,6 @@
 import os
 import pandas as pd
+import numpy as np
 import seaborn as sns
 import numpy as np
 import matplotlib.pyplot as plt
@@ -63,7 +64,8 @@ class DataVisualizer:
         corr_mat_df = data.corr()
         plt.figure(figsize=(15, 8))
         sns.heatmap(data=corr_mat_df, annot=True, fmt=".1f", linewidth=0.5)
-        plt.savefig(self.images_destination_path + "correlation_matrix.jpeg")
+        if self.images_destination_path is not None:
+            plt.savefig(self.images_destination_path + "correlation_matrix.jpeg")
         # plt.show()
         plt.close()
 
@@ -80,16 +82,19 @@ class DataVisualizer:
         Returns:
             None
         """
-        plt.figure(figsize=(20, 10))
-        # diag_kind="kde" or "hist"
-        mrkr_sz = 3
-        sns.pairplot(
-            data, diag_kind="kde", hue=hue, corner=False, plot_kws={"s": mrkr_sz}
-        )
-        plt.suptitle(f"Pair Plot for Numerical Features")
-        plt.savefig(self.images_destination_path + "Pair_Plot_Numerical_Features.jpeg")
-        # plt.show()
-        plt.close()
+        if self.images_destination_path is not None:
+            plt.figure(figsize=(20, 10))
+            # diag_kind="kde" or "hist"
+            mrkr_sz = 3
+            sns.pairplot(
+                data, diag_kind="kde", hue=hue, corner=False, plot_kws={"s": mrkr_sz}
+            )
+            plt.suptitle(f"Pair Plot for Numerical Features")
+            plt.savefig(
+                self.images_destination_path + "Pair_Plot_Numerical_Features.jpeg"
+            )
+            # plt.show()
+            plt.close()
 
     def plot_pairplot_categorical(
         self, data: pd.DataFrame = None, hue: str = None
@@ -112,9 +117,10 @@ class DataVisualizer:
         )
         plt.suptitle(f"Pair Plot for Categorical Features")
 
-        plt.savefig(
-            self.images_destination_path + "Pair_Plot_Categorical_Features.jpeg"
-        )
+        if self.images_destination_path is not None:
+            plt.savefig(
+                self.images_destination_path + "Pair_Plot_Categorical_Features.jpeg"
+            )
         # plt.show()
         plt.close()
 
@@ -149,7 +155,8 @@ class DataVisualizer:
                 ax[idx].set_title(col_name)
 
             fig.suptitle("Numerical Data Distribution Histogramms")
-            plt.savefig(self.images_destination_path + "histograms_numerical.jpeg")
+            if self.images_destination_path is not None:
+                plt.savefig(self.images_destination_path + "histograms_numerical.jpeg")
             # plt.show()
             plt.close()
 
@@ -184,7 +191,10 @@ class DataVisualizer:
                 ax[idx].set_title(col_name)
 
             fig.suptitle("Categorical Data Distribution Histogramms")
-            plt.savefig(self.images_destination_path + "histograms_categorical.jpeg")
+            if self.images_destination_path is not None:
+                plt.savefig(
+                    self.images_destination_path + "histograms_categorical.jpeg"
+                )
             # plt.show()
             plt.close()
 
@@ -217,7 +227,8 @@ class DataVisualizer:
 
         sns.boxplot(data=data, x=x, y=y, hue=hue)
         plt.title(f"Boxplot\n{suffix}")
-        plt.savefig(self.images_destination_path + f"boxplot{suffix}.jpeg")
+        if self.images_destination_path is not None:
+            plt.savefig(self.images_destination_path + f"boxplot{suffix}.jpeg")
         # plt.show()
         plt.close()
 
@@ -261,9 +272,10 @@ class DataVisualizer:
         else:
             suffix = "_" + suffix
 
-        plt.savefig(
-            self.images_destination_path + f"class_distribution_plot{suffix}.jpeg"
-        )
+        if self.images_destination_path is not None:
+            plt.savefig(
+                self.images_destination_path + f"class_distribution_plot{suffix}.jpeg"
+            )
         # plt.show()
         plt.close()
 
@@ -288,7 +300,8 @@ class DataVisualizer:
             showlegend=True,
         )
 
-        fig.show()
+        if self.images_destination_path is not None:
+            fig.show()
 
 
 if __name__ == "__main__":

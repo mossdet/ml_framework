@@ -1,6 +1,8 @@
 import pytest
 import pandas as pd
 import numpy as np
+
+# Import the class to be tested
 from ml_framework.data_analysis.data_cleaning import DataCleaner
 
 
@@ -120,7 +122,4 @@ def test_drop_rows(data_cleaner):
 
 
 if __name__ == "__main__":
-    test_replace_missing_data_dataframe(DataCleaner())
-    test_replace_missing_data_ndarray(DataCleaner())
-    test_drop_columns(DataCleaner())
-    test_drop_rows(DataCleaner())
+    pytest.main()

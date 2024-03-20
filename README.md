@@ -1,6 +1,6 @@
 <div align="center">
   
-  ![Static Badge](https://img.shields.io/badge/6%25-gray?label=coverage&labelColor=brightgreen&color=gray)  
+  ![Static Badge](https://img.shields.io/badge/21%25-gray?label=coverage&labelColor=brightgreen&color=gray)  
 
 </div>
 
@@ -370,10 +370,10 @@ Name                                                                Stmts   Miss
 src\ml_framework\__init__.py                                            0      0   100%
 src\ml_framework\data_analysis\__init__.py                              0      0   100%
 src\ml_framework\data_analysis\data_cleaning.py                        95     11    88%
-src\ml_framework\data_analysis\data_encoding.py                        58     58     0%
-src\ml_framework\data_analysis\data_ingestion.py                       44     44     0%
-src\ml_framework\data_analysis\data_sampling.py                        94     94     0%
-src\ml_framework\data_analysis\data_visualization.py                   96     96     0%
+src\ml_framework\data_analysis\data_encoding.py                        58     26    55%
+src\ml_framework\data_analysis\data_ingestion.py                       44     23    48%
+src\ml_framework\data_analysis\data_sampling.py                        94      2    98%
+src\ml_framework\data_analysis\data_visualization.py                  105     25    76%
 src\ml_framework\data_classification\__init__.py                        0      0   100%
 src\ml_framework\data_classification\ann_tf_classifier.py              61     61     0%
 src\ml_framework\data_classification\classifier.py                     61     61     0%
@@ -403,9 +403,9 @@ src\ml_framework\data_regression\run_eda_regression.py                 61     61
 src\ml_framework\data_regression\support_vector_regressor.py           32     32     0%
 src\ml_framework\data_regression\xgboost_regressor.py                  33     33     0%
 src\ml_framework\tools\__init__.py                                      0      0   100%
-src\ml_framework\tools\helper_functions.py                             15     15     0%
+src\ml_framework\tools\helper_functions.py                             15      7    53%
 ---------------------------------------------------------------------------------------
-TOTAL                                                                1486   1402     6%
+TOTAL                                                                1495   1178    21%
 ```
 <br /><br /><br /><br />
 
