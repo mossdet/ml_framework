@@ -9,7 +9,7 @@ from sklearn.datasets import make_classification
 from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import StandardScaler
 from ml_framework.data_classification.classifier import Classifier
-from ann_tf_classifier import ANN_TF_Classifier
+from ml_framework.data_classification.ann_tf_classifier import ANN_TF_Classifier
 
 # Set up logging
 logging.basicConfig(level=logging.INFO)

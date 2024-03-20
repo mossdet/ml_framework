@@ -370,20 +370,20 @@ Name                                                                Stmts   Miss
 src\ml_framework\__init__.py                                            0      0   100%
 src\ml_framework\data_analysis\__init__.py                              0      0   100%
 src\ml_framework\data_analysis\data_cleaning.py                        95     11    88%
-src\ml_framework\data_analysis\data_encoding.py                        58     26    55%
-src\ml_framework\data_analysis\data_ingestion.py                       44     23    48%
+src\ml_framework\data_analysis\data_encoding.py                        58     24    59%
+src\ml_framework\data_analysis\data_ingestion.py                       44     22    50%
 src\ml_framework\data_analysis\data_sampling.py                        94      2    98%
-src\ml_framework\data_analysis\data_visualization.py                  105     25    76%
+src\ml_framework\data_analysis\data_visualization.py                  105     30    71%
 src\ml_framework\data_classification\__init__.py                        0      0   100%
-src\ml_framework\data_classification\ann_tf_classifier.py              61     61     0%
-src\ml_framework\data_classification\classifier.py                     61     61     0%
-src\ml_framework\data_classification\decision_tree_classifier.py       33     33     0%
-src\ml_framework\data_classification\knn_classifier.py                 38     38     0%
-src\ml_framework\data_classification\logistic_regression.py            34     34     0%
-src\ml_framework\data_classification\random_forest_classifier.py       34     34     0%
-src\ml_framework\data_classification\run_eda_classification.py         67     67     0%
-src\ml_framework\data_classification\support_vector_classifier.py      34     34     0%
-src\ml_framework\data_classification\xgboost_classifier.py             34     34     0%
+src\ml_framework\data_classification\ann_tf_classifier.py              61     26    57%
+src\ml_framework\data_classification\classifier.py                     61     23    62%
+src\ml_framework\data_classification\decision_tree_classifier.py       33      9    73%
+src\ml_framework\data_classification\knn_classifier.py                 38     12    68%
+src\ml_framework\data_classification\logistic_regression.py            34     10    71%
+src\ml_framework\data_classification\random_forest_classifier.py       34     18    47%
+src\ml_framework\data_classification\run_eda_classification.py         67     32    52%
+src\ml_framework\data_classification\support_vector_classifier.py      34     17    50%
+src\ml_framework\data_classification\xgboost_classifier.py             34     17    50%
 src\ml_framework\data_clustering\__init__.py                            0      0   100%
 src\ml_framework\data_clustering\agglomerative_clustering.py           86     86     0%
 src\ml_framework\data_clustering\clustering.py                         47     47     0%
@@ -403,9 +403,9 @@ src\ml_framework\data_regression\run_eda_regression.py                 61     61
 src\ml_framework\data_regression\support_vector_regressor.py           32     32     0%
 src\ml_framework\data_regression\xgboost_regressor.py                  33     33     0%
 src\ml_framework\tools\__init__.py                                      0      0   100%
-src\ml_framework\tools\helper_functions.py                             15      7    53%
+src\ml_framework\tools\helper_functions.py                             15      0   100%
 ---------------------------------------------------------------------------------------
-TOTAL                                                                1495   1178    21%
+TOTAL                                                                1495    941    37%
 ```
 <br /><br /><br /><br />
 
