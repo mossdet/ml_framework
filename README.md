@@ -1,6 +1,6 @@
 <div align="center">
   
-  ![Static Badge](https://img.shields.io/badge/2%25-gray?label=coverage&labelColor=brightgreen&color=gray)  
+  ![Static Badge](https://img.shields.io/badge/6%25-gray?label=coverage&labelColor=brightgreen&color=gray)  
 
 </div>
 
