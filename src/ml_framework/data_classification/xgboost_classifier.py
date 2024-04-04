@@ -121,6 +121,15 @@ class XGBoostClassifier(Classifier):
 
         pass
 
+    def save_model(self, stored_model_path:str=None)->None:
+        # store the XGBoost classifier in XGBoost format (pickle format is not always backwards and forward compatible)
+        self.model.save_model(stored_model_path + type(self).__name__ + "SavedModel")
+
+    def load_model(self, stored_model_path:str=None)->None:
+        # load the XGBoost classifier in XGBoost format (pickle format is not always backwards and forward compatible)
+        self.model = XGBClassifier()
+        self.model.load_model(stored_model_path + type(self).__name__ + "SavedModel")
+
 
 if __name__ == "__main__":
     pass

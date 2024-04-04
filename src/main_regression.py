@@ -3,6 +3,7 @@ import socket
 import matplotlib
 import pandas as pd
 import logging
+import pickle
 
 from collections import defaultdict
 from ml_framework.tools.helper_functions import get_workspace_path
@@ -27,14 +28,17 @@ matplotlib.use("Agg")
 
 
 def main() -> None:
+
     # Set Data path
     data_folder_path = ""
     if socket.gethostname() == "LAPTOP-TFQFNF6U":
         data_folder_path = "F:/Weiterbildung/UOC_ML_Bootcamp/Capstone_Projects/Data/"
+        stored_models_path = "F:/Weiterbildung/UOC_ML_Bootcamp/Capstone_Projects/ml_framework/Stored_Models/"
     elif socket.gethostname() == "DLP":
-        data_folder_path = (
-            "C:/Users/HFO/Documents/MachineLearning/Capstone_Projects/Data/"
-        )
+        data_folder_path = "C:/Users/HFO/Documents/MachineLearning/Capstone_Projects/Data/"
+        stored_models_path = "C:/Users/HFO/Documents/MachineLearning/Capstone_Projects/ml_framework/Stored_Models/"
+    
+    os.makedirs(stored_models_path, exist_ok=True)
 
     data_filepath = data_folder_path + "diamonds.csv"
 
@@ -48,6 +52,12 @@ def main() -> None:
     train_data, valid_data, test_data = analyzer.sample_data(
         target_col_name=target_col_name, train_perc=0.8, valid_perc=0.2
     )
+
+    # store the analyzer as pickle file
+    analyzer_filepath = stored_models_path+"Regression_Analyzer.bin"
+    with open(analyzer_filepath, 'wb') as f_out:
+        pickle.dump(analyzer, f_out)
+
 
     # Regression
     regressors_ls = [
@@ -67,10 +77,17 @@ def main() -> None:
         regressor.predict(test_data)
         score_dict = regressor.score()
         regressor.plot_scatterplot()
+        regressor.save_model(stored_model_path=stored_models_path)
 
         all_models_performance["Model"].append(regressor_name)
         for k, v in score_dict.items():
             all_models_performance[k].append(v)
+
+        # store the regressor instance as pickle file
+        # regressor_filepath = stored_models_path + f"{regressor_name}.bin"
+        # with open(regressor_filepath, 'wb') as f_out:
+        #     regressor.reset_attributes()
+        #     pickle.dump(regressor, f_out)
 
     perf_df = pd.DataFrame(all_models_performance)
     logging.info(perf_df)

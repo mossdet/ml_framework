@@ -157,6 +157,13 @@ class ANN_TF_Regressor(Regressor):
         )
         self.y_predicted = self.model.predict(X_test).ravel()
 
+    def save_model(self, stored_model_path:str=None)->None:
+        # store the Keras model
+        self.model.save(stored_model_path + type(self).__name__ + "SavedModel.keras")
+
+    def load_model(self, stored_model_path:str=None)->None:
+        # load the Keras model
+        self.model = keras.models.load_model(stored_model_path + type(self).__name__ + "SavedModel.keras")
 
 if __name__ == "__main__":
     pass
