@@ -40,11 +40,11 @@ def main() -> None:
             stored_models_path = "/mnt/f/Weiterbildung/UOC_ML_Bootcamp/Capstone_Projects/ml_framework/Stored_Models/"
     elif socket.gethostname() == "DLP":
         if os.name == 'nt':
-        data_folder_path = "C:/Users/HFO/Documents/MachineLearning/Capstone_Projects/Data/"
-        stored_models_path = "C:/Users/HFO/Documents/MachineLearning/Capstone_Projects/ml_framework/Stored_Models/"
+            data_folder_path = "C:/Users/HFO/Documents/MachineLearning/Capstone_Projects/Data/"
+            stored_models_path = "C:/Users/HFO/Documents/MachineLearning/Capstone_Projects/ml_framework/Stored_Models/"
         elif os.name == 'posix':
-        data_folder_path = "mnt/c/Users/HFO/Documents/MachineLearning/Capstone_Projects/Data/"
-        stored_models_path = "mnt/c/Users/HFO/Documents/MachineLearning/Capstone_Projects/ml_framework/Stored_Models/"
+            data_folder_path = "mnt/c/Users/HFO/Documents/MachineLearning/Capstone_Projects/Data/"
+            stored_models_path = "mnt/c/Users/HFO/Documents/MachineLearning/Capstone_Projects/ml_framework/Stored_Models/"
     
     os.makedirs(stored_models_path, exist_ok=True)
 
