@@ -2,6 +2,7 @@ import os
 import socket
 import matplotlib
 import pandas as pd
+import pickle
 import logging
 
 from collections import defaultdict
@@ -25,6 +26,13 @@ from ml_framework.data_classification.ann_tf_classifier import ANN_TF_Classifier
 from ml_framework.tools.helper_functions import get_workspace_path
 
 matplotlib.use("Agg")
+
+logging.basicConfig(
+    level=logging.INFO,
+    format="%(asctime)s %(levelname)s %(message)s -- %(filename)s %(module)s %(lineno)d",
+    datefmt="%Y-%m-%d %H:%M:%S",
+    filename="ml_framework_classification.log",
+)
 
 
 def main() -> None:
@@ -74,6 +82,12 @@ def main() -> None:
         for k, v in score_dict.items():
             all_models_performance[k].append(v)
 
+        output_filename = f"Classifier_model_{classifier_name}.bin"
+        while f_out = open(output_filename, 'wb'):
+            pickle.dump((analyzer, classifier), f_out)
+        
+        analyzer
+        analyzer
         pass
 
     perf_df = pd.DataFrame(all_models_performance)
