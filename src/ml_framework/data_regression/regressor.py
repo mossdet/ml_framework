@@ -3,6 +3,7 @@ import pandas as pd
 import numpy as np
 import seaborn as sns
 import matplotlib.pyplot as plt
+import pickle
 import logging
 
 from typing import List, Dict, Union
@@ -55,19 +56,30 @@ class Regressor:
             train_data (pd.DataFrame): The training data for the classifier.
             valid_data (pd.DataFrame): The validation data for the classifier.
         """
-        self.X_train = train_data.loc[
-            :, train_data.columns != target_col_name
-        ].to_numpy()
-        self.y_train = (
-            train_data.loc[:, train_data.columns == target_col_name].to_numpy().ravel()
-        )
+        if train_data is not None:
 
-        self.X_valid = valid_data.loc[
-            :, valid_data.columns != target_col_name
-        ].to_numpy()
-        self.y_valid = (
-            valid_data.loc[:, valid_data.columns == target_col_name].to_numpy().ravel()
-        )
+            self.X_train = None
+            self.y_train = None
+            self.X_valid = None
+            self.y_valid = None
+
+            self.X_train = train_data.loc[
+                :, train_data.columns != target_col_name
+            ].to_numpy()
+            
+            self.y_train = (
+                train_data.loc[:, train_data.columns == target_col_name].to_numpy().ravel()
+            )
+
+        if valid_data is not None:
+
+            self.X_valid = valid_data.loc[
+                :, valid_data.columns != target_col_name
+            ].to_numpy()
+            
+            self.y_valid = (
+                valid_data.loc[:, valid_data.columns == target_col_name].to_numpy().ravel()
+            )
 
         self.target_col_name = target_col_name
         self.y_test = None
@@ -84,7 +96,7 @@ class Regressor:
         logging.info(
             "\n\n****************************************************************"
         )
-        logging.info("\nRunning ", type(self).__name__)
+        logging.info(f"\nRunning {type(self).__name__}")
 
         pass
 
@@ -162,6 +174,29 @@ class Regressor:
         # plt.show()
         plt.close()
 
+    def save_model(self, stored_model_path:str=None)->None:
+        # store the classifier as pickle file
+        classifier_filepath = stored_model_path + type(self).__name__ + "_SavedModel.bin"
+        with open(classifier_filepath, 'wb') as f_out:
+            pickle.dump(self.model, f_out)
+
+    def load_model(self, stored_model_path:str=None)->None:
+        # store the classifier as pickle file
+        classifier_filepath = stored_model_path + type(self).__name__ + "_SavedModel.bin"
+        with open(classifier_filepath, 'rb') as f_in:
+            self.model = pickle.load(f_in)
+
+    def reset_attributes(self):
+        self.X_train = None
+        self.y_train = None
+        self.X_valid = None
+        self.y_valid = None
+        self.y_test = None
+        self.model = None
+        self.y_predicted = None
+        self.perf_metrics = None
+        self.nr_classes = None
+        self.images_destination_path = None
 
 if __name__ == "__main__":
     pass

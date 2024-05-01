@@ -116,6 +116,14 @@ class XGBoostRegressor(Regressor):
 
         pass
 
+    def save_model(self, stored_model_path:str=None)->None:
+        # store the XGBoost model
+        self.model.save_model(stored_model_path + type(self).__name__ + "SavedModel")
+
+    def load_model(self, stored_model_path:str=None)->None:
+        # load the XGBoost model
+        self.model = XGBRegressor()
+        self.model.load_model(stored_model_path + type(self).__name__ + "SavedModel")
 
 if __name__ == "__main__":
     pass
