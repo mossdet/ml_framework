@@ -51,7 +51,6 @@ class DataCleaner:
             # Test replacement metrics correctness for array
             if not isinstance(nan_replace_metrics, str):
                 logging.info("Wrong array nan_replace_metrics type!")
-                print("Wrong array nan_replace_metrics type!")
                 return None
             else:
                 if nan_replace_metrics not in valid_replacement_metrics:
@@ -206,4 +205,4 @@ class DataCleaner:
 
 
 if __name__ == "__main__":
-    pass
+    pytest.main()

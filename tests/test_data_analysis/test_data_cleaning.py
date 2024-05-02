@@ -122,5 +122,4 @@ def test_drop_rows(data_cleaner):
 
 
 if __name__ == "__main__":
-    pass
-    # pytest.main()
+    pytest.main()

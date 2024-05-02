@@ -2,8 +2,8 @@ import os
 import socket
 import matplotlib
 import pandas as pd
-import pickle
 import logging
+import pickle
 
 from collections import defaultdict
 from ml_framework.data_classification.run_eda_classification import ClassificationEDA
@@ -27,24 +27,27 @@ from ml_framework.tools.helper_functions import get_workspace_path
 
 matplotlib.use("Agg")
 
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s %(levelname)s %(message)s -- %(filename)s %(module)s %(lineno)d",
-    datefmt="%Y-%m-%d %H:%M:%S",
-    filename="ml_framework_classification.log",
-)
-
 
 def main() -> None:
 
     # Set Data path
     data_folder_path = ""
     if socket.gethostname() == "LAPTOP-TFQFNF6U":
-        data_folder_path = "F:/Weiterbildung/UOC_ML_Bootcamp/Capstone_Projects/Data/"
+        if os.name == 'nt':
+            data_folder_path = "F:/Weiterbildung/UOC_ML_Bootcamp/Capstone_Projects/Data/"
+            stored_models_path = "F:/Weiterbildung/UOC_ML_Bootcamp/Capstone_Projects/ml_framework/Stored_Models/"
+        elif os.name == 'posix':
+            data_folder_path = "/mnt/f/Weiterbildung/UOC_ML_Bootcamp/Capstone_Projects/Data/"
+            stored_models_path = "/mnt/f/Weiterbildung/UOC_ML_Bootcamp/Capstone_Projects/ml_framework/Stored_Models/"
     elif socket.gethostname() == "DLP":
-        data_folder_path = (
-            "C:/Users/HFO/Documents/MachineLearning/Capstone_Projects/Data/"
-        )
+        if os.name == 'nt':
+            data_folder_path = "C:/Users/HFO/Documents/MachineLearning/Capstone_Projects/Data/"
+            stored_models_path = "C:/Users/HFO/Documents/MachineLearning/Capstone_Projects/ml_framework/Stored_Models/"
+        elif os.name == 'posix':
+            data_folder_path = "mnt/c/Users/HFO/Documents/MachineLearning/Capstone_Projects/Data/"
+            stored_models_path = "mnt/c/Users/HFO/Documents/MachineLearning/Capstone_Projects/ml_framework/Stored_Models/"
+        
+    os.makedirs(stored_models_path, exist_ok=True)
 
     data_filepath = data_folder_path + "diamonds.csv"
 
@@ -58,7 +61,11 @@ def main() -> None:
     train_data, valid_data, test_data = analyzer.sample_data(
         target_col_name=target_col_name, train_perc=0.8, valid_perc=0.2
     )
-
+    # store the analyzer as pickle file
+    analyzer_filepath = stored_models_path+"Classification_Analyzer.bin"
+    with open(analyzer_filepath, 'wb') as f_out:
+        pickle.dump(analyzer, f_out)
+                
     # Classifier
     classifiers_ls = [
         "LogisticRegressionClassifier",
@@ -70,6 +77,17 @@ def main() -> None:
         "SupportVectorClassifier",
     ]
 
+    # load the classifiers
+    # for classifier_name in classifiers_ls:
+    #     classifier_filepath = stored_models_path + f"{classifier_name}.bin"
+    #     with open(classifier_filepath, 'rb') as f_in:
+    #         classifier = pickle.load(f_in)
+
+    #     classifier.load_model(stored_model_path=stored_models_path)
+    #     classifier.predict(test_data)
+    #     score_dict = classifier.score()
+    #     pass
+
     all_models_performance = defaultdict(list)
     for classifier_name in classifiers_ls:
         classifier = eval(classifier_name + "(target_col_name, train_data, valid_data)")
@@ -77,17 +95,18 @@ def main() -> None:
         classifier.predict(test_data)
         score_dict = classifier.score()
         classifier.plot_confusion_matrix()
+        classifier.save_model(stored_model_path=stored_models_path)
 
         all_models_performance["Model"].append(classifier_name)
         for k, v in score_dict.items():
             all_models_performance[k].append(v)
 
-        output_filename = f"Classifier_model_{classifier_name}.bin"
-        while f_out = open(output_filename, 'wb'):
-            pickle.dump((analyzer, classifier), f_out)
-        
-        analyzer
-        analyzer
+        # # store the classifier as pickle file
+        # classifier_filepath = stored_models_path + f"{classifier_name}.bin"
+        # with open(classifier_filepath, 'wb') as f_out:
+        #     regressor.reset_attributes()
+        #     pickle.dump(classifier, f_out)
+
         pass
 
     perf_df = pd.DataFrame(all_models_performance)
